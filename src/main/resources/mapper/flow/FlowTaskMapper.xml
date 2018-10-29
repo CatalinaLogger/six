@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.maybe.flow.dao.FlowTaskMapper">
+  <resultMap id="BaseResultMap" type="com.maybe.flow.model.FlowTask">
+    <id column="ID_" jdbcType="VARCHAR" property="id" />
+    <result column="REV_" jdbcType="INTEGER" property="rev" />
+    <result column="PROC_DEF_ID_" jdbcType="VARCHAR" property="procDefId" />
+    <result column="TASK_DEF_ID_" jdbcType="VARCHAR" property="taskDefId" />
+    <result column="TASK_DEF_KEY_" jdbcType="VARCHAR" property="taskDefKey" />
+    <result column="PROC_INST_ID_" jdbcType="VARCHAR" property="procInstId" />
+    <result column="EXECUTION_ID_" jdbcType="VARCHAR" property="executionId" />
+    <result column="SCOPE_ID_" jdbcType="VARCHAR" property="scopeId" />
+    <result column="SUB_SCOPE_ID_" jdbcType="VARCHAR" property="subScopeId" />
+    <result column="SCOPE_TYPE_" jdbcType="VARCHAR" property="scopeType" />
+    <result column="SCOPE_DEFINITION_ID_" jdbcType="VARCHAR" property="scopeDefinitionId" />
+    <result column="NAME_" jdbcType="VARCHAR" property="name" />
+    <result column="PARENT_TASK_ID_" jdbcType="VARCHAR" property="parentTaskId" />
+    <result column="DESCRIPTION_" jdbcType="VARCHAR" property="description" />
+    <result column="OWNER_" jdbcType="VARCHAR" property="owner" />
+    <result column="ASSIGNEE_" jdbcType="VARCHAR" property="assignee" />
+    <result column="START_TIME_" jdbcType="TIMESTAMP" property="startTime" />
+    <result column="CLAIM_TIME_" jdbcType="TIMESTAMP" property="claimTime" />
+    <result column="END_TIME_" jdbcType="TIMESTAMP" property="endTime" />
+    <result column="DURATION_" jdbcType="BIGINT" property="duration" />
+    <result column="DELETE_REASON_" jdbcType="VARCHAR" property="deleteReason" />
+    <result column="PRIORITY_" jdbcType="INTEGER" property="priority" />
+    <result column="DUE_DATE_" jdbcType="TIMESTAMP" property="dueDate" />
+    <result column="FORM_KEY_" jdbcType="VARCHAR" property="formKey" />
+    <result column="CATEGORY_" jdbcType="VARCHAR" property="category" />
+    <result column="TENANT_ID_" jdbcType="VARCHAR" property="tenantId" />
+    <result column="LAST_UPDATED_TIME_" jdbcType="TIMESTAMP" property="lastUpdatedTime" />
+    <result column="HANDEL_USER_" jdbcType="VARCHAR" property="handelUser" />
+    <result column="TASK_CODE_" jdbcType="INTEGER" property="taskCode" />
+    <result column="TASK_NOTE_" jdbcType="VARCHAR" property="taskNote" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ID_, REV_, PROC_DEF_ID_, TASK_DEF_ID_, TASK_DEF_KEY_, PROC_INST_ID_, EXECUTION_ID_, 
+    SCOPE_ID_, SUB_SCOPE_ID_, SCOPE_TYPE_, SCOPE_DEFINITION_ID_, NAME_, PARENT_TASK_ID_, 
+    DESCRIPTION_, OWNER_, ASSIGNEE_, START_TIME_, CLAIM_TIME_, END_TIME_, DURATION_, 
+    DELETE_REASON_, PRIORITY_, DUE_DATE_, FORM_KEY_, CATEGORY_, TENANT_ID_, LAST_UPDATED_TIME_
+  </sql>
+
+  <select id="taskListByProcessId" parameterType="java.lang.String" resultMap="BaseResultMap">
+    SELECT
+      ID_, REV_, PROC_DEF_ID_, TASK_DEF_ID_, TASK_DEF_KEY_, PROC_INST_ID_, EXECUTION_ID_,
+      SCOPE_ID_, SUB_SCOPE_ID_, SCOPE_TYPE_, SCOPE_DEFINITION_ID_, NAME_, PARENT_TASK_ID_,
+      DESCRIPTION_, OWNER_, ASSIGNEE_, START_TIME_, CLAIM_TIME_, END_TIME_, DURATION_,
+      DELETE_REASON_, PRIORITY_, DUE_DATE_, FORM_KEY_, CATEGORY_, TENANT_ID_, LAST_UPDATED_TIME_,
+      U.name HANDEL_USER_, C.task_code TASK_CODE_, C.task_note TASK_NOTE_
+    FROM ACT_HI_TASKINST T, flow_hi_check C, sys_user U
+    WHERE T.PROC_INST_ID_ = #{processId,jdbcType=VARCHAR}
+    AND T.ID_ = C.task_id
+    AND T.OWNER_ = U.id
+    ORDER BY T.END_TIME_ ASC
+  </select>
+</mapper>

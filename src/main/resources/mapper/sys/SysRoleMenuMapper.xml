@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.maybe.sys.dao.SysRoleMenuMapper">
+  <resultMap id="BaseResultMap" type="com.maybe.sys.model.SysRoleMenu">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="role_id" jdbcType="INTEGER" property="roleId" />
+    <result column="menu_id" jdbcType="INTEGER" property="menuId" />
+    <result column="operate_ip" jdbcType="VARCHAR" property="operateIp" />
+    <result column="operate_id" jdbcType="INTEGER" property="operateId" />
+    <result column="operate_name" jdbcType="VARCHAR" property="operateName" />
+    <result column="operate_time" jdbcType="TIMESTAMP" property="operateTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, role_id, menu_id, operate_ip, operate_id, operate_name, operate_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from sys_role_menu
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from sys_role_menu
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.maybe.sys.model.SysRoleMenu">
+    insert into sys_role_menu (id, role_id, menu_id,
+      operate_ip, operate_id, operate_name,
+      operate_time)
+    values (#{id,jdbcType=INTEGER}, #{roleId,jdbcType=INTEGER}, #{menuId,jdbcType=INTEGER},
+      #{operateIp,jdbcType=VARCHAR}, #{operateId,jdbcType=INTEGER}, #{operateName,jdbcType=VARCHAR},
+      #{operateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.maybe.sys.model.SysRoleMenu">
+    insert into sys_role_menu
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="roleId != null">
+        role_id,
+      </if>
+      <if test="menuId != null">
+        menu_id,
+      </if>
+      <if test="operateIp != null">
+        operate_ip,
+      </if>
+      <if test="operateId != null">
+        operate_id,
+      </if>
+      <if test="operateName != null">
+        operate_name,
+      </if>
+      <if test="operateTime != null">
+        operate_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="roleId != null">
+        #{roleId,jdbcType=INTEGER},
+      </if>
+      <if test="menuId != null">
+        #{menuId,jdbcType=INTEGER},
+      </if>
+      <if test="operateIp != null">
+        #{operateIp,jdbcType=VARCHAR},
+      </if>
+      <if test="operateId != null">
+        #{operateId,jdbcType=INTEGER},
+      </if>
+      <if test="operateName != null">
+        #{operateName,jdbcType=VARCHAR},
+      </if>
+      <if test="operateTime != null">
+        #{operateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.maybe.sys.model.SysRoleMenu">
+    update sys_role_menu
+    <set>
+      <if test="roleId != null">
+        role_id = #{roleId,jdbcType=INTEGER},
+      </if>
+      <if test="menuId != null">
+        menu_id = #{menuId,jdbcType=INTEGER},
+      </if>
+      <if test="operateIp != null">
+        operate_ip = #{operateIp,jdbcType=VARCHAR},
+      </if>
+      <if test="operateId != null">
+        operate_id = #{operateId,jdbcType=INTEGER},
+      </if>
+      <if test="operateName != null">
+        operate_name = #{operateName,jdbcType=VARCHAR},
+      </if>
+      <if test="operateTime != null">
+        operate_time = #{operateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.maybe.sys.model.SysRoleMenu">
+    update sys_role_menu
+    set role_id = #{roleId,jdbcType=INTEGER},
+      menu_id = #{menuId,jdbcType=INTEGER},
+      operate_ip = #{operateIp,jdbcType=VARCHAR},
+      operate_id = #{operateId,jdbcType=INTEGER},
+      operate_name = #{operateName,jdbcType=VARCHAR},
+      operate_time = #{operateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="selectMenuKeysByRoleId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+    SELECT menu_id
+    FROM sys_role_menu
+    WHERE role_id = #{roleId,jdbcType=INTEGER}
+  </select>
+  <insert id="insertRoleMenu">
+    INSERT INTO sys_role_menu
+    (role_id, menu_id, operate_ip, operate_id, operate_name, operate_time)
+    VALUES
+    <foreach collection ="menuKeys" item="key" separator =",">
+      (#{sysRole.id,jdbcType=INTEGER}, #{key,jdbcType=INTEGER}, #{sysRole.operateIp,jdbcType=VARCHAR},
+      #{sysRole.operateId,jdbcType=INTEGER}, #{sysRole.operateName,jdbcType=VARCHAR}, #{sysRole.operateTime,jdbcType=TIMESTAMP})
+    </foreach >
+  </insert>
+  <delete id="removeRoleMenu">
+    DELETE FROM sys_role_menu
+    WHERE role_id = #{sysRole.id,jdbcType=INTEGER}
+    AND menu_id in
+    <foreach collection ="menuKeys" item="key"  open="(" separator="," close=")">
+      #{key,jdbcType=INTEGER}
+    </foreach >
+  </delete>
+  <delete id="deleteRoleMenuByRoleId" parameterType="java.lang.Integer">
+    DELETE FROM sys_role_menu
+    WHERE role_id = #{roleId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteRoleMenuByMenuId" parameterType="java.lang.Integer">
+    DELETE FROM sys_role_menu
+    WHERE menu_id = #{menuId,jdbcType=INTEGER}
+  </delete>
+</mapper>

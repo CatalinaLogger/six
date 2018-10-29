@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.maybe.flow.dao.FlowMineMapper">
+  <resultMap id="BaseResultMap" type="com.maybe.flow.model.FlowMine">
+    <id column="ID_" jdbcType="VARCHAR" property="id" />
+    <result column="REV_" jdbcType="INTEGER" property="rev" />
+    <result column="PROC_INST_ID_" jdbcType="VARCHAR" property="procInstId" />
+    <result column="LEVEL_" jdbcType="INTEGER" property="level" />
+    <result column="PROC_DEF_ID_" jdbcType="VARCHAR" property="procDefId" />
+    <result column="PROC_DEF_KEY_" jdbcType="VARCHAR" property="procDefKey" />
+    <result column="PROC_DEF_NAME_" jdbcType="VARCHAR" property="procDefName" />
+    <result column="START_TIME_" jdbcType="TIMESTAMP" property="startTime" />
+    <result column="END_TIME_" jdbcType="TIMESTAMP" property="endTime" />
+    <result column="DURATION_" jdbcType="BIGINT" property="duration" />
+    <result column="START_USER_ID_" jdbcType="VARCHAR" property="startUserId" />
+    <result column="START_ACT_ID_" jdbcType="VARCHAR" property="startActId" />
+    <result column="END_ACT_ID_" jdbcType="VARCHAR" property="endActId" />
+    <result column="SUPER_PROCESS_INSTANCE_ID_" jdbcType="VARCHAR" property="superProcessInstanceId" />
+    <result column="DELETE_REASON_" jdbcType="VARCHAR" property="deleteReason" />
+    <result column="TENANT_ID_" jdbcType="VARCHAR" property="tenantId" />
+    <result column="NAME_" jdbcType="VARCHAR" property="name" />
+    <result column="CALLBACK_ID_" jdbcType="VARCHAR" property="callbackId" />
+    <result column="CALLBACK_TYPE_" jdbcType="VARCHAR" property="callbackType" />
+    <result column="CATEGORY_" jdbcType="VARCHAR" property="category" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ID_, REV_, PROC_INST_ID_, BUSINESS_KEY_ LEVEL_, PROC_DEF_ID_, START_TIME_, END_TIME_, DURATION_,
+    START_USER_ID_, START_ACT_ID_, END_ACT_ID_, SUPER_PROCESS_INSTANCE_ID_, DELETE_REASON_, 
+    TENANT_ID_, NAME_, CALLBACK_ID_, CALLBACK_TYPE_
+  </sql>
+  <select id="mineCountByUser" resultType="java.lang.Integer">
+    select
+      count(1)
+    from ACT_HI_PROCINST AHP, ACT_RE_PROCDEF ARP, ACT_RE_DEPLOYMENT ARD
+    where AHP.START_USER_ID_ = #{userId,jdbcType=INTEGER}
+    AND AHP.PROC_DEF_ID_ = ARP.ID_
+    AND ARP.DEPLOYMENT_ID_ = ARD.ID_
+    <if test="param.category != null">
+      AND ARD.CATEGORY_ = #{param.category,jdbcType=VARCHAR}
+    </if>
+    <if test="param.name != null">
+      AND ARD.NAME_ LIKE CONCAT('%',#{param.name,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="param.level != null">
+      AND AHP.BUSINESS_KEY_ = #{param.level,jdbcType=INTEGER}
+    </if>
+    <if test="param.status != null and param.status == 0">
+      AND AHP.DURATION_ IS NULL
+    </if>
+    <if test="param.status != null and param.status == 1">
+      AND AHP.DURATION_ IS NOT NULL
+    </if>
+    <if test="param.start != null">
+      AND AHP.START_TIME_ <![CDATA[ > ]]> #{param.start,jdbcType=TIMESTAMP}
+    </if>
+    <if test="param.end != null">
+      AND AHP.START_TIME_ <![CDATA[ < ]]> #{param.end,jdbcType=TIMESTAMP}
+    </if>
+  </select>
+
+  <select id="minePageByUser"  resultMap="BaseResultMap">
+    select
+      AHP.ID_, AHP.REV_, AHP.PROC_INST_ID_, AHP.BUSINESS_KEY_ LEVEL_, AHP.PROC_DEF_ID_, ARP.KEY_ PROC_DEF_KEY_, ARD.NAME_ PROC_DEF_NAME_, AHP.START_TIME_, AHP.END_TIME_, AHP.DURATION_,
+      AHP.START_USER_ID_, AHP.START_ACT_ID_, AHP.END_ACT_ID_, AHP.SUPER_PROCESS_INSTANCE_ID_, AHP.DELETE_REASON_,
+      AHP.TENANT_ID_, AHP.NAME_, AHP.CALLBACK_ID_, AHP.CALLBACK_TYPE_, ARD.CATEGORY_ CATEGORY_
+    from ACT_HI_PROCINST AHP, ACT_RE_PROCDEF ARP, ACT_RE_DEPLOYMENT ARD
+    where AHP.START_USER_ID_ = #{userId,jdbcType=INTEGER}
+    AND AHP.PROC_DEF_ID_ = ARP.ID_
+    AND ARP.DEPLOYMENT_ID_ = ARD.ID_
+    <if test="param.category != null">
+      AND ARD.CATEGORY_ = #{param.category,jdbcType=VARCHAR}
+    </if>
+    <if test="param.name != null">
+      AND ARD.NAME_ LIKE CONCAT('%',#{param.name,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="param.level != null">
+      AND AHP.BUSINESS_KEY_ = #{param.level,jdbcType=INTEGER}
+    </if>
+    <if test="param.status != null and param.status == 0">
+      AND AHP.DURATION_ IS NULL
+    </if>
+    <if test="param.status != null and param.status == 1">
+      AND AHP.DURATION_ IS NOT NULL
+    </if>
+    <if test="param.start != null">
+      AND AHP.START_TIME_ <![CDATA[ > ]]> #{param.start,jdbcType=TIMESTAMP}
+    </if>
+    <if test="param.end != null">
+      AND AHP.START_TIME_ <![CDATA[ < ]]> #{param.end,jdbcType=TIMESTAMP}
+    </if>
+    ORDER BY AHP.START_TIME_ DESC
+    LIMIT #{page.offset,jdbcType=INTEGER}, #{page.size,jdbcType=INTEGER}
+  </select>
+
+</mapper>

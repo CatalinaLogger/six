@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.maybe.sys.dao.SysUserLoginMapper">
+  <resultMap id="BaseResultMap" type="com.maybe.sys.model.SysUserLogin">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="login_ip" jdbcType="VARCHAR" property="loginIp" />
+    <result column="login_time" jdbcType="TIMESTAMP" property="loginTime" />
+    <result column="login_address" jdbcType="VARCHAR" property="loginAddress" />
+    <result column="login_system" jdbcType="VARCHAR" property="loginSystem" />
+    <result column="login_browser" jdbcType="VARCHAR" property="loginBrowser" />
+    <result column="login_browser_version" jdbcType="VARCHAR" property="loginBrowserVersion" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, user_id, user_name, login_ip, login_time, login_address, login_system, login_browser, 
+    login_browser_version
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from sys_user_login
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from sys_user_login
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.maybe.sys.model.SysUserLogin">
+    insert into sys_user_login (id, user_id, user_name, 
+      login_ip, login_time, login_address, 
+      login_system, login_browser, login_browser_version
+      )
+    values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{userName,jdbcType=VARCHAR}, 
+      #{loginIp,jdbcType=VARCHAR}, #{loginTime,jdbcType=TIMESTAMP}, #{loginAddress,jdbcType=VARCHAR}, 
+      #{loginSystem,jdbcType=VARCHAR}, #{loginBrowser,jdbcType=VARCHAR}, #{loginBrowserVersion,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.maybe.sys.model.SysUserLogin">
+    insert into sys_user_login
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="userName != null">
+        user_name,
+      </if>
+      <if test="loginIp != null">
+        login_ip,
+      </if>
+      <if test="loginTime != null">
+        login_time,
+      </if>
+      <if test="loginAddress != null">
+        login_address,
+      </if>
+      <if test="loginSystem != null">
+        login_system,
+      </if>
+      <if test="loginBrowser != null">
+        login_browser,
+      </if>
+      <if test="loginBrowserVersion != null">
+        login_browser_version,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="userName != null">
+        #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="loginIp != null">
+        #{loginIp,jdbcType=VARCHAR},
+      </if>
+      <if test="loginTime != null">
+        #{loginTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="loginAddress != null">
+        #{loginAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="loginSystem != null">
+        #{loginSystem,jdbcType=VARCHAR},
+      </if>
+      <if test="loginBrowser != null">
+        #{loginBrowser,jdbcType=VARCHAR},
+      </if>
+      <if test="loginBrowserVersion != null">
+        #{loginBrowserVersion,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.maybe.sys.model.SysUserLogin">
+    update sys_user_login
+    <set>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="userName != null">
+        user_name = #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="loginIp != null">
+        login_ip = #{loginIp,jdbcType=VARCHAR},
+      </if>
+      <if test="loginTime != null">
+        login_time = #{loginTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="loginAddress != null">
+        login_address = #{loginAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="loginSystem != null">
+        login_system = #{loginSystem,jdbcType=VARCHAR},
+      </if>
+      <if test="loginBrowser != null">
+        login_browser = #{loginBrowser,jdbcType=VARCHAR},
+      </if>
+      <if test="loginBrowserVersion != null">
+        login_browser_version = #{loginBrowserVersion,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.maybe.sys.model.SysUserLogin">
+    update sys_user_login
+    set user_id = #{userId,jdbcType=INTEGER},
+      user_name = #{userName,jdbcType=VARCHAR},
+      login_ip = #{loginIp,jdbcType=VARCHAR},
+      login_time = #{loginTime,jdbcType=TIMESTAMP},
+      login_address = #{loginAddress,jdbcType=VARCHAR},
+      login_system = #{loginSystem,jdbcType=VARCHAR},
+      login_browser = #{loginBrowser,jdbcType=VARCHAR},
+      login_browser_version = #{loginBrowserVersion,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="loginCount" resultType="java.lang.Integer">
+    SELECT
+    count(1)
+    FROM sys_user_login
+    WHERE user_id = #{userId,jdbcType=INTEGER}
+  </select>
+  <select id="loginPage" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List" />
+    FROM sys_user_login
+    WHERE user_id = #{userId,jdbcType=INTEGER}
+    ORDER BY login_time DESC
+    LIMIT #{page.offset,jdbcType=INTEGER}, #{page.size,jdbcType=INTEGER}
+  </select>
+</mapper>

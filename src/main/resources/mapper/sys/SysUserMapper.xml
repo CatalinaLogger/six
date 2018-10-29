@@ -1,0 +1,595 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.maybe.sys.dao.SysUserMapper">
+  <resultMap id="BaseResultMap" type="com.maybe.sys.model.SysUser">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="nick_name" jdbcType="VARCHAR" property="nickName" />
+    <result column="sex" jdbcType="INTEGER" property="sex" />
+    <result column="birthday" jdbcType="DATE" property="birthday" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+    <result column="mail" jdbcType="VARCHAR" property="mail" />
+    <result column="say" jdbcType="VARCHAR" property="say" />
+    <result column="avatar" jdbcType="VARCHAR" property="avatar" />
+    <result column="we_chat" jdbcType="VARCHAR" property="weChat" />
+    <result column="qq" jdbcType="VARCHAR" property="qq" />
+    <result column="open_we" jdbcType="VARCHAR" property="openWe" />
+    <result column="open_qq" jdbcType="VARCHAR" property="openQq" />
+    <result column="username" jdbcType="VARCHAR" property="username" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="reset_code" jdbcType="VARCHAR" property="resetCode" />
+    <result column="parent_id" jdbcType="INTEGER" property="parentId" />
+    <result column="parent_name" jdbcType="VARCHAR" property="parentName" />
+    <result column="parent_username" jdbcType="VARCHAR" property="parentUsername" />
+    <result column="level" jdbcType="VARCHAR" property="level" />
+    <result column="dept_id" jdbcType="INTEGER" property="deptId" />
+    <result column="dept_name" jdbcType="VARCHAR" property="deptName" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="operate_ip" jdbcType="VARCHAR" property="operateIp" />
+    <result column="operate_id" jdbcType="INTEGER" property="operateId" />
+    <result column="operate_name" jdbcType="VARCHAR" property="operateName" />
+    <result column="operate_time" jdbcType="TIMESTAMP" property="operateTime" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.maybe.sys.model.SysUser">
+    <result column="json_info" jdbcType="LONGVARCHAR" property="jsonInfo" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, name, nick_name, sex, birthday, phone, mail, say, avatar, we_chat, qq, open_we,
+    open_qq, username, password, reset_code, parent_id, parent_name, parent_username,
+    level, dept_id, dept_name, status, remark, operate_ip, operate_id, operate_name,
+    operate_time
+  </sql>
+  <sql id="Blob_Column_List">
+    json_info
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+    select
+    <include refid="Base_Column_List" />
+    from sys_user
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from sys_user
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.maybe.sys.model.SysUser">
+    insert into sys_user (id, name, nick_name,
+      sex, birthday, phone,
+      mail, say, avatar,
+      we_chat, qq, open_we,
+      open_qq, username, password,
+      reset_code, parent_id, parent_name,
+      parent_username, level, dept_id,
+      dept_name, status, remark,
+      operate_ip, operate_id, operate_name,
+      operate_time, json_info)
+    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{nickName,jdbcType=VARCHAR},
+      #{sex,jdbcType=INTEGER}, #{birthday,jdbcType=DATE}, #{phone,jdbcType=VARCHAR},
+      #{mail,jdbcType=VARCHAR}, #{say,jdbcType=VARCHAR}, #{avatar,jdbcType=VARCHAR},
+      #{weChat,jdbcType=VARCHAR}, #{qq,jdbcType=VARCHAR}, #{openWe,jdbcType=VARCHAR},
+      #{openQq,jdbcType=VARCHAR}, #{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR},
+      #{resetCode,jdbcType=VARCHAR}, #{parentId,jdbcType=INTEGER}, #{parentName,jdbcType=VARCHAR},
+      #{parentUsername,jdbcType=VARCHAR}, #{level,jdbcType=VARCHAR}, #{deptId,jdbcType=INTEGER},
+      #{deptName,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR},
+      #{operateIp,jdbcType=VARCHAR}, #{operateId,jdbcType=INTEGER}, #{operateName,jdbcType=VARCHAR},
+      #{operateTime,jdbcType=TIMESTAMP}, #{jsonInfo,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.maybe.sys.model.SysUser">
+    insert into sys_user
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="nickName != null">
+        nick_name,
+      </if>
+      <if test="sex != null">
+        sex,
+      </if>
+      <if test="birthday != null">
+        birthday,
+      </if>
+      <if test="phone != null">
+        phone,
+      </if>
+      <if test="mail != null">
+        mail,
+      </if>
+      <if test="say != null">
+        say,
+      </if>
+      <if test="avatar != null">
+        avatar,
+      </if>
+      <if test="weChat != null">
+        we_chat,
+      </if>
+      <if test="qq != null">
+        qq,
+      </if>
+      <if test="openWe != null">
+        open_we,
+      </if>
+      <if test="openQq != null">
+        open_qq,
+      </if>
+      <if test="username != null">
+        username,
+      </if>
+      <if test="password != null">
+        password,
+      </if>
+      <if test="resetCode != null">
+        reset_code,
+      </if>
+      <if test="parentId != null">
+        parent_id,
+      </if>
+      <if test="parentName != null">
+        parent_name,
+      </if>
+      <if test="parentUsername != null">
+        parent_username,
+      </if>
+      <if test="level != null">
+        level,
+      </if>
+      <if test="deptId != null">
+        dept_id,
+      </if>
+      <if test="deptName != null">
+        dept_name,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="operateIp != null">
+        operate_ip,
+      </if>
+      <if test="operateId != null">
+        operate_id,
+      </if>
+      <if test="operateName != null">
+        operate_name,
+      </if>
+      <if test="operateTime != null">
+        operate_time,
+      </if>
+      <if test="jsonInfo != null">
+        json_info,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="nickName != null">
+        #{nickName,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null">
+        #{sex,jdbcType=INTEGER},
+      </if>
+      <if test="birthday != null">
+        #{birthday,jdbcType=DATE},
+      </if>
+      <if test="phone != null">
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="mail != null">
+        #{mail,jdbcType=VARCHAR},
+      </if>
+      <if test="say != null">
+        #{say,jdbcType=VARCHAR},
+      </if>
+      <if test="avatar != null">
+        #{avatar,jdbcType=VARCHAR},
+      </if>
+      <if test="weChat != null">
+        #{weChat,jdbcType=VARCHAR},
+      </if>
+      <if test="qq != null">
+        #{qq,jdbcType=VARCHAR},
+      </if>
+      <if test="openWe != null">
+        #{openWe,jdbcType=VARCHAR},
+      </if>
+      <if test="openQq != null">
+        #{openQq,jdbcType=VARCHAR},
+      </if>
+      <if test="username != null">
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="resetCode != null">
+        #{resetCode,jdbcType=VARCHAR},
+      </if>
+      <if test="parentId != null">
+        #{parentId,jdbcType=INTEGER},
+      </if>
+      <if test="parentName != null">
+        #{parentName,jdbcType=VARCHAR},
+      </if>
+      <if test="parentUsername != null">
+        #{parentUsername,jdbcType=VARCHAR},
+      </if>
+      <if test="level != null">
+        #{level,jdbcType=VARCHAR},
+      </if>
+      <if test="deptId != null">
+        #{deptId,jdbcType=INTEGER},
+      </if>
+      <if test="deptName != null">
+        #{deptName,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="operateIp != null">
+        #{operateIp,jdbcType=VARCHAR},
+      </if>
+      <if test="operateId != null">
+        #{operateId,jdbcType=INTEGER},
+      </if>
+      <if test="operateName != null">
+        #{operateName,jdbcType=VARCHAR},
+      </if>
+      <if test="operateTime != null">
+        #{operateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="jsonInfo != null">
+        #{jsonInfo,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.maybe.sys.model.SysUser">
+    update sys_user
+    <set>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="nickName != null">
+        nick_name = #{nickName,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null">
+        sex = #{sex,jdbcType=INTEGER},
+      </if>
+      <if test="birthday != null">
+        birthday = #{birthday,jdbcType=DATE},
+      </if>
+      <if test="phone != null">
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="mail != null">
+        mail = #{mail,jdbcType=VARCHAR},
+      </if>
+      <if test="say != null">
+        say = #{say,jdbcType=VARCHAR},
+      </if>
+      <if test="avatar != null">
+        avatar = #{avatar,jdbcType=VARCHAR},
+      </if>
+      <if test="weChat != null">
+        we_chat = #{weChat,jdbcType=VARCHAR},
+      </if>
+      <if test="qq != null">
+        qq = #{qq,jdbcType=VARCHAR},
+      </if>
+      <if test="openWe != null">
+        open_we = #{openWe,jdbcType=VARCHAR},
+      </if>
+      <if test="openQq != null">
+        open_qq = #{openQq,jdbcType=VARCHAR},
+      </if>
+      <if test="username != null">
+        username = #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        password = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="resetCode != null">
+        reset_code = #{resetCode,jdbcType=VARCHAR},
+      </if>
+      <if test="parentId != null">
+        parent_id = #{parentId,jdbcType=INTEGER},
+      </if>
+      <if test="parentName != null">
+        parent_name = #{parentName,jdbcType=VARCHAR},
+      </if>
+      <if test="parentUsername != null">
+        parent_username = #{parentUsername,jdbcType=VARCHAR},
+      </if>
+      <if test="level != null">
+        level = #{level,jdbcType=VARCHAR},
+      </if>
+      <if test="deptId != null">
+        dept_id = #{deptId,jdbcType=INTEGER},
+      </if>
+      <if test="deptName != null">
+        dept_name = #{deptName,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="operateIp != null">
+        operate_ip = #{operateIp,jdbcType=VARCHAR},
+      </if>
+      <if test="operateId != null">
+        operate_id = #{operateId,jdbcType=INTEGER},
+      </if>
+      <if test="operateName != null">
+        operate_name = #{operateName,jdbcType=VARCHAR},
+      </if>
+      <if test="operateTime != null">
+        operate_time = #{operateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="jsonInfo != null">
+        json_info = #{jsonInfo,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.maybe.sys.model.SysUser">
+    update sys_user
+    set name = #{name,jdbcType=VARCHAR},
+      nick_name = #{nickName,jdbcType=VARCHAR},
+      sex = #{sex,jdbcType=INTEGER},
+      birthday = #{birthday,jdbcType=DATE},
+      phone = #{phone,jdbcType=VARCHAR},
+      mail = #{mail,jdbcType=VARCHAR},
+      say = #{say,jdbcType=VARCHAR},
+      avatar = #{avatar,jdbcType=VARCHAR},
+      we_chat = #{weChat,jdbcType=VARCHAR},
+      qq = #{qq,jdbcType=VARCHAR},
+      open_we = #{openWe,jdbcType=VARCHAR},
+      open_qq = #{openQq,jdbcType=VARCHAR},
+      username = #{username,jdbcType=VARCHAR},
+      password = #{password,jdbcType=VARCHAR},
+      reset_code = #{resetCode,jdbcType=VARCHAR},
+      parent_id = #{parentId,jdbcType=INTEGER},
+      parent_name = #{parentName,jdbcType=VARCHAR},
+      parent_username = #{parentUsername,jdbcType=VARCHAR},
+      level = #{level,jdbcType=VARCHAR},
+      dept_id = #{deptId,jdbcType=INTEGER},
+      dept_name = #{deptName,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},
+      remark = #{remark,jdbcType=VARCHAR},
+      operate_ip = #{operateIp,jdbcType=VARCHAR},
+      operate_id = #{operateId,jdbcType=INTEGER},
+      operate_name = #{operateName,jdbcType=VARCHAR},
+      operate_time = #{operateTime,jdbcType=TIMESTAMP},
+      json_info = #{jsonInfo,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.maybe.sys.model.SysUser">
+    update sys_user
+    set name = #{name,jdbcType=VARCHAR},
+      nick_name = #{nickName,jdbcType=VARCHAR},
+      sex = #{sex,jdbcType=INTEGER},
+      birthday = #{birthday,jdbcType=DATE},
+      phone = #{phone,jdbcType=VARCHAR},
+      mail = #{mail,jdbcType=VARCHAR},
+      say = #{say,jdbcType=VARCHAR},
+      avatar = #{avatar,jdbcType=VARCHAR},
+      we_chat = #{weChat,jdbcType=VARCHAR},
+      qq = #{qq,jdbcType=VARCHAR},
+      open_we = #{openWe,jdbcType=VARCHAR},
+      open_qq = #{openQq,jdbcType=VARCHAR},
+      username = #{username,jdbcType=VARCHAR},
+      password = #{password,jdbcType=VARCHAR},
+      reset_code = #{resetCode,jdbcType=VARCHAR},
+      parent_id = #{parentId,jdbcType=INTEGER},
+      parent_name = #{parentName,jdbcType=VARCHAR},
+      parent_username = #{parentUsername,jdbcType=VARCHAR},
+      level = #{level,jdbcType=VARCHAR},
+      dept_id = #{deptId,jdbcType=INTEGER},
+      dept_name = #{deptName,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},
+      remark = #{remark,jdbcType=VARCHAR},
+      operate_ip = #{operateIp,jdbcType=VARCHAR},
+      operate_id = #{operateId,jdbcType=INTEGER},
+      operate_name = #{operateName,jdbcType=VARCHAR},
+      operate_time = #{operateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="countByDeptId" resultType="java.lang.Integer">
+    SELECT count(1)
+    FROM sys_user
+    WHERE 1=1
+    <if test="deptId != null">
+      AND dept_id = #{deptId,jdbcType=INTEGER}
+    </if>
+    <if test="query != null">
+      AND (
+        name LIKE CONCAT('%',#{query,jdbcType=VARCHAR},'%')
+        OR phone LIKE CONCAT('%',#{query,jdbcType=VARCHAR},'%')
+        OR mail LIKE CONCAT('%',#{query,jdbcType=VARCHAR},'%')
+      )
+    </if>
+  </select>
+  <select id="findUserPageByDeptId" resultMap="BaseResultMap">
+    SELECT <include refid="Base_Column_List" />
+    FROM sys_user
+    WHERE 1=1
+    <if test="deptId != null">
+      AND dept_id = #{deptId,jdbcType=INTEGER}
+    </if>
+    <if test="query != null">
+      AND (
+      name LIKE CONCAT('%',#{query,jdbcType=VARCHAR},'%')
+      OR phone LIKE CONCAT('%',#{query,jdbcType=VARCHAR},'%')
+      OR mail LIKE CONCAT('%',#{query,jdbcType=VARCHAR},'%')
+      )
+    </if>
+    LIMIT #{page.offset,jdbcType=INTEGER}, #{page.size,jdbcType=INTEGER}
+  </select>
+  <select id="countByDeptLevel" resultType="java.lang.Integer">
+    SELECT count(1)
+    FROM sys_user u, sys_dept d
+    WHERE u.dept_id = d.id
+    <if test="level != null">
+      AND d.level LIKE #{level,jdbcType=VARCHAR}
+    </if>
+    <if test="query != null">
+      AND (
+      u.name LIKE CONCAT('%',#{query,jdbcType=VARCHAR},'%')
+      OR u.phone LIKE CONCAT('%',#{query,jdbcType=VARCHAR},'%')
+      OR u.mail LIKE CONCAT('%',#{query,jdbcType=VARCHAR},'%')
+      )
+    </if>
+  </select>
+  <select id="findUserPageByDeptLevel" resultMap="BaseResultMap">
+    SELECT u.id, u.name, u.phone, u.mail, u.nick_name, u.avatar, u.open_we, u.open_qq, u.username, u.password, u.reset_code, u.dept_id, u.status, u.remark, u.operate_ip, u.operate_id, u.operate_name, u.operate_time
+    FROM sys_user u, sys_dept d
+    WHERE u.dept_id = d.id
+    <if test="level != null">
+      AND d.level LIKE #{level,jdbcType=VARCHAR}
+    </if>
+    <if test="query != null">
+      AND (
+      u.name LIKE CONCAT('%',#{query,jdbcType=VARCHAR},'%')
+      OR u.phone LIKE CONCAT('%',#{query,jdbcType=VARCHAR},'%')
+      OR u.mail LIKE CONCAT('%',#{query,jdbcType=VARCHAR},'%')
+      )
+    </if>
+    LIMIT #{page.offset,jdbcType=INTEGER}, #{page.size,jdbcType=INTEGER}
+  </select>
+  <select id="findByKeyword" parameterType="java.lang.String" resultMap="BaseResultMap">
+    SELECT <include refid="Base_Column_List" />
+    FROM sys_user
+    WHERE username = #{keyword}
+    OR phone = #{keyword}
+    OR mail = #{keyword}
+  </select>
+  <delete id="deleteByUserKeys">
+    DELETE FROM sys_user
+    WHERE id IN
+    <foreach collection ="userKeys" item="key"  open="(" separator="," close=")">
+      #{key,jdbcType=INTEGER}
+    </foreach >
+  </delete>
+  <select id="withListOfUser" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List" />
+    FROM sys_user
+    WHERE parent_id = #{parentId,jdbcType=INTEGER}
+  </select>
+  <select id="userCountPageOfNone" resultType="java.lang.Integer">
+    SELECT
+      count(1)
+    FROM sys_user
+    WHERE parent_id IS NULL
+    <if test="query != null">
+      AND (
+      name LIKE CONCAT('%',#{query,jdbcType=VARCHAR},'%')
+      OR phone LIKE CONCAT('%',#{query,jdbcType=VARCHAR},'%')
+      OR mail LIKE CONCAT('%',#{query,jdbcType=VARCHAR},'%')
+      )
+    </if>
+  </select>
+  <select id="userPageOfNone" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List" />
+    FROM sys_user
+    WHERE parent_id IS NULL
+    <if test="query != null">
+      AND (
+      name LIKE CONCAT('%',#{query,jdbcType=VARCHAR},'%')
+      OR phone LIKE CONCAT('%',#{query,jdbcType=VARCHAR},'%')
+      OR mail LIKE CONCAT('%',#{query,jdbcType=VARCHAR},'%')
+      )
+    </if>
+    LIMIT #{page.offset,jdbcType=INTEGER}, #{page.size,jdbcType=INTEGER}
+  </select>
+  <update id="underPush">
+    UPDATE sys_user
+    SET
+      parent_id = #{under.id,jdbcType=INTEGER},
+      parent_name = #{under.name,jdbcType=VARCHAR},
+      parent_username = #{under.username,jdbcType=VARCHAR},
+      level = #{under.level,jdbcType=VARCHAR}
+    WHERE id IN
+    <foreach collection="userKeys" item="item" index="index" separator="," open="(" close=")">
+      #{item,jdbcType=INTEGER}
+    </foreach>
+  </update>
+  <update id="underPull">
+    update sys_user
+    SET
+      parent_id = NULL,
+      parent_name = NULL,
+      parent_username = NULL,
+      level = NULL
+    WHERE parent_id = ${parentId}
+    AND id IN
+    <foreach collection="userKeys" item="item" index="index" separator="," open="(" close=")">
+      #{item,jdbcType=INTEGER}
+    </foreach>
+  </update>
+  <update id="underPullChild" parameterType="java.lang.Integer">
+    update sys_user
+    SET
+      parent_id = NULL,
+      parent_name = NULL,
+      parent_username = NULL,
+      level = NULL
+    WHERE level LIKE CONCAT('%',#{userKey,jdbcType=INTEGER},'%')
+  </update>
+  <select id="userListByRoleCode" resultMap="BaseResultMap">
+    SELECT
+      u.id, u.name, u.phone, u.mail, u.nick_name, u.avatar, u.open_we, u.open_qq, u.username, u.password, u.reset_code, u.dept_id, u.status, u.remark, u.operate_ip, u.operate_id, u.operate_name, u.operate_time
+    FROM sys_user u, sys_role r, sys_role_user ru
+    WHERE r.code = #{roleCode,jdbcType=VARCHAR}
+    AND r.id = ru.role_id
+    AND u.id = ru.user_id
+  </select>
+  <select id="userListByProcessId" parameterType="java.lang.String" resultMap="BaseResultMap">
+    SELECT
+      U.id, U.name, U.phone, U.mail, U.nick_name, U.avatar, U.open_we, U.open_qq, U.username, U.password, U.reset_code, U.dept_id, U.status, U.remark, U.operate_ip, U.operate_id, U.operate_name, U.operate_time
+    FROM  ACT_RU_TASK RT, sys_user U
+    WHERE RT.PROC_INST_ID_ = #{processId,jdbcType=VARCHAR}
+    AND RT.ASSIGNEE_ = U.username
+    UNION
+    SELECT
+      U.id, U.name, U.phone, U.mail, U.nick_name, U.avatar, U.open_we, U.open_qq, U.username, U.password, U.reset_code, U.dept_id, U.status, U.remark, U.operate_ip, U.operate_id, U.operate_name, U.operate_time
+    FROM ACT_RU_TASK RT, ACT_RU_IDENTITYLINK RI, sys_user U
+    WHERE RT.PROC_INST_ID_ = #{processId,jdbcType=VARCHAR}
+    AND RT.ID_ = RI.TASK_ID_
+    AND RI.TYPE_ = 'candidate'
+    AND RI.USER_ID_ = U.username
+    UNION
+    SELECT
+      U.id, U.name, U.phone, U.mail, U.nick_name, U.avatar, U.open_we, U.open_qq, U.username, U.password, U.reset_code, U.dept_id, U.status, U.remark, U.operate_ip, U.operate_id, U.operate_name, U.operate_time
+    FROM ACT_RU_TASK RT, ACT_RU_IDENTITYLINK RI, sys_role R, sys_role_user RU, sys_user U
+    WHERE RT.PROC_INST_ID_ = #{processId,jdbcType=VARCHAR}
+    AND RT.ID_ = RI.TASK_ID_
+    AND RI.TYPE_ = 'candidate'
+    AND RI.GROUP_ID_ = R.code
+    AND R.id = RU.role_id
+    AND RU.user_id = U.id
+  </select>
+  <select id="findJsonInfoByUserId" parameterType="java.lang.Integer" resultType="java.lang.String">
+    SELECT
+      json_info
+    FROM sys_user
+    WHERE id = #{id,jdbcType=INTEGER}
+  </select>
+</mapper>

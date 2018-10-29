@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.maybe.flow.dao.FlowPastMapper">
+  <resultMap id="BaseResultMap" type="com.maybe.flow.model.FlowPast">
+    <id column="ID_" jdbcType="VARCHAR" property="id" />
+    <result column="REV_" jdbcType="INTEGER" property="rev" />
+    <result column="PROC_DEF_ID_" jdbcType="VARCHAR" property="procDefId" />
+    <result column="PROC_DEF_KEY_" jdbcType="VARCHAR" property="procDefKey" />
+    <result column="PROC_DEF_NAME_" jdbcType="VARCHAR" property="procDefName" />
+    <result column="TASK_DEF_ID_" jdbcType="VARCHAR" property="taskDefId" />
+    <result column="TASK_DEF_KEY_" jdbcType="VARCHAR" property="taskDefKey" />
+    <result column="PROC_INST_ID_" jdbcType="VARCHAR" property="procInstId" />
+    <result column="EXECUTION_ID_" jdbcType="VARCHAR" property="executionId" />
+    <result column="SCOPE_ID_" jdbcType="VARCHAR" property="scopeId" />
+    <result column="SUB_SCOPE_ID_" jdbcType="VARCHAR" property="subScopeId" />
+    <result column="SCOPE_TYPE_" jdbcType="VARCHAR" property="scopeType" />
+    <result column="SCOPE_DEFINITION_ID_" jdbcType="VARCHAR" property="scopeDefinitionId" />
+    <result column="NAME_" jdbcType="VARCHAR" property="name" />
+    <result column="PARENT_TASK_ID_" jdbcType="VARCHAR" property="parentTaskId" />
+    <result column="DESCRIPTION_" jdbcType="VARCHAR" property="description" />
+    <result column="OWNER_" jdbcType="VARCHAR" property="owner" />
+    <result column="ASSIGNEE_" jdbcType="VARCHAR" property="assignee" />
+    <result column="START_TIME_" jdbcType="TIMESTAMP" property="startTime" />
+    <result column="CLAIM_TIME_" jdbcType="TIMESTAMP" property="claimTime" />
+    <result column="END_TIME_" jdbcType="TIMESTAMP" property="endTime" />
+    <result column="DURATION_" jdbcType="BIGINT" property="duration" />
+    <result column="DELETE_REASON_" jdbcType="VARCHAR" property="deleteReason" />
+    <result column="PRIORITY_" jdbcType="INTEGER" property="priority" />
+    <result column="DUE_DATE_" jdbcType="TIMESTAMP" property="dueDate" />
+    <result column="FORM_KEY_" jdbcType="VARCHAR" property="formKey" />
+    <result column="CATEGORY_" jdbcType="VARCHAR" property="category" />
+    <result column="TENANT_ID_" jdbcType="VARCHAR" property="tenantId" />
+    <result column="LAST_UPDATED_TIME_" jdbcType="TIMESTAMP" property="lastUpdatedTime" />
+    <result column="CREATE_USER_" jdbcType="VARCHAR" property="createUser" />
+    <result column="CREATE_DEPT_" jdbcType="VARCHAR" property="createDept" />
+    <result column="CREATE_TIME_" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="LEVEL_" jdbcType="INTEGER" property="level" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ID_, REV_, PROC_DEF_ID_, TASK_DEF_ID_, TASK_DEF_KEY_, PROC_INST_ID_, EXECUTION_ID_,
+    SCOPE_ID_, SUB_SCOPE_ID_, SCOPE_TYPE_, SCOPE_DEFINITION_ID_, NAME_, PARENT_TASK_ID_, 
+    DESCRIPTION_, OWNER_, ASSIGNEE_, START_TIME_, CLAIM_TIME_, END_TIME_, DURATION_, 
+    DELETE_REASON_, PRIORITY_, DUE_DATE_, FORM_KEY_, CATEGORY_, TENANT_ID_, LAST_UPDATED_TIME_
+  </sql>
+
+  <select id="pastCountByUser" resultType="java.lang.Integer">
+    SELECT
+      count(1)
+    FROM ACT_HI_TASKINST T, ACT_HI_PROCINST P, sys_user U, ACT_RE_PROCDEF RP, ACT_RE_DEPLOYMENT D
+    WHERE T.OWNER_ = #{userId,jdbcType=INTEGER}
+    AND T.PROC_INST_ID_ = P.ID_
+    AND P.START_USER_ID_ = U.id
+    AND T.PROC_DEF_ID_ = RP.ID_
+    AND RP.DEPLOYMENT_ID_ = D.ID_
+    <if test="param.name != null">
+      AND D.NAME_ LIKE CONCAT('%',#{param.name,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="param.user != null">
+      AND U.name LIKE CONCAT('%',#{param.user,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="param.task != null">
+      AND T.NAME_ LIKE CONCAT('%',#{param.task,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="param.level != null">
+      AND P.BUSINESS_KEY_ = #{param.level,jdbcType=INTEGER}
+    </if>
+    <if test="param.start != null">
+      AND P.START_TIME_ <![CDATA[ > ]]> #{param.start,jdbcType=TIMESTAMP}
+    </if>
+    <if test="param.end != null">
+      AND P.START_TIME_ <![CDATA[ < ]]> #{param.end,jdbcType=TIMESTAMP}
+    </if>
+  </select>
+
+  <select id="pastPageByUser" resultMap="BaseResultMap">
+    SELECT
+      T.ID_, T.REV_, T.PROC_DEF_ID_, RP.KEY_ PROC_DEF_KEY_, D.NAME_ PROC_DEF_NAME_, T.TASK_DEF_ID_, T.TASK_DEF_KEY_, T.PROC_INST_ID_, T.EXECUTION_ID_,
+      T.SCOPE_ID_, T.SUB_SCOPE_ID_, T.SCOPE_TYPE_, T.SCOPE_DEFINITION_ID_, T.NAME_, T.PARENT_TASK_ID_,
+      T.DESCRIPTION_, T.OWNER_, T.ASSIGNEE_, T.START_TIME_, T.CLAIM_TIME_, T.END_TIME_, T.DURATION_,
+      T.DELETE_REASON_, T.PRIORITY_, T.DUE_DATE_, T.FORM_KEY_, T.CATEGORY_, T.TENANT_ID_, T.LAST_UPDATED_TIME_,
+      U.name CREATE_USER_, U.dept_name CREATE_DEPT_, P.START_TIME_ CREATE_TIME_, P.BUSINESS_KEY_ LEVEL_
+    FROM ACT_HI_TASKINST T, ACT_HI_PROCINST P, sys_user U, ACT_RE_PROCDEF RP, ACT_RE_DEPLOYMENT D
+    WHERE T.OWNER_ = #{userId,jdbcType=INTEGER}
+    AND T.PROC_INST_ID_ = P.ID_
+    AND P.START_USER_ID_ = U.id
+    AND T.PROC_DEF_ID_ = RP.ID_
+    AND RP.DEPLOYMENT_ID_ = D.ID_
+    <if test="param.name != null">
+      AND D.NAME_ LIKE CONCAT('%',#{param.name,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="param.user != null">
+      AND U.name LIKE CONCAT('%',#{param.user,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="param.task != null">
+      AND T.NAME_ LIKE CONCAT('%',#{param.task,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="param.level != null">
+      AND P.BUSINESS_KEY_ = #{param.level,jdbcType=INTEGER}
+    </if>
+    <if test="param.start != null">
+      AND P.START_TIME_ <![CDATA[ > ]]> #{param.start,jdbcType=TIMESTAMP}
+    </if>
+    <if test="param.end != null">
+      AND P.START_TIME_ <![CDATA[ < ]]> #{param.end,jdbcType=TIMESTAMP}
+    </if>
+    ORDER BY T.END_TIME_ DESC
+    LIMIT #{page.offset,jdbcType=INTEGER}, #{page.size,jdbcType=INTEGER}
+  </select>
+
+</mapper>

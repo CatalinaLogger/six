@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.maybe.sys.dao.SysMenuMapper">
+  <resultMap id="BaseResultMap" type="com.maybe.sys.model.SysMenu">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="path" jdbcType="VARCHAR" property="path" />
+    <result column="redirect" jdbcType="VARCHAR" property="redirect" />
+    <result column="icon" jdbcType="VARCHAR" property="icon" />
+    <result column="hidden" jdbcType="INTEGER" property="hidden" />
+    <result column="cache" jdbcType="INTEGER" property="cache" />
+    <result column="parent_id" jdbcType="INTEGER" property="parentId" />
+    <result column="level" jdbcType="VARCHAR" property="level" />
+    <result column="seq" jdbcType="INTEGER" property="seq" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="operate_ip" jdbcType="VARCHAR" property="operateIp" />
+    <result column="operate_id" jdbcType="INTEGER" property="operateId" />
+    <result column="operate_name" jdbcType="VARCHAR" property="operateName" />
+    <result column="operate_time" jdbcType="TIMESTAMP" property="operateTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, name, path, redirect, icon, hidden, cache, parent_id, level, seq, type, remark,
+    operate_ip, operate_id, operate_name, operate_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from sys_menu
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from sys_menu
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.maybe.sys.model.SysMenu">
+    insert into sys_menu (id, name, path,
+      redirect, icon, hidden,
+      cache, parent_id, level,
+      seq, type, remark,
+      operate_ip, operate_id, operate_name,
+      operate_time)
+    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{path,jdbcType=VARCHAR},
+      #{redirect,jdbcType=VARCHAR}, #{icon,jdbcType=VARCHAR}, #{hidden,jdbcType=INTEGER},
+      #{cache,jdbcType=INTEGER}, #{parentId,jdbcType=INTEGER}, #{level,jdbcType=VARCHAR},
+      #{seq,jdbcType=INTEGER}, #{type,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR},
+      #{operateIp,jdbcType=VARCHAR}, #{operateId,jdbcType=INTEGER}, #{operateName,jdbcType=VARCHAR},
+      #{operateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.maybe.sys.model.SysMenu">
+    insert into sys_menu
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="path != null">
+        path,
+      </if>
+      <if test="redirect != null">
+        redirect,
+      </if>
+      <if test="icon != null">
+        icon,
+      </if>
+      <if test="hidden != null">
+        hidden,
+      </if>
+      <if test="cache != null">
+        cache,
+      </if>
+      <if test="parentId != null">
+        parent_id,
+      </if>
+      <if test="level != null">
+        level,
+      </if>
+      <if test="seq != null">
+        seq,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="operateIp != null">
+        operate_ip,
+      </if>
+      <if test="operateId != null">
+        operate_id,
+      </if>
+      <if test="operateName != null">
+        operate_name,
+      </if>
+      <if test="operateTime != null">
+        operate_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="path != null">
+        #{path,jdbcType=VARCHAR},
+      </if>
+      <if test="redirect != null">
+        #{redirect,jdbcType=VARCHAR},
+      </if>
+      <if test="icon != null">
+        #{icon,jdbcType=VARCHAR},
+      </if>
+      <if test="hidden != null">
+        #{hidden,jdbcType=INTEGER},
+      </if>
+      <if test="cache != null">
+        #{cache,jdbcType=INTEGER},
+      </if>
+      <if test="parentId != null">
+        #{parentId,jdbcType=INTEGER},
+      </if>
+      <if test="level != null">
+        #{level,jdbcType=VARCHAR},
+      </if>
+      <if test="seq != null">
+        #{seq,jdbcType=INTEGER},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="operateIp != null">
+        #{operateIp,jdbcType=VARCHAR},
+      </if>
+      <if test="operateId != null">
+        #{operateId,jdbcType=INTEGER},
+      </if>
+      <if test="operateName != null">
+        #{operateName,jdbcType=VARCHAR},
+      </if>
+      <if test="operateTime != null">
+        #{operateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.maybe.sys.model.SysMenu">
+    update sys_menu
+    <set>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="path != null">
+        path = #{path,jdbcType=VARCHAR},
+      </if>
+      <if test="redirect != null">
+        redirect = #{redirect,jdbcType=VARCHAR},
+      </if>
+      <if test="icon != null">
+        icon = #{icon,jdbcType=VARCHAR},
+      </if>
+      <if test="hidden != null">
+        hidden = #{hidden,jdbcType=INTEGER},
+      </if>
+      <if test="cache != null">
+        cache = #{cache,jdbcType=INTEGER},
+      </if>
+      <if test="parentId != null">
+        parent_id = #{parentId,jdbcType=INTEGER},
+      </if>
+      <if test="level != null">
+        level = #{level,jdbcType=VARCHAR},
+      </if>
+      <if test="seq != null">
+        seq = #{seq,jdbcType=INTEGER},
+      </if>
+      <if test="type != null">
+        type = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="operateIp != null">
+        operate_ip = #{operateIp,jdbcType=VARCHAR},
+      </if>
+      <if test="operateId != null">
+        operate_id = #{operateId,jdbcType=INTEGER},
+      </if>
+      <if test="operateName != null">
+        operate_name = #{operateName,jdbcType=VARCHAR},
+      </if>
+      <if test="operateTime != null">
+        operate_time = #{operateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.maybe.sys.model.SysMenu">
+    update sys_menu
+    set name = #{name,jdbcType=VARCHAR},
+      path = #{path,jdbcType=VARCHAR},
+      redirect = #{redirect,jdbcType=VARCHAR},
+      icon = #{icon,jdbcType=VARCHAR},
+      hidden = #{hidden,jdbcType=INTEGER},
+      cache = #{cache,jdbcType=INTEGER},
+      parent_id = #{parentId,jdbcType=INTEGER},
+      level = #{level,jdbcType=VARCHAR},
+      seq = #{seq,jdbcType=INTEGER},
+      type = #{type,jdbcType=INTEGER},
+      remark = #{remark,jdbcType=VARCHAR},
+      operate_ip = #{operateIp,jdbcType=VARCHAR},
+      operate_id = #{operateId,jdbcType=INTEGER},
+      operate_name = #{operateName,jdbcType=VARCHAR},
+      operate_time = #{operateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="findAll" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List" />
+    FROM sys_menu
+  </select>
+  <select id="findByUserId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    SELECT DISTINCT M.id, M.name, M.path, M.redirect, M.icon, M.hidden, M.cache, M.parent_id, M.level, M.seq, M.type, M.remark, M.operate_ip, M.operate_id, M.operate_name, M.operate_time
+    FROM sys_role_user RU, sys_role_menu RM, sys_menu M
+    WHERE RU.user_id = #{userId,jdbcType=INTEGER}
+    AND RU.role_id = RM.role_id
+    AND RM.menu_id = M.id
+  </select>
+  <select id="findChildrenByLevel" parameterType="java.lang.String" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List" />
+    FROM sys_menu
+    WHERE level LIKE #{level,jdbcType=VARCHAR} || '%'
+  </select>
+  <update id="batchUpdateMenuLevel" parameterType="java.util.List">
+    UPDATE sys_menu
+    <trim prefix="set" suffixOverrides=",">
+      <trim prefix="level = case" suffix="end,">
+        <foreach collection="sysMenuList" item="item" index="index">
+          when id=#{item.id,jdbcType=INTEGER} then #{item.level,jdbcType=VARCHAR}
+        </foreach>
+      </trim>
+    </trim>
+    where id in
+    <foreach collection="sysMenuList" item="item" index="index" separator="," open="(" close=")">
+      #{item.id,jdbcType=INTEGER}
+    </foreach>
+  </update>
+</mapper>

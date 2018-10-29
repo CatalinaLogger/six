@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.maybe.sys.dao.SysRoleUserMapper">
+  <resultMap id="BaseResultMap" type="com.maybe.sys.model.SysRoleUser">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="role_id" jdbcType="INTEGER" property="roleId" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="operate_ip" jdbcType="VARCHAR" property="operateIp" />
+    <result column="operate_id" jdbcType="INTEGER" property="operateId" />
+    <result column="operate_name" jdbcType="VARCHAR" property="operateName" />
+    <result column="operate_time" jdbcType="TIMESTAMP" property="operateTime" />
+  </resultMap>
+  <resultMap id="UserResultMap" type="com.maybe.sys.model.SysUser">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+    <result column="mail" jdbcType="VARCHAR" property="mail" />
+    <result column="nick_name" jdbcType="VARCHAR" property="nickName" />
+    <result column="avatar" jdbcType="VARCHAR" property="avatar" />
+    <result column="open_we" jdbcType="VARCHAR" property="openWe" />
+    <result column="open_qq" jdbcType="VARCHAR" property="openQq" />
+    <result column="username" jdbcType="VARCHAR" property="username" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="reset_code" jdbcType="VARCHAR" property="resetCode" />
+    <result column="dept_id" jdbcType="INTEGER" property="deptId" />
+    <result column="dept_name" jdbcType="VARCHAR" property="deptName" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="operate_ip" jdbcType="VARCHAR" property="operateIp" />
+    <result column="operate_id" jdbcType="INTEGER" property="operateId" />
+    <result column="operate_name" jdbcType="VARCHAR" property="operateName" />
+    <result column="operate_time" jdbcType="TIMESTAMP" property="operateTime" />
+  </resultMap>
+  <resultMap id="RoleResultMap" type="com.maybe.sys.model.SysRole">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="code" jdbcType="VARCHAR" property="code" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="operate_ip" jdbcType="VARCHAR" property="operateIp" />
+    <result column="operate_id" jdbcType="INTEGER" property="operateId" />
+    <result column="operate_name" jdbcType="VARCHAR" property="operateName" />
+    <result column="operate_time" jdbcType="TIMESTAMP" property="operateTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, role_id, user_id, operate_ip, operate_id, operate_name, operate_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from sys_role_user
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from sys_role_user
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.maybe.sys.model.SysRoleUser">
+    insert into sys_role_user (id, role_id, user_id,
+      operate_ip, operate_id, operate_name,
+      operate_time)
+    values (#{id,jdbcType=INTEGER}, #{roleId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER},
+      #{operateIp,jdbcType=VARCHAR}, #{operateId,jdbcType=INTEGER}, #{operateName,jdbcType=VARCHAR},
+      #{operateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.maybe.sys.model.SysRoleUser">
+    insert into sys_role_user
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="roleId != null">
+        role_id,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="operateIp != null">
+        operate_ip,
+      </if>
+      <if test="operateId != null">
+        operate_id,
+      </if>
+      <if test="operateName != null">
+        operate_name,
+      </if>
+      <if test="operateTime != null">
+        operate_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="roleId != null">
+        #{roleId,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="operateIp != null">
+        #{operateIp,jdbcType=VARCHAR},
+      </if>
+      <if test="operateId != null">
+        #{operateId,jdbcType=INTEGER},
+      </if>
+      <if test="operateName != null">
+        #{operateName,jdbcType=VARCHAR},
+      </if>
+      <if test="operateTime != null">
+        #{operateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.maybe.sys.model.SysRoleUser">
+    update sys_role_user
+    <set>
+      <if test="roleId != null">
+        role_id = #{roleId,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="operateIp != null">
+        operate_ip = #{operateIp,jdbcType=VARCHAR},
+      </if>
+      <if test="operateId != null">
+        operate_id = #{operateId,jdbcType=INTEGER},
+      </if>
+      <if test="operateName != null">
+        operate_name = #{operateName,jdbcType=VARCHAR},
+      </if>
+      <if test="operateTime != null">
+        operate_time = #{operateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.maybe.sys.model.SysRoleUser">
+    update sys_role_user
+    set role_id = #{roleId,jdbcType=INTEGER},
+      user_id = #{userId,jdbcType=INTEGER},
+      operate_ip = #{operateIp,jdbcType=VARCHAR},
+      operate_id = #{operateId,jdbcType=INTEGER},
+      operate_name = #{operateName,jdbcType=VARCHAR},
+      operate_time = #{operateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="roleListByUserId" parameterType="java.lang.Integer" resultMap="RoleResultMap">
+    SELECT r.id, r.code, r.name, r.operate_ip, r.operate_id, r.operate_name, r.operate_time
+    FROM sys_role r, sys_role_user u
+    WHERE r.id = u.role_id
+    AND u.user_id = #{userId,jdbcType=INTEGER}
+  </select>
+  <select id="selectUserKeysByRoleId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+    SELECT user_id
+    FROM sys_role_user
+    WHERE role_id = #{roleId,jdbcType=INTEGER}
+  </select>
+  <insert id="insertRoleUser">
+    INSERT INTO sys_role_user
+    (role_id, user_id, operate_ip, operate_id, operate_name, operate_time)
+    VALUES
+    <foreach collection ="userKeys" item="key" separator =",">
+      (#{sysRole.id,jdbcType=INTEGER}, #{key,jdbcType=INTEGER}, #{sysRole.operateIp,jdbcType=VARCHAR},
+      #{sysRole.operateId,jdbcType=INTEGER}, #{sysRole.operateName,jdbcType=VARCHAR}, #{sysRole.operateTime,jdbcType=TIMESTAMP})
+    </foreach >
+  </insert>
+  <delete id="removeRoleUser">
+    DELETE FROM sys_role_user
+    WHERE role_id = #{sysRole.id,jdbcType=INTEGER}
+    AND user_id in
+    <foreach collection ="userKeys" item="key"  open="(" separator="," close=")">
+      #{key,jdbcType=INTEGER}
+    </foreach >
+  </delete>
+  <select id="selectRoleKeysByUserId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+    SELECT role_id
+    FROM sys_role_user
+    WHERE user_id = #{userId,jdbcType=INTEGER}
+  </select>
+  <insert id="insertUserRole">
+    INSERT INTO sys_role_user
+    (role_id, user_id, operate_ip, operate_id, operate_name, operate_time)
+    VALUES
+    <foreach collection ="roleKeys" item="key" separator =",">
+      (#{key,jdbcType=INTEGER}, #{sysUser.id,jdbcType=INTEGER}, #{sysUser.operateIp,jdbcType=VARCHAR},
+      #{sysUser.operateId,jdbcType=INTEGER}, #{sysUser.operateName,jdbcType=VARCHAR}, #{sysUser.operateTime,jdbcType=TIMESTAMP})
+    </foreach >
+  </insert>
+  <delete id="removeUserRole">
+    DELETE FROM sys_role_user
+    WHERE user_id = #{sysUser.id,jdbcType=INTEGER}
+    AND role_id in
+    <foreach collection ="roleKeys" item="key"  open="(" separator="," close=")">
+      #{key,jdbcType=INTEGER}
+    </foreach >
+  </delete>
+  <select id="countBoundByRoleId" resultType="java.lang.Integer">
+    SELECT count(1)
+    FROM sys_user U
+    WHERE EXISTS(SELECT 1 FROM sys_role_user RU WHERE RU.user_id = U.id AND RU.role_id = #{roleId,jdbcType=INTEGER})
+    <if test="query != null">
+      AND (
+      U.name LIKE #{query,jdbcType=VARCHAR}
+      OR U.phone LIKE #{query,jdbcType=VARCHAR}
+      OR U.mail LIKE #{query,jdbcType=VARCHAR}
+      )
+    </if>
+  </select>
+  <select id="pageBoundByRoleId" resultMap="UserResultMap">
+    SELECT U.*
+    FROM sys_user U
+    WHERE EXISTS(SELECT 1 FROM sys_role_user RU WHERE RU.user_id = U.id AND RU.role_id = #{roleId,jdbcType=INTEGER})
+    <if test="query != null">
+      AND (
+      U.name LIKE #{query,jdbcType=VARCHAR}
+      OR U.phone LIKE #{query,jdbcType=VARCHAR}
+      OR U.mail LIKE #{query,jdbcType=VARCHAR}
+      )
+    </if>
+    LIMIT #{page.offset,jdbcType=INTEGER}, #{page.size,jdbcType=INTEGER}
+  </select>
+  <select id="countUnboundByRoleId" resultType="java.lang.Integer">
+    SELECT count(1)
+    FROM sys_user U
+    WHERE NOT EXISTS(SELECT 1 FROM sys_role_user RU WHERE RU.user_id = U.id AND RU.role_id = #{roleId,jdbcType=INTEGER})
+    <if test="query != null">
+      AND (
+      U.name LIKE #{query,jdbcType=VARCHAR}
+      OR U.phone LIKE #{query,jdbcType=VARCHAR}
+      OR U.mail LIKE #{query,jdbcType=VARCHAR}
+      )
+    </if>
+  </select>
+  <select id="pageUnboundByRoleId" resultMap="UserResultMap">
+    SELECT U.*
+    FROM sys_user U
+    WHERE NOT EXISTS(SELECT 1 FROM sys_role_user RU WHERE RU.user_id = U.id AND RU.role_id = #{roleId,jdbcType=INTEGER})
+    <if test="query != null">
+      AND (
+      U.name LIKE #{query,jdbcType=VARCHAR}
+      OR U.phone LIKE #{query,jdbcType=VARCHAR}
+      OR U.mail LIKE #{query,jdbcType=VARCHAR}
+      )
+    </if>
+    LIMIT #{page.offset,jdbcType=INTEGER}, #{page.size,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteRoleUserByUserId" parameterType="java.lang.Integer">
+    DELETE FROM sys_role_user
+    WHERE user_id = #{userId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteRoleUserByUserKeys">
+    DELETE FROM sys_role_user
+    WHERE user_id in
+    <foreach collection ="userKeys" item="key"  open="(" separator="," close=")">
+      #{key,jdbcType=INTEGER}
+    </foreach >
+  </delete>
+  <delete id="deleteRoleUserByRoleId" parameterType="java.lang.Integer">
+    DELETE FROM sys_role_user
+    WHERE role_id = #{roleId,jdbcType=INTEGER}
+  </delete>
+</mapper>

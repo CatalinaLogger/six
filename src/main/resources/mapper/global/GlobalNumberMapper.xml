@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.maybe.global.dao.GlobalNumberMapper">
+  <resultMap id="BaseResultMap" type="com.maybe.global.model.GlobalNumber">
+    <id column="key" jdbcType="VARCHAR" property="key" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="prefix" jdbcType="VARCHAR" property="prefix" />
+    <result column="format" jdbcType="VARCHAR" property="format" />
+    <result column="suffix" jdbcType="INTEGER" property="suffix" />
+    <result column="suffix_size" jdbcType="INTEGER" property="suffixSize" />
+    <result column="operate_ip" jdbcType="VARCHAR" property="operateIp" />
+    <result column="operate_id" jdbcType="INTEGER" property="operateId" />
+    <result column="operate_name" jdbcType="VARCHAR" property="operateName" />
+    <result column="operate_time" jdbcType="TIMESTAMP" property="operateTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    key, name, prefix, format, suffix, suffix_size, operate_ip, operate_id, operate_name, 
+    operate_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from global_number
+    where key = #{key,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from global_number
+    where key = #{key,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.maybe.global.model.GlobalNumber">
+    insert into global_number (key, name, prefix, 
+      format, suffix, suffix_size, 
+      operate_ip, operate_id, operate_name, 
+      operate_time)
+    values (#{key,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{prefix,jdbcType=VARCHAR}, 
+      #{format,jdbcType=VARCHAR}, #{suffix,jdbcType=INTEGER}, #{suffixSize,jdbcType=INTEGER}, 
+      #{operateIp,jdbcType=VARCHAR}, #{operateId,jdbcType=INTEGER}, #{operateName,jdbcType=VARCHAR}, 
+      #{operateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.maybe.global.model.GlobalNumber">
+    insert into global_number
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="key != null">
+        key,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="prefix != null">
+        prefix,
+      </if>
+      <if test="format != null">
+        format,
+      </if>
+      <if test="suffix != null">
+        suffix,
+      </if>
+      <if test="suffixSize != null">
+        suffix_size,
+      </if>
+      <if test="operateIp != null">
+        operate_ip,
+      </if>
+      <if test="operateId != null">
+        operate_id,
+      </if>
+      <if test="operateName != null">
+        operate_name,
+      </if>
+      <if test="operateTime != null">
+        operate_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="key != null">
+        #{key,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="prefix != null">
+        #{prefix,jdbcType=VARCHAR},
+      </if>
+      <if test="format != null">
+        #{format,jdbcType=VARCHAR},
+      </if>
+      <if test="suffix != null">
+        #{suffix,jdbcType=INTEGER},
+      </if>
+      <if test="suffixSize != null">
+        #{suffixSize,jdbcType=INTEGER},
+      </if>
+      <if test="operateIp != null">
+        #{operateIp,jdbcType=VARCHAR},
+      </if>
+      <if test="operateId != null">
+        #{operateId,jdbcType=INTEGER},
+      </if>
+      <if test="operateName != null">
+        #{operateName,jdbcType=VARCHAR},
+      </if>
+      <if test="operateTime != null">
+        #{operateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.maybe.global.model.GlobalNumber">
+    update global_number
+    <set>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="prefix != null">
+        prefix = #{prefix,jdbcType=VARCHAR},
+      </if>
+      <if test="format != null">
+        format = #{format,jdbcType=VARCHAR},
+      </if>
+      <if test="suffix != null">
+        suffix = #{suffix,jdbcType=INTEGER},
+      </if>
+      <if test="suffixSize != null">
+        suffix_size = #{suffixSize,jdbcType=INTEGER},
+      </if>
+      <if test="operateIp != null">
+        operate_ip = #{operateIp,jdbcType=VARCHAR},
+      </if>
+      <if test="operateId != null">
+        operate_id = #{operateId,jdbcType=INTEGER},
+      </if>
+      <if test="operateName != null">
+        operate_name = #{operateName,jdbcType=VARCHAR},
+      </if>
+      <if test="operateTime != null">
+        operate_time = #{operateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where key = #{key,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.maybe.global.model.GlobalNumber">
+    update global_number
+    set name = #{name,jdbcType=VARCHAR},
+      prefix = #{prefix,jdbcType=VARCHAR},
+      format = #{format,jdbcType=VARCHAR},
+      suffix = #{suffix,jdbcType=INTEGER},
+      suffix_size = #{suffixSize,jdbcType=INTEGER},
+      operate_ip = #{operateIp,jdbcType=VARCHAR},
+      operate_id = #{operateId,jdbcType=INTEGER},
+      operate_name = #{operateName,jdbcType=VARCHAR},
+      operate_time = #{operateTime,jdbcType=TIMESTAMP}
+    where key = #{key,jdbcType=VARCHAR}
+  </update>
+</mapper>

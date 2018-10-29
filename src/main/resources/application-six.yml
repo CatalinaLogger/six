@@ -1,0 +1,110 @@
+spring:
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.jdbc.Driver
+    username: root
+    password: 123
+    url: jdbc:mysql://118.24.80.59/six?useUnicode=true&useSSL=false&characterEncoding=utf-8
+    # 下面为连接池的补充设置，应用到上面所有数据源中
+    # 初始化大小，最小，最大
+    initial-size: 5
+    min-idle: 5
+    max-active: 20
+    # 配置获取连接等待超时的时间
+    max-wait: 60000
+    # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+    time-between-eviction-runs-millis: 60000
+    # 配置一个连接在池中最小生存的时间，单位是毫秒
+    min-evictable-idle-time-millis: 300000
+    validation-query: SELECT 1 FROM DUAL
+    test-while-idle: true
+    test-on-borrow: false
+    test-on-return: false
+    # 打开PSCache，并且指定每个连接上PSCache的大小
+    pool-prepared-statements: true
+    max-pool-prepared-statement-per-connection-size: 20
+    # 配置监控统计拦截的filters，去掉后监控界面sql无法统计，'wall'用于防火墙
+    filters: stat,wall,logback
+    # 通过connectProperties属性来打开mergeSql功能；慢SQL记录
+    connection-properties:
+      druid:
+        stat:
+          merge-sql: true
+          slow-sql-millis: 5000
+    # 合并多个DruidDataSource的监控数据
+    # useGlobalDataSourceStat: true
+  redis:
+    #数据库索引
+    database: 0
+    host: 118.24.80.59
+    port: 6379
+    password: qwertyuiop
+    #连接超时时间
+    timeout: 10000
+    jedis:
+      pool:
+        #最大连接数
+        max-active: 8
+        #最大阻塞等待时间(负数表示没限制)
+        max-wait: -1
+        #最大空闲
+        max-idle: 8
+        #最小空闲
+        min-idle: 0
+  jpa:
+    show-sql: true
+    properties:
+          hibernate:
+            format_sql: true
+  jackson:
+    default-property-inclusion: non_null
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+  servlet:
+    multipart:
+      max-file-size: 500MB
+      max-request-size: 10MB
+  mail:
+    host: smtp.qq.com
+    port: 587
+    username: 1641525429@QQ.COM
+    password: klvizszkejebcjch
+    properties:
+      smtp:
+        auth: true
+        starttls:
+          enable: true
+          required: true
+        ssl:
+          enable: true
+
+flowable:
+  checkProcessDefinitions: false
+  common:
+    app:
+      idm-url: a
+  idm:
+    enabled: false
+
+# 分布式文件系统FDFS配置
+fdfs:
+  so-timeout: 1500 #socket连接超时时长
+  connect-timeout: 600 #连接tracker服务器超时时长
+  thumb-image: #缩略图生成参数，可选
+    width: 150
+    height: 150
+  tracker-list: #TrackerList参数,支持多个，我这里只有一个，如果有多个在下方加- x.x.x.x:port
+    - 118.24.80.59:22122
+
+server:
+  port: 8888
+  max-http-header-size: 1048576
+#  ssl:
+#    key-store: classpath:jsixg.com.jks
+#    key-store-password: 0b003r22b03od5
+#    key-store-type: JKS
+#    key-alias: jsixg.com
+
+system:
+  avatar: https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif?imageView2/1/w/80/h/80
+  fast-url: http://www.jsixg.com/
