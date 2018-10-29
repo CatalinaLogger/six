@@ -177,18 +177,12 @@ public class SysUserServiceImpl implements ISysUserService{
             SysDept sysDept = sysDeptMapper.selectByPrimaryKey(SessionLocal.getUser().getDeptId());
             String level = sysDept.getLevel() + "." + sysDept.getId() + "%";
             int total = sysUserMapper.countByDeptLevel(level, query);
-            if (total > 0) {
-                List<SysUser> list = sysUserMapper.findUserPageByDeptLevel(level, query, page);
-                return new PageDto<>(page.getPage(), page.getSize(), total, list);
-            }
-            return new PageDto<>(page.getPage(), page.getSize(), total, null);
+            List<SysUser> list = sysUserMapper.findUserPageByDeptLevel(level, query, page);
+            return new PageDto<>(page.getPage(), page.getSize(), total, list);
         } else {
             int total = sysUserMapper.countByDeptId(deptId, query);
-            if (total > 0) {
-                List<SysUser> list = sysUserMapper.findUserPageByDeptId(deptId, query, page);
-                return new PageDto<>(page.getPage(), page.getSize(), total, list);
-            }
-            return new PageDto<>(page.getPage(), page.getSize(), total, null);
+            List<SysUser> list = sysUserMapper.findUserPageByDeptId(deptId, query, page);
+            return new PageDto<>(page.getPage(), page.getSize(), total, list);
         }
     }
 

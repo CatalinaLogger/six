@@ -19,10 +19,7 @@ public class SysCenterServiceImpl implements ISysCenterService {
     @Override
     public PageDto<SysUserLogin> loginPage(PageParam page) {
         int total = sysUserLoginMapper.loginCount(SessionLocal.getUser().getId());
-        if (total > 0) {
-            List<SysUserLogin> list = sysUserLoginMapper.loginPage(SessionLocal.getUser().getId(), page);
-            return new PageDto<>(page.getPage(), page.getSize(), total, list);
-        }
-        return new PageDto<>(page.getPage(), page.getSize(), total, null);
+        List<SysUserLogin> list = sysUserLoginMapper.loginPage(SessionLocal.getUser().getId(), page);
+        return new PageDto<>(page.getPage(), page.getSize(), total, list);
     }
 }
