@@ -191,6 +191,7 @@
     <include refid="Base_Column_List" />
     FROM global_conf_data
     WHERE conf_code = #{code,jdbcType=VARCHAR}
+    ORDER BY seq ASC
   </select>
   <delete id="deleteByConfId" parameterType="java.lang.Integer">
     DELETE FROM global_conf_data

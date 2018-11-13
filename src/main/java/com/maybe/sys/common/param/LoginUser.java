@@ -1,7 +1,10 @@
 package com.maybe.sys.common.param;
 
+import com.maybe.sys.model.SysDept;
 import lombok.Data;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 /**
  * @author jin
@@ -22,9 +25,7 @@ public class LoginUser {
 
     private String username;
 
-    private Integer deptId;
-
-    private String deptName;
+    private List<SysDept> dept;
 
     private Integer status;
 

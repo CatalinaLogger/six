@@ -5,13 +5,15 @@
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="code" jdbcType="VARCHAR" property="code" />
     <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="parent_id" jdbcType="INTEGER" property="parentId" />
+    <result column="edit" jdbcType="INTEGER" property="edit" />
     <result column="operate_ip" jdbcType="VARCHAR" property="operateIp" />
     <result column="operate_id" jdbcType="INTEGER" property="operateId" />
     <result column="operate_name" jdbcType="VARCHAR" property="operateName" />
     <result column="operate_time" jdbcType="TIMESTAMP" property="operateTime" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, code, name, operate_ip, operate_id, operate_name, operate_time
+    id, code, name, parent_id, edit, operate_ip, operate_id, operate_name, operate_time
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select
@@ -23,15 +25,17 @@
     delete from sys_role
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.maybe.sys.model.SysRole">
+  <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.maybe.sys.model.SysRole">
     insert into sys_role (id, code, name,
-      operate_ip, operate_id, operate_name,
-      operate_time)
+      parent_id, edit, operate_ip,
+      operate_id, operate_name, operate_time
+      )
     values (#{id,jdbcType=INTEGER}, #{code,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR},
-      #{operateIp,jdbcType=VARCHAR}, #{operateId,jdbcType=INTEGER}, #{operateName,jdbcType=VARCHAR},
-      #{operateTime,jdbcType=TIMESTAMP})
+      #{parentId,jdbcType=INTEGER}, #{edit,jdbcType=INTEGER}, #{operateIp,jdbcType=VARCHAR},
+      #{operateId,jdbcType=INTEGER}, #{operateName,jdbcType=VARCHAR}, #{operateTime,jdbcType=TIMESTAMP}
+      )
   </insert>
-  <insert id="insertSelective" parameterType="com.maybe.sys.model.SysRole">
+  <insert id="insertSelective" useGeneratedKeys="true" keyProperty="id" parameterType="com.maybe.sys.model.SysRole">
     insert into sys_role
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -42,6 +46,12 @@
       </if>
       <if test="name != null">
         name,
+      </if>
+      <if test="parentId != null">
+        parent_id,
+      </if>
+      <if test="edit != null">
+        edit,
       </if>
       <if test="operateIp != null">
         operate_ip,
@@ -66,6 +76,12 @@
       <if test="name != null">
         #{name,jdbcType=VARCHAR},
       </if>
+      <if test="parentId != null">
+        #{parentId,jdbcType=INTEGER},
+      </if>
+      <if test="edit != null">
+        #{edit,jdbcType=INTEGER},
+      </if>
       <if test="operateIp != null">
         #{operateIp,jdbcType=VARCHAR},
       </if>
@@ -89,6 +105,12 @@
       <if test="name != null">
         name = #{name,jdbcType=VARCHAR},
       </if>
+      <if test="parentId != null">
+        parent_id = #{parentId,jdbcType=INTEGER},
+      </if>
+      <if test="edit != null">
+        edit = #{edit,jdbcType=INTEGER},
+      </if>
       <if test="operateIp != null">
         operate_ip = #{operateIp,jdbcType=VARCHAR},
       </if>
@@ -108,6 +130,8 @@
     update sys_role
     set code = #{code,jdbcType=VARCHAR},
       name = #{name,jdbcType=VARCHAR},
+      parent_id = #{parentId,jdbcType=INTEGER},
+      edit = #{edit,jdbcType=INTEGER},
       operate_ip = #{operateIp,jdbcType=VARCHAR},
       operate_id = #{operateId,jdbcType=INTEGER},
       operate_name = #{operateName,jdbcType=VARCHAR},
@@ -115,17 +139,17 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
 
-  <select id="findAll" resultMap="BaseResultMap">
+  <select id="groupList" resultMap="BaseResultMap">
     SELECT
     <include refid="Base_Column_List" />
     FROM sys_role
+    WHERE parent_id = 0
   </select>
-  <select id="countByName" parameterType="java.util.Map" resultType="int">
-    SELECT count(1)
+
+  <select id="roleList" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List" />
     FROM sys_role
-    WHERE name = #{name,jdbcType=VARCHAR}
-    <if test="id != null">
-      AND id != #{id,jdbcType=INTEGER}
-    </if>
+    WHERE <![CDATA[parent_id <> 0]]>
   </select>
 </mapper>

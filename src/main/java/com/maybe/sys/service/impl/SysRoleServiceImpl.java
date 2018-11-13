@@ -6,12 +6,8 @@ import com.maybe.sys.common.exception.SixException;
 import com.maybe.sys.common.param.PageParam;
 import com.maybe.sys.common.param.RoleParam;
 import com.maybe.sys.common.util.SessionLocal;
-import com.maybe.sys.dao.SysRoleMapper;
-import com.maybe.sys.dao.SysRoleMenuMapper;
-import com.maybe.sys.dao.SysRoleUserMapper;
-import com.maybe.sys.model.SysMenu;
+import com.maybe.sys.dao.*;
 import com.maybe.sys.model.SysRole;
-import com.maybe.sys.model.SysRoleMenu;
 import com.maybe.sys.model.SysUser;
 import com.maybe.sys.service.ISysRoleService;
 import org.springframework.beans.BeanUtils;
@@ -24,29 +20,66 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-/**
- * @author jin
- * @description:
- * @date 2018/5/10
- */
 @Service
 public class SysRoleServiceImpl implements ISysRoleService {
 
     @Autowired
     private SysRoleMapper sysRoleMapper;
     @Autowired
+    private SysUtilsMapper sysUtilsMapper;
+    @Autowired
     private SysRoleMenuMapper sysRoleMenuMapper;
     @Autowired
     private SysRoleUserMapper sysRoleUserMapper;
 
     @Override
+    public void insertGroup(String name) {
+        if (checkExist(0, null, "name", name)) {
+            throw new SixException(ResultEnum.ERROR_PARAM.getCode(), "该角色组名称已存在");
+        }
+        SysRole group = new SysRole();
+        group.setName(name);
+        group.setParentId(0);
+        group.setEdit(1);
+        group.setOperateIp(SessionLocal.getUser().getOperateIp());
+        group.setOperateId(SessionLocal.getUser().getId());
+        group.setOperateName(SessionLocal.getUser().getName());
+        group.setOperateTime(new Date());
+        sysRoleMapper.insert(group);
+    }
+
+    @Override
+    public void updateGroup(Integer id, String name) {
+        if (checkExist(0, id, "name", name)) {
+            throw new SixException(ResultEnum.ERROR_PARAM.getCode(), "该角色组名称已存在");
+        }
+        SysRole group = sysRoleMapper.selectByPrimaryKey(id);
+        if (group.getEdit().equals(0)) {
+            throw new SixException(ResultEnum.ERROR_PARAM.getCode(), "系统默认角色组，无法修改");
+        }
+        group.setName(name);
+        group.setOperateIp(SessionLocal.getUser().getOperateIp());
+        group.setOperateId(SessionLocal.getUser().getId());
+        group.setOperateName(SessionLocal.getUser().getName());
+        group.setOperateTime(new Date());
+        sysRoleMapper.updateByPrimaryKey(group);
+    }
+
+    @Override
+    public List<SysRole> groupList() {
+        return sysRoleMapper.groupList();
+    }
+
+    @Override
     @Transactional
     public void insert(RoleParam param) {
-        SysRole sysRole = new SysRole();
-        BeanUtils.copyProperties(param, sysRole);
-        if (checkExist(sysRole.getName(), sysRole.getId())) {
+        if (checkExist(param.getGroupId(), param.getId(), "name", param.getName())) {
             throw new SixException(ResultEnum.ERROR_PARAM.getCode(), "该角色已存在");
         }
+        SysRole sysRole = new SysRole();
+        BeanUtils.copyProperties(param, sysRole);
+        sysRole.setParentId(param.getGroupId());
+        sysRole.setEdit(1);
         sysRole.setOperateIp(SessionLocal.getUser().getOperateIp());
         sysRole.setOperateId(SessionLocal.getUser().getId());
         sysRole.setOperateName(SessionLocal.getUser().getName());
@@ -60,21 +93,24 @@ public class SysRoleServiceImpl implements ISysRoleService {
     @Override
     @Transactional
     public void update(RoleParam param) {
-        SysRole after = new SysRole();
-        BeanUtils.copyProperties(param, after);
-        if (checkExist(after.getName(), after.getId())) {
+        if (checkExist(param.getGroupId(), param.getId(), "name", param.getName())) {
             throw new SixException(ResultEnum.ERROR_PARAM.getCode(), "该角色已存在");
         }
-        SysRole before = sysRoleMapper.selectByPrimaryKey(after.getId());
+        SysRole before = sysRoleMapper.selectByPrimaryKey(param.getId());
         if (ObjectUtils.isEmpty(before)) {
             throw new SixException(ResultEnum.ERROR_PARAM.getCode(), "待更新角色不存在");
         }
-        after.setOperateIp(SessionLocal.getUser().getOperateIp());
-        after.setOperateId(SessionLocal.getUser().getId());
-        after.setOperateName(SessionLocal.getUser().getName());
-        after.setOperateTime(new Date());
-        sysRoleMapper.updateByPrimaryKey(after);
-        List<Integer> oldKeys = sysRoleMenuMapper.selectMenuKeysByRoleId(after.getId());
+        if (before.getEdit().equals(0)) {
+            throw new SixException(ResultEnum.ERROR_PARAM.getCode(), "系统默认角色，无法修改");
+        }
+        BeanUtils.copyProperties(param, before);
+        before.setParentId(param.getGroupId());
+        before.setOperateIp(SessionLocal.getUser().getOperateIp());
+        before.setOperateId(SessionLocal.getUser().getId());
+        before.setOperateName(SessionLocal.getUser().getName());
+        before.setOperateTime(new Date());
+        sysRoleMapper.updateByPrimaryKey(before);
+        List<Integer> oldKeys = sysRoleMenuMapper.selectMenuKeysByRoleId(before.getId());
         List<Integer> newKeys = param.getMenuKeys();
         List<Integer> addKeys = new ArrayList<>();
         addKeys.addAll(newKeys);
@@ -83,10 +119,10 @@ public class SysRoleServiceImpl implements ISysRoleService {
         delKeys.addAll(oldKeys);
         delKeys.removeAll(newKeys);
         if (addKeys.size() > 0) {
-            sysRoleMenuMapper.insertRoleMenu(after, addKeys);
+            sysRoleMenuMapper.insertRoleMenu(before, addKeys);
         }
         if (delKeys.size() > 0) {
-            sysRoleMenuMapper.removeRoleMenu(after, delKeys);
+            sysRoleMenuMapper.removeRoleMenu(before, delKeys);
         }
     }
 
@@ -95,16 +131,26 @@ public class SysRoleServiceImpl implements ISysRoleService {
     public void delete(Integer roleId) {
         SysRole before = sysRoleMapper.selectByPrimaryKey(roleId);
         if (ObjectUtils.isEmpty(before)) {
-            throw new SixException(ResultEnum.ERROR_PARAM.getCode(), "待删除角色不存在");
+            throw new SixException(ResultEnum.ERROR_PARAM.getCode(), "待删除角色组或角色不存在");
         }
-        sysRoleMenuMapper.deleteRoleMenuByRoleId(roleId);
-        sysRoleUserMapper.deleteRoleUserByRoleId(roleId);
+        if (before.getEdit().equals(0)) {
+            throw new SixException(ResultEnum.ERROR_PARAM.getCode(), "系统默认，无法删除");
+        }
+        if (before.getParentId().equals(0)) {
+            int count = sysUtilsMapper.countOfExist("sys_role", before.getId(), null, null, null);
+            if (count > 0) {
+                throw new SixException(ResultEnum.ERROR_PARAM.getCode(), "该角色组下存在角色，无法删除");
+            }
+        } else {
+            sysRoleMenuMapper.deleteRoleMenuByRoleId(roleId);
+            sysRoleUserMapper.deleteRoleUserByRoleId(roleId);
+        }
         sysRoleMapper.deleteByPrimaryKey(roleId);
     }
 
     @Override
-    public List<SysRole> findAll() {
-        return sysRoleMapper.findAll();
+    public List<SysRole> roleList() {
+        return sysRoleMapper.roleList();
     }
 
     @Override
@@ -125,21 +171,15 @@ public class SysRoleServiceImpl implements ISysRoleService {
     @Override
     public PageDto<SysUser> pageBoundByRoleId(Integer roleId, String query, PageParam page) {
         int total = sysRoleUserMapper.countBoundByRoleId(roleId, query);
-        if (total > 0) {
-            List<SysUser> list = sysRoleUserMapper.pageBoundByRoleId(roleId, query, page);
-            return new PageDto<>(page.getPage(), page.getSize(), total, list);
-        }
-        return new PageDto<>(page.getPage(), page.getSize(), total, null);
+        List<SysUser> list = sysRoleUserMapper.pageBoundByRoleId(roleId, query, page);
+        return new PageDto<>(page.getPage(), page.getSize(), total, list);
     }
 
     @Override
     public PageDto<SysUser> pageUnboundByRoleId(Integer roleId, String query, PageParam page) {
         int total = sysRoleUserMapper.countUnboundByRoleId(roleId, query);
-        if (total > 0) {
-            List<SysUser> list = sysRoleUserMapper.pageUnboundByRoleId(roleId, query, page);
-            return new PageDto<>(page.getPage(), page.getSize(), total, list);
-        }
-        return new PageDto<>(page.getPage(), page.getSize(), total, null);
+        List<SysUser> list = sysRoleUserMapper.pageUnboundByRoleId(roleId, query, page);
+        return new PageDto<>(page.getPage(), page.getSize(), total, list);
     }
 
     @Override
@@ -168,7 +208,8 @@ public class SysRoleServiceImpl implements ISysRoleService {
         }
     }
 
-    public boolean checkExist(String roleName, Integer roleId) {
-        return sysRoleMapper.countByName(roleName, roleId) > 0;
+    public boolean checkExist(Integer parentId, Integer roleId, String field, String value) {
+        int count = sysUtilsMapper.countOfExist("sys_role", parentId, roleId, field, value);
+        return count > 0;
     }
 }

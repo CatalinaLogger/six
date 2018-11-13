@@ -30,16 +30,16 @@ public interface SysUserMapper {
 
     List<SysUser> findUserPageByDeptLevel(@Param("level") String level, @Param("query") String query, @Param("page") PageParam page);
 
+    SysUser findByUsername(@Param("username") String username);
+
     SysUser findByKeyword(@Param("keyword") String keyword);
 
     void deleteByUserKeys(@Param("userKeys") List<Integer> userKeys);
 
     /** 用户领导的人员 */
     List<SysUser> withListOfUser(@Param("parentId") Integer parentId);
-
     /** 没有领导的人员 */
     int userCountPageOfNone(@Param("query") String query);
-
     List<SysUser> userPageOfNone(@Param("query") String query, @Param("page") PageParam page);
     /** 绑定用户的下属 */
     void underPush(@Param("under") SysUser under, @Param("userKeys") List<Integer> userKeys);
@@ -53,4 +53,10 @@ public interface SysUserMapper {
     List<SysUser> userListByProcessId(@Param("processId") String processId);
 
     String findJsonInfoByUserId(@Param("id") Integer id);
+    /** 获取部门主管列表 */
+    List<SysUser> findLeadListByDeptId(@Param("deptId") Integer deptId);
+    /** 获取所有主管列表 */
+    List<SysUser> findLeadList();
+    /** 根据用户userId字段获取用户的主管列表 */
+    List<SysUser> findLeadListByUserId(@Param("userId") Integer userId);
 }

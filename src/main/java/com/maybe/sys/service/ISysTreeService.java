@@ -15,8 +15,6 @@ public interface ISysTreeService {
 
     List<DeptLevelDto> deptTree();
 
-    List<DeptLevelDto> deptTreeByUser();
-
     List<MenuLevelDto> menuTree();
 
     List<MenuLevelDto> menuTreeByUserId(Integer userId);

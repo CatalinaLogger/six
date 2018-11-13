@@ -153,12 +153,12 @@ public class GlobalConfServiceImpl implements IGlobalConfService {
     }
 
     private boolean checkDataExist(Integer parentId, Integer dataId, String field, String value) {
-        int count = sysUtilsMapper.countOfExist("sys_conf_data", parentId, dataId, field, value);
+        int count = sysUtilsMapper.countOfExist("global_conf_data", parentId, dataId, field, value);
         return count > 0;
     }
 
     private boolean checkExist(Integer confId, String field, String value) {
-        int count = sysUtilsMapper.countOfExist("sys_conf", null, confId, field, value);
+        int count = sysUtilsMapper.countOfExist("global_conf", null, confId, field, value);
         return count > 0;
     }
 }

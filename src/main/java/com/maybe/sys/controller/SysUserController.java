@@ -5,13 +5,12 @@ import com.maybe.sys.common.dto.LoginUserDto;
 import com.maybe.sys.common.dto.PageDto;
 import com.maybe.sys.common.param.PageParam;
 import com.maybe.sys.common.param.UserParam;
+import com.maybe.sys.model.SysDept;
 import com.maybe.sys.model.SysUser;
+import com.maybe.sys.service.ISysDeptService;
 import com.maybe.sys.service.ISysRoleService;
 import com.maybe.sys.service.ISysUserService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.ObjectUtils;
@@ -35,7 +34,10 @@ public class SysUserController {
     private ISysRoleService sysRoleService;
 
     @ApiOperation("新增用户")
-    @ApiImplicitParam(name = "roleKeys", value = "角色ID数组，示例：1,2,3", dataType = "string", paramType = "query", required = true)
+    @ApiImplicitParams({
+        @ApiImplicitParam(name = "deptKeys", value = "部门ID数组，示例：1,2,3", dataType = "string", paramType = "query", required = true),
+        @ApiImplicitParam(name = "roleKeys", value = "角色ID数组，示例：1,2,3", dataType = "string", paramType = "query")
+    })
     @PostMapping("/insert")
     public JsonData insertUser(@Valid UserParam param, BindingResult bindingResult) {
         sysUserService.insert(param);
@@ -50,7 +52,10 @@ public class SysUserController {
     }
 
     @ApiOperation("修改用户")
-    @ApiImplicitParam(name = "roleKeys", value = "角色ID数组，示例：1,2,3", dataType = "string", paramType = "query", required = true)
+    @ApiImplicitParams({
+        @ApiImplicitParam(name = "deptKeys", value = "部门ID数组，示例：1,2,3", dataType = "string", paramType = "query", required = true),
+        @ApiImplicitParam(name = "roleKeys", value = "角色ID数组，示例：1,2,3", dataType = "string", paramType = "query")
+    })
     @PutMapping("/update")
     public JsonData updateUser(@Valid UserParam param, BindingResult bindingResult) {
         sysUserService.update(param);
@@ -105,10 +110,17 @@ public class SysUserController {
         return JsonData.success();
     }
 
-    @ApiOperation("获取用户所拥有的角色列表")
+    @ApiOperation("获取用户所有角色ID数组")
     @GetMapping("/role/keys")
     public JsonData roleKeys(@ApiParam(value = "用户ID", required = true, example = "1") @RequestParam("userId") Integer userId) {
         List<Integer> list = sysRoleService.findRoleKeysByUserId(userId);
+        return JsonData.success(list);
+    }
+
+    @ApiOperation("获取用户所属部门列表")
+    @GetMapping("/dept/list")
+    public JsonData deptList(@ApiParam(value = "用户ID", required = true, example = "1") @RequestParam("userId") Integer userId) {
+        List<SysDept> list = sysUserService.findDeptListByUserId(userId);
         return JsonData.success(list);
     }
 

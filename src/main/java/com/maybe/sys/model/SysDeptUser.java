@@ -1,20 +1,16 @@
 package com.maybe.sys.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
+
 import java.util.Date;
 
 @Data
-public class SysRole {
+public class SysDeptUser {
     private Integer id;
 
-    private String code;
+    private Integer deptId;
 
-    private String name;
-
-    private Integer parentId;
-
-    private Integer edit;
+    private Integer userId;
 
     private String operateIp;
 
@@ -23,6 +19,4 @@ public class SysRole {
     private String operateName;
 
     private Date operateTime;
-    @JsonIgnore
-    private Integer deptId;
 }

@@ -8,11 +8,12 @@ import com.maybe.sys.common.dto.DeptLevelDto;
 import com.maybe.sys.common.dto.MenuLevelDto;
 import com.maybe.sys.common.exception.SixException;
 import com.maybe.sys.common.util.LevelUtil;
-import com.maybe.sys.common.util.SessionLocal;
 import com.maybe.sys.dao.SysDeptMapper;
 import com.maybe.sys.dao.SysMenuMapper;
+import com.maybe.sys.dao.SysUserMapper;
 import com.maybe.sys.model.SysDept;
 import com.maybe.sys.model.SysMenu;
+import com.maybe.sys.model.SysUser;
 import com.maybe.sys.service.ISysTreeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,6 +39,8 @@ public class SysTreeServiceImpl implements ISysTreeService{
     @Autowired
     private SysMenuMapper sysMenuMapper;
     @Autowired
+    private SysUserMapper sysUserMapper;
+    @Autowired
     private GlobalConfDataMapper globalConfDataMapper;
 
     /**
@@ -47,28 +50,18 @@ public class SysTreeServiceImpl implements ISysTreeService{
     @Override
     public List<DeptLevelDto> deptTree() {
         List<SysDept> deptList = sysDeptMapper.findAll();
-        List<DeptLevelDto> dtoList = new ArrayList<DeptLevelDto>();
+        List<SysUser> leadList = sysUserMapper.findLeadList();
+        LinkedMultiValueMap<Integer, SysUser> leadMap = new LinkedMultiValueMap<>();
+        for (SysUser user : leadList) {
+            leadMap.add(user.getDeptId(), user);
+        }
+        List<DeptLevelDto> dtoList = new ArrayList<>();
         for (SysDept dept: deptList) {
             DeptLevelDto dto = DeptLevelDto.adapt(dept);
+            dto.setLead(leadMap.get(dto.getId()));
             dtoList.add(dto);
         }
         return deptListToTree(dtoList, "0");
-    }
-
-    /**
-     * 获取当前用户所在部门的子部门
-     * @return
-     */
-    @Override
-    public List<DeptLevelDto> deptTreeByUser() {
-        SysDept sysDept = sysDeptMapper.selectByPrimaryKey(SessionLocal.getUser().getDeptId());
-        List<SysDept> deptList = sysDeptMapper.findChildrenByLevel(sysDept.getLevel() + ".%");
-        List<DeptLevelDto> dtoList = new ArrayList<DeptLevelDto>();
-        for (SysDept dept: deptList) {
-            DeptLevelDto dto = DeptLevelDto.adapt(dept);
-            dtoList.add(dto);
-        }
-        return deptListToTree(dtoList, sysDept.getLevel() + "." + sysDept.getId());
     }
 
     @Override

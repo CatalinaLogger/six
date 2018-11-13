@@ -32,7 +32,7 @@
     select
       count(1)
     from ACT_HI_PROCINST AHP, ACT_RE_PROCDEF ARP, ACT_RE_DEPLOYMENT ARD
-    where AHP.START_USER_ID_ = #{userId,jdbcType=INTEGER}
+    where AHP.START_USER_ID_ = #{username,jdbcType=VARCHAR}
     AND AHP.PROC_DEF_ID_ = ARP.ID_
     AND ARP.DEPLOYMENT_ID_ = ARD.ID_
     <if test="param.category != null">
@@ -64,7 +64,7 @@
       AHP.START_USER_ID_, AHP.START_ACT_ID_, AHP.END_ACT_ID_, AHP.SUPER_PROCESS_INSTANCE_ID_, AHP.DELETE_REASON_,
       AHP.TENANT_ID_, AHP.NAME_, AHP.CALLBACK_ID_, AHP.CALLBACK_TYPE_, ARD.CATEGORY_ CATEGORY_
     from ACT_HI_PROCINST AHP, ACT_RE_PROCDEF ARP, ACT_RE_DEPLOYMENT ARD
-    where AHP.START_USER_ID_ = #{userId,jdbcType=INTEGER}
+    where AHP.START_USER_ID_ = #{username,jdbcType=VARCHAR}
     AND AHP.PROC_DEF_ID_ = ARP.ID_
     AND ARP.DEPLOYMENT_ID_ = ARD.ID_
     <if test="param.category != null">

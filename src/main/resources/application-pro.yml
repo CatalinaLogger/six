@@ -83,7 +83,7 @@ spring:
         ssl:
           enable: true
 flowable:
-  checkProcessDefinitions: false
+  check-process-definitions: false
   common:
     app:
       idm-url: a

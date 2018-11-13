@@ -288,6 +288,7 @@ div.propertySection {
 .selected-item-body > div {
     overflow: hidden;
     margin: 5px 20px;
+    padding-bottom: 50px;
 }
 
 .property-row > span {

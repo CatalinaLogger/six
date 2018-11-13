@@ -11,7 +11,7 @@ import java.util.List;
 @Mapper
 public interface FlowPastMapper {
 
-    int pastCountByUser(@Param("userId") Integer userId, @Param("param") FlowParam param, @Param("page") PageParam page);
+    int pastCountByUser(@Param("username") String username, @Param("param") FlowParam param, @Param("page") PageParam page);
 
-    List<FlowPast> pastPageByUser(@Param("userId") Integer userId, @Param("param") FlowParam param, @Param("page") PageParam page);
+    List<FlowPast> pastPageByUser(@Param("username") String username, @Param("param") FlowParam param, @Param("page") PageParam page);
 }

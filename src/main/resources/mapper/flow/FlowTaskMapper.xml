@@ -50,7 +50,7 @@
     FROM ACT_HI_TASKINST T, flow_hi_check C, sys_user U
     WHERE T.PROC_INST_ID_ = #{processId,jdbcType=VARCHAR}
     AND T.ID_ = C.task_id
-    AND T.OWNER_ = U.id
+    AND T.ASSIGNEE_ = U.username
     ORDER BY T.END_TIME_ ASC
   </select>
 </mapper>

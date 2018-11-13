@@ -20,7 +20,7 @@ public interface SysRoleMapper {
 
     int updateByPrimaryKey(SysRole record);
 
-    List<SysRole> findAll();
+    List<SysRole> groupList();
 
-    int countByName(@Param("name") String name, @Param("id") Integer id);
+    List<SysRole> roleList();
 }

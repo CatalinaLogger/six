@@ -46,20 +46,20 @@ public class ProxyServiceImpl implements IProxyService {
     @Override
     public String startProcess(WorkParam param) {
         Map<String, Object> map = new HashMap<>();
+        map.put("starter", SessionLocal.getUser().getUsername()); // 设置第一个用户任务的用户
         map.put("taskCode", param.getTaskCode());
-        map.put("startUser", SessionLocal.getUser().getUsername()); // 设置第一个用户任务的用户
 
-        Authentication.setAuthenticatedUserId(SessionLocal.getUser().getId().toString()); // 保存流程发起人
+        Authentication.setAuthenticatedUserId(SessionLocal.getUser().getUsername()); // 设置流程发起人
         ProcessInstance processInstance = runtimeService.startProcessInstanceById(param.getDefineId(), param.getLevel().toString(), map);
         Task task = taskService.createTaskQuery().processInstanceId(processInstance.getProcessInstanceId()).singleResult();
-        taskService.setOwner(task.getId(), SessionLocal.getUser().getId().toString());
+        taskService.setAssignee(task.getId(), SessionLocal.getUser().getUsername());
         taskService.complete(task.getId());
         Authentication.setAuthenticatedUserId(null);
 
         // 保存用户设置的流程变量
         flowCheckMapper.insertSelective(new FlowCheck(task.getId(), param.getTaskCode(), param.getTaskNote()));
 
-        sendNotice(processInstance.getProcessInstanceId());
+        // sendNotice(processInstance.getProcessInstanceId());
         System.out.println("主线程");
         return processInstance.getProcessInstanceId();
     }
@@ -67,21 +67,22 @@ public class ProxyServiceImpl implements IProxyService {
     @Override
     public String startProcess(WorkParam param, Map<String, Object> varMap) {
         Map<String, Object> map = new HashMap<>();
+        map.put("starter", SessionLocal.getUser().getUsername()); // 设置第一个用户任务的用户
         map.put("taskCode", param.getTaskCode());
-        map.put("startUser", SessionLocal.getUser().getUsername()); // 设置第一个用户任务的用户
         map.putAll(varMap);
 
-        Authentication.setAuthenticatedUserId(SessionLocal.getUser().getId().toString()); // 保存流程发起人
+        Authentication.setAuthenticatedUserId(SessionLocal.getUser().getUsername()); // 保存流程发起人
         ProcessInstance processInstance = runtimeService.startProcessInstanceById(param.getDefineId(), param.getLevel().toString(), map);
         Task task = taskService.createTaskQuery().processInstanceId(processInstance.getProcessInstanceId()).singleResult();
-        taskService.setOwner(task.getId(), SessionLocal.getUser().getId().toString());
+
+        taskService.setAssignee(task.getId(), SessionLocal.getUser().getUsername());
         taskService.complete(task.getId());
         Authentication.setAuthenticatedUserId(null);
 
         // 保存用户设置的流程变量
         flowCheckMapper.insertSelective(new FlowCheck(task.getId(), param.getTaskCode(), param.getTaskNote()));
 
-        sendNotice(processInstance.getProcessInstanceId());
+        // sendNotice(processInstance.getProcessInstanceId());
         System.out.println("主线程");
         return processInstance.getProcessInstanceId();
     }
@@ -99,13 +100,13 @@ public class ProxyServiceImpl implements IProxyService {
 
         Map<String, Object> map = new HashMap<>();
         map.put("taskCode", param.getTaskCode());
-        taskService.setOwner(param.getTaskId(), SessionLocal.getUser().getId().toString());
+        taskService.setAssignee(task.getId(), SessionLocal.getUser().getUsername());
         taskService.complete(param.getTaskId(), map);
 
         // 保存用户设置的流程变量
         flowCheckMapper.insertSelective(new FlowCheck(param.getTaskId(), param.getTaskCode(), param.getTaskNote()));
 
-        sendNotice(task.getProcessInstanceId());
+        // sendNotice(task.getProcessInstanceId());
         System.out.println("主线程");
         return task;
     }
@@ -120,13 +121,13 @@ public class ProxyServiceImpl implements IProxyService {
         Map<String, Object> map = new HashMap<>();
         map.put("taskCode", param.getTaskCode());
         map.putAll(varMap);
-        taskService.setOwner(param.getTaskId(), SessionLocal.getUser().getId().toString());
+        taskService.setAssignee(task.getId(), SessionLocal.getUser().getUsername());
         taskService.complete(param.getTaskId(), map);
 
         // 保存用户设置的流程变量
         flowCheckMapper.insertSelective(new FlowCheck(param.getTaskId(), param.getTaskCode(), param.getTaskNote()));
 
-        sendNotice(task.getProcessInstanceId());
+        // sendNotice(task.getProcessInstanceId());
         System.out.println("主线程");
         return task;
     }
@@ -141,7 +142,7 @@ public class ProxyServiceImpl implements IProxyService {
                 List<SysUser> list = sysUserMapper.userListByProcessId(processId);
                 for (SysUser item : list) {
                     String message = "{\"name\": \"" + item.getName() + "\", \"message\": \"工作平台提示：\\n  " +
-                            startUser.getDeptName() + "--" + startUser.getName() + " 发起了【"+ processInstance.getProcessDefinitionName() +
+                            startUser.getName() + " 发起了【"+ processInstance.getProcessDefinitionName() +
                             "】，请及时处理！\"}";
                     System.out.println("rabbit生产者发送消息 : " + message);
                     /** 第一个参数：交换机的名字，我们在第二步，声明了topic交换机名称为spring-boot-topicExchange的交换机，

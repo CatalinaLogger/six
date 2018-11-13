@@ -134,9 +134,9 @@ public class FlowServiceImpl implements IFlowService {
 
     @Override
     public PageDto<FlowMine> minePage(FlowParam param, PageParam page) {
-        int total = flowMineMapper.mineCountByUser(SessionLocal.getUser().getId(), param, page);
+        int total = flowMineMapper.mineCountByUser(SessionLocal.getUser().getUsername(), param, page);
         if (total > 0) {
-            List<FlowMine> list = flowMineMapper.minePageByUser(SessionLocal.getUser().getId(), param, page);
+            List<FlowMine> list = flowMineMapper.minePageByUser(SessionLocal.getUser().getUsername(), param, page);
             return new PageDto<>(page.getPage(), page.getSize(), total, list);
         }
         return new PageDto<>(page.getPage(), page.getSize(), total, null);

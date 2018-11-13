@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import java.util.Date;
+import java.util.List;
 
 @Data
 public class SysUser {
@@ -47,10 +48,6 @@ public class SysUser {
 
     private String level;
 
-    private Integer deptId;
-
-    private String deptName;
-
     private Integer status;
 
     private String remark;
@@ -64,4 +61,9 @@ public class SysUser {
     private Date operateTime;
 
     private String jsonInfo;
+
+    @JsonIgnore
+    private Integer deptId;
+
+    private List<SysDept> dept;
 }

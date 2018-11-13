@@ -32,7 +32,6 @@
     <result column="TENANT_ID_" jdbcType="VARCHAR" property="tenantId" />
     <result column="LAST_UPDATED_TIME_" jdbcType="TIMESTAMP" property="lastUpdatedTime" />
     <result column="CREATE_USER_" jdbcType="VARCHAR" property="createUser" />
-    <result column="CREATE_DEPT_" jdbcType="VARCHAR" property="createDept" />
     <result column="CREATE_TIME_" jdbcType="TIMESTAMP" property="createTime" />
     <result column="LEVEL_" jdbcType="INTEGER" property="level" />
   </resultMap>
@@ -47,9 +46,9 @@
     SELECT
       count(1)
     FROM ACT_HI_TASKINST T, ACT_HI_PROCINST P, sys_user U, ACT_RE_PROCDEF RP, ACT_RE_DEPLOYMENT D
-    WHERE T.OWNER_ = #{userId,jdbcType=INTEGER}
+    WHERE T.ASSIGNEE_ = #{username,jdbcType=VARCHAR}
     AND T.PROC_INST_ID_ = P.ID_
-    AND P.START_USER_ID_ = U.id
+    AND P.START_USER_ID_ = U.username
     AND T.PROC_DEF_ID_ = RP.ID_
     AND RP.DEPLOYMENT_ID_ = D.ID_
     <if test="param.name != null">
@@ -78,11 +77,11 @@
       T.SCOPE_ID_, T.SUB_SCOPE_ID_, T.SCOPE_TYPE_, T.SCOPE_DEFINITION_ID_, T.NAME_, T.PARENT_TASK_ID_,
       T.DESCRIPTION_, T.OWNER_, T.ASSIGNEE_, T.START_TIME_, T.CLAIM_TIME_, T.END_TIME_, T.DURATION_,
       T.DELETE_REASON_, T.PRIORITY_, T.DUE_DATE_, T.FORM_KEY_, T.CATEGORY_, T.TENANT_ID_, T.LAST_UPDATED_TIME_,
-      U.name CREATE_USER_, U.dept_name CREATE_DEPT_, P.START_TIME_ CREATE_TIME_, P.BUSINESS_KEY_ LEVEL_
+      U.name CREATE_USER_, P.START_TIME_ CREATE_TIME_, P.BUSINESS_KEY_ LEVEL_
     FROM ACT_HI_TASKINST T, ACT_HI_PROCINST P, sys_user U, ACT_RE_PROCDEF RP, ACT_RE_DEPLOYMENT D
-    WHERE T.OWNER_ = #{userId,jdbcType=INTEGER}
+    WHERE T.ASSIGNEE_ = #{username,jdbcType=VARCHAR}
     AND T.PROC_INST_ID_ = P.ID_
-    AND P.START_USER_ID_ = U.id
+    AND P.START_USER_ID_ = U.username
     AND T.PROC_DEF_ID_ = RP.ID_
     AND RP.DEPLOYMENT_ID_ = D.ID_
     <if test="param.name != null">

@@ -6,6 +6,7 @@ import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 /**
  * @author jin
@@ -22,10 +23,8 @@ public class DeptParam {
     private String name;
     @ApiParam(value = "父节点ID", example = "0")
     private Integer parentId = 0;
-    @ApiParam(value = "责任人ID", example = "1")
-    private Integer leaderId;
-    @ApiParam(value = "协助人ID", example = "1")
-    private Integer helperId;
+    @ApiParam(hidden = true)
+    private List<Integer> leadKeys;
     @ApiParam(value = "排序号", required = true, example = "1")
     @NotNull(message = "排序号不能为空")
     private Integer seq;

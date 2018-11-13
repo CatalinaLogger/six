@@ -1,21 +1,16 @@
 package com.maybe.sys.service;
 
-import com.maybe.sys.common.dto.DeptLevelDto;
-import com.maybe.sys.model.SysDept;
+import com.maybe.sys.common.param.DeptParam;
+import com.maybe.sys.model.SysUser;
 
-/**
- * @author jin
- * @description:
- * @date 2018/4/27
- */
+import java.util.List;
+
 public interface ISysDeptService {
+    void insert(DeptParam param);
 
-    void insert(SysDept sysDept);
-
-    void update(SysDept sysDept);
+    void update(DeptParam param);
 
     void delete(Integer deptId);
 
-    DeptLevelDto mine();
-
+    List<SysUser> findLeadListByDeptId(Integer deptId);
 }

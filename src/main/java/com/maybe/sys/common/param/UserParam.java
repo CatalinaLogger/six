@@ -36,9 +36,6 @@ public class UserParam implements Serializable{
     @NotBlank(message = "用户名不能为空")
     @Length(min = 1, max = 20, message = "用户名长度在1~20位之间")
     private String username;
-    @ApiParam(value = "所属部门ID", required = true, example = "1")
-    @NotNull(message = "所属部门不能为空")
-    private Integer deptId;
     @ApiParam(value = "状态码", required = true, example = "0")
     @NotNull(message = "状态码不能为空")
     @Min(value = 0, message = "状态码不合法")
@@ -47,6 +44,8 @@ public class UserParam implements Serializable{
     @ApiParam("备注")
     @Length(max = 200, message = "备注长度不能超过200位")
     private String remark;
+    @ApiParam(hidden = true)
+    private List<Integer> deptKeys;
     @ApiParam(hidden = true)
     private List<Integer> roleKeys;
 }

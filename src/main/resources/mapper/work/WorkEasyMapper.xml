@@ -6,8 +6,6 @@
     <result column="code" jdbcType="VARCHAR" property="code" />
     <result column="user_id" jdbcType="INTEGER" property="userId" />
     <result column="user_name" jdbcType="VARCHAR" property="userName" />
-    <result column="dept_id" jdbcType="INTEGER" property="deptId" />
-    <result column="dept_name" jdbcType="VARCHAR" property="deptName" />
     <result column="start_time" jdbcType="TIMESTAMP" property="startTime" />
     <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
     <result column="status" jdbcType="INTEGER" property="status" />
@@ -20,14 +18,14 @@
     <result column="content" jdbcType="LONGVARCHAR" property="content" />
   </resultMap>
   <sql id="Base_Column_List">
-    proc_inst_id_, code, user_id, user_name, dept_id, dept_name, start_time, end_time, 
-    status, operate_ip, operate_id, operate_name, operate_time
+    proc_inst_id_, code, user_id, user_name, start_time, end_time, status, operate_ip,
+    operate_id, operate_name, operate_time
   </sql>
   <sql id="Blob_Column_List">
     content
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="ResultMapWithBLOBs">
-    select 
+    select
     <include refid="Base_Column_List" />
     ,
     <include refid="Blob_Column_List" />
@@ -39,16 +37,16 @@
     where proc_inst_id_ = #{procInstId,jdbcType=VARCHAR}
   </delete>
   <insert id="insert" parameterType="com.maybe.work.model.WorkEasy">
-    insert into work_easy (proc_inst_id_, code, user_id, 
-      user_name, dept_id, dept_name, 
-      start_time, end_time, status, 
-      operate_ip, operate_id, operate_name, 
-      operate_time, content)
-    values (#{procInstId,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR}, #{userId,jdbcType=INTEGER}, 
-      #{userName,jdbcType=VARCHAR}, #{deptId,jdbcType=INTEGER}, #{deptName,jdbcType=VARCHAR}, 
-      #{startTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, #{status,jdbcType=INTEGER}, 
-      #{operateIp,jdbcType=VARCHAR}, #{operateId,jdbcType=INTEGER}, #{operateName,jdbcType=VARCHAR}, 
-      #{operateTime,jdbcType=TIMESTAMP}, #{content,jdbcType=LONGVARCHAR})
+    insert into work_easy (proc_inst_id_, code, user_id,
+      user_name, start_time, end_time,
+      status, operate_ip, operate_id,
+      operate_name, operate_time, content
+      )
+    values (#{procInstId,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR}, #{userId,jdbcType=INTEGER},
+      #{userName,jdbcType=VARCHAR}, #{startTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP},
+      #{status,jdbcType=INTEGER}, #{operateIp,jdbcType=VARCHAR}, #{operateId,jdbcType=INTEGER},
+      #{operateName,jdbcType=VARCHAR}, #{operateTime,jdbcType=TIMESTAMP}, #{content,jdbcType=LONGVARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.maybe.work.model.WorkEasy">
     insert into work_easy
@@ -64,12 +62,6 @@
       </if>
       <if test="userName != null">
         user_name,
-      </if>
-      <if test="deptId != null">
-        dept_id,
-      </if>
-      <if test="deptName != null">
-        dept_name,
       </if>
       <if test="startTime != null">
         start_time,
@@ -109,12 +101,6 @@
       <if test="userName != null">
         #{userName,jdbcType=VARCHAR},
       </if>
-      <if test="deptId != null">
-        #{deptId,jdbcType=INTEGER},
-      </if>
-      <if test="deptName != null">
-        #{deptName,jdbcType=VARCHAR},
-      </if>
       <if test="startTime != null">
         #{startTime,jdbcType=TIMESTAMP},
       </if>
@@ -153,12 +139,6 @@
       <if test="userName != null">
         user_name = #{userName,jdbcType=VARCHAR},
       </if>
-      <if test="deptId != null">
-        dept_id = #{deptId,jdbcType=INTEGER},
-      </if>
-      <if test="deptName != null">
-        dept_name = #{deptName,jdbcType=VARCHAR},
-      </if>
       <if test="startTime != null">
         start_time = #{startTime,jdbcType=TIMESTAMP},
       </if>
@@ -191,8 +171,6 @@
     set code = #{code,jdbcType=VARCHAR},
       user_id = #{userId,jdbcType=INTEGER},
       user_name = #{userName,jdbcType=VARCHAR},
-      dept_id = #{deptId,jdbcType=INTEGER},
-      dept_name = #{deptName,jdbcType=VARCHAR},
       start_time = #{startTime,jdbcType=TIMESTAMP},
       end_time = #{endTime,jdbcType=TIMESTAMP},
       status = #{status,jdbcType=INTEGER},
@@ -208,8 +186,6 @@
     set code = #{code,jdbcType=VARCHAR},
       user_id = #{userId,jdbcType=INTEGER},
       user_name = #{userName,jdbcType=VARCHAR},
-      dept_id = #{deptId,jdbcType=INTEGER},
-      dept_name = #{deptName,jdbcType=VARCHAR},
       start_time = #{startTime,jdbcType=TIMESTAMP},
       end_time = #{endTime,jdbcType=TIMESTAMP},
       status = #{status,jdbcType=INTEGER},

@@ -34,7 +34,6 @@
     <result column="ID_LINK_COUNT_" jdbcType="INTEGER" property="idLinkCount" />
     <result column="SUB_TASK_COUNT_" jdbcType="INTEGER" property="subTaskCount" />
     <result column="CREATE_USER_" jdbcType="VARCHAR" property="createUser" />
-    <result column="CREATE_DEPT_" jdbcType="VARCHAR" property="createDept" />
     <result column="START_TIME_" jdbcType="TIMESTAMP" property="startTime" />
     <result column="LEVEL_" jdbcType="INTEGER" property="level" />
   </resultMap>
@@ -79,7 +78,7 @@
     ) M, ACT_RU_TASK T, ACT_RU_EXECUTION E, sys_user U, ACT_RE_PROCDEF P, ACT_RE_DEPLOYMENT D
     WHERE M.TASK_ID_ = T.ID_
     AND T.PROC_INST_ID_ = E.ID_
-    AND E.START_USER_ID_ = U.id
+    AND E.START_USER_ID_ = U.username
     AND T.PROC_DEF_ID_ = P.ID_
     AND P.DEPLOYMENT_ID_ = D.ID_
     <if test="param.name != null">
@@ -108,7 +107,7 @@
       T.SCOPE_TYPE_, T.SCOPE_DEFINITION_ID_, T.NAME_, T.PARENT_TASK_ID_, T.DESCRIPTION_, T.TASK_DEF_KEY_,
       T.OWNER_, T.ASSIGNEE_, T.DELEGATION_, T.PRIORITY_, T.CREATE_TIME_, T.DUE_DATE_, T.CATEGORY_, T.SUSPENSION_STATE_,
       T.TENANT_ID_, T.FORM_KEY_, T.CLAIM_TIME_, T.IS_COUNT_ENABLED_, T.VAR_COUNT_, T.ID_LINK_COUNT_,
-      T.SUB_TASK_COUNT_, U.name CREATE_USER_, U.dept_name CREATE_DEPT_, E.START_TIME_, E.BUSINESS_KEY_ LEVEL_
+      T.SUB_TASK_COUNT_, U.name CREATE_USER_, E.START_TIME_, E.BUSINESS_KEY_ LEVEL_
     FROM (
       SELECT
           ID_ AS TASK_ID_
@@ -139,7 +138,7 @@
     ) M, ACT_RU_TASK T, ACT_RU_EXECUTION E, sys_user U, ACT_RE_PROCDEF P, ACT_RE_DEPLOYMENT D
     WHERE M.TASK_ID_ = T.ID_
     AND T.PROC_INST_ID_ = E.ID_
-    AND E.START_USER_ID_ = U.id
+    AND E.START_USER_ID_ = U.username
     AND T.PROC_DEF_ID_ = P.ID_
     AND P.DEPLOYMENT_ID_ = D.ID_
     <if test="param.name != null">
@@ -163,6 +162,4 @@
     ORDER BY T.CREATE_TIME_ DESC
     LIMIT #{page.offset,jdbcType=INTEGER}, #{page.size,jdbcType=INTEGER}
   </select>
-
-
 </mapper>

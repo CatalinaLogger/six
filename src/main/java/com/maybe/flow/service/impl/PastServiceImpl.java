@@ -26,11 +26,8 @@ public class PastServiceImpl implements IPastService {
      */
     @Override
     public PageDto<FlowPast> pastPage(FlowParam param, PageParam page) {
-        int total = flowPastMapper.pastCountByUser(SessionLocal.getUser().getId(), param, page);
-        if (total > 0) {
-            List<FlowPast> list = flowPastMapper.pastPageByUser(SessionLocal.getUser().getId(), param, page);
-            return new PageDto<>(page.getPage(), page.getSize(), total, list);
-        }
-        return new PageDto<>(page.getPage(), page.getSize(), total, null);
+        int total = flowPastMapper.pastCountByUser(SessionLocal.getUser().getUsername(), param, page);
+        List<FlowPast> list = flowPastMapper.pastPageByUser(SessionLocal.getUser().getUsername(), param, page);
+        return new PageDto<>(page.getPage(), page.getSize(), total, list);
     }
 }

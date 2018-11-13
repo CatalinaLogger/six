@@ -4,9 +4,9 @@ import com.auth0.jwt.interfaces.Claim;
 import com.maybe.sys.common.config.SocketEnum;
 import com.maybe.sys.common.dto.SocketData;
 import com.maybe.sys.common.util.JWToken;
+import com.maybe.sys.common.util.SpringContextHolder;
 import com.maybe.sys.model.SysUser;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 import javax.websocket.*;
@@ -27,15 +27,8 @@ public class WebSocketServer {
     // 与某个客户端的连接会话，需要通过它来给客户端发送数据
     private Session session;
     private Integer id;
-
-    //此处是解决无法注入的关键
-    private static ApplicationContext applicationContext;
     //你要注入的service或者dao
     private WebSocketService socketService;
-
-    public static void setApplicationContext(ApplicationContext applicationContext) {
-        WebSocketServer.applicationContext = applicationContext;
-    }
 
     /**
      * 连接建立成功调用的方法*/
@@ -48,7 +41,7 @@ public class WebSocketServer {
             this.id = map.get("id").asInt(); // 接收到发送消息的人员编号
             webSocketSet.put(this.id, this);   // 加入set中
             //此处是解决无法注入的关键
-            socketService = applicationContext.getBean(WebSocketService.class);
+            socketService = SpringContextHolder.getBean(WebSocketService.class);
             SysUser user = socketService.findUserById(this.id);
             log.info("用户" + user.getName() + "上线！当前在线人数为" + getOnlineCount());
             sendToOther(SocketData.send(SocketEnum.ONLINE_NOTICE, "用户 " + user.getName() + " 上线了！"));
@@ -75,7 +68,6 @@ public class WebSocketServer {
     public void onClose() {
         subOnlineCount();                // 在线数减1
         webSocketSet.remove(this.id);  // 从set中删除
-        socketService = applicationContext.getBean(WebSocketService.class);
         SysUser user = socketService.findUserById(this.id);
         log.info("用户" + user.getName() + "离线！当前在线人数为" + getOnlineCount());
         sendToOther(SocketData.send(SocketEnum.OFFLINE_NOTICE, "用户 " + user.getName() + " 离线了！"));

@@ -3,6 +3,8 @@ package com.maybe.sys.model;
 import lombok.Data;
 
 import java.util.Date;
+import java.util.List;
+
 @Data
 public class SysDept {
     private Integer id;
@@ -13,17 +15,7 @@ public class SysDept {
 
     private String level;
 
-    private Integer leaderId;
-
-    private String leaderName;
-
-    private String leaderUsername;
-
-    private Integer helperId;
-
-    private String helperName;
-
-    private String helperUsername;
+    private List<SysUser> lead;
 
     private Integer seq;
 

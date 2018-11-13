@@ -3,6 +3,7 @@
 <mapper namespace="com.maybe.sys.dao.SysUserMapper">
   <resultMap id="BaseResultMap" type="com.maybe.sys.model.SysUser">
     <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="dept_id" jdbcType="INTEGER" property="deptId" />
     <result column="name" jdbcType="VARCHAR" property="name" />
     <result column="nick_name" jdbcType="VARCHAR" property="nickName" />
     <result column="sex" jdbcType="INTEGER" property="sex" />
@@ -22,8 +23,6 @@
     <result column="parent_name" jdbcType="VARCHAR" property="parentName" />
     <result column="parent_username" jdbcType="VARCHAR" property="parentUsername" />
     <result column="level" jdbcType="VARCHAR" property="level" />
-    <result column="dept_id" jdbcType="INTEGER" property="deptId" />
-    <result column="dept_name" jdbcType="VARCHAR" property="deptName" />
     <result column="status" jdbcType="INTEGER" property="status" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
     <result column="operate_ip" jdbcType="VARCHAR" property="operateIp" />
@@ -37,8 +36,7 @@
   <sql id="Base_Column_List">
     id, name, nick_name, sex, birthday, phone, mail, say, avatar, we_chat, qq, open_we,
     open_qq, username, password, reset_code, parent_id, parent_name, parent_username,
-    level, dept_id, dept_name, status, remark, operate_ip, operate_id, operate_name,
-    operate_time
+    level, status, remark, operate_ip, operate_id, operate_name, operate_time
   </sql>
   <sql id="Blob_Column_List">
     json_info
@@ -46,6 +44,8 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
     select
     <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
     from sys_user
     where id = #{id,jdbcType=INTEGER}
   </select>
@@ -60,20 +60,20 @@
       we_chat, qq, open_we,
       open_qq, username, password,
       reset_code, parent_id, parent_name,
-      parent_username, level, dept_id,
-      dept_name, status, remark,
-      operate_ip, operate_id, operate_name,
-      operate_time, json_info)
+      parent_username, level, status,
+      remark, operate_ip, operate_id,
+      operate_name, operate_time, json_info
+      )
     values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{nickName,jdbcType=VARCHAR},
       #{sex,jdbcType=INTEGER}, #{birthday,jdbcType=DATE}, #{phone,jdbcType=VARCHAR},
       #{mail,jdbcType=VARCHAR}, #{say,jdbcType=VARCHAR}, #{avatar,jdbcType=VARCHAR},
       #{weChat,jdbcType=VARCHAR}, #{qq,jdbcType=VARCHAR}, #{openWe,jdbcType=VARCHAR},
       #{openQq,jdbcType=VARCHAR}, #{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR},
       #{resetCode,jdbcType=VARCHAR}, #{parentId,jdbcType=INTEGER}, #{parentName,jdbcType=VARCHAR},
-      #{parentUsername,jdbcType=VARCHAR}, #{level,jdbcType=VARCHAR}, #{deptId,jdbcType=INTEGER},
-      #{deptName,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR},
-      #{operateIp,jdbcType=VARCHAR}, #{operateId,jdbcType=INTEGER}, #{operateName,jdbcType=VARCHAR},
-      #{operateTime,jdbcType=TIMESTAMP}, #{jsonInfo,jdbcType=LONGVARCHAR})
+      #{parentUsername,jdbcType=VARCHAR}, #{level,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER},
+      #{remark,jdbcType=VARCHAR}, #{operateIp,jdbcType=VARCHAR}, #{operateId,jdbcType=INTEGER},
+      #{operateName,jdbcType=VARCHAR}, #{operateTime,jdbcType=TIMESTAMP}, #{jsonInfo,jdbcType=LONGVARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.maybe.sys.model.SysUser">
     insert into sys_user
@@ -137,12 +137,6 @@
       </if>
       <if test="level != null">
         level,
-      </if>
-      <if test="deptId != null">
-        dept_id,
-      </if>
-      <if test="deptName != null">
-        dept_name,
       </if>
       <if test="status != null">
         status,
@@ -227,12 +221,6 @@
       <if test="level != null">
         #{level,jdbcType=VARCHAR},
       </if>
-      <if test="deptId != null">
-        #{deptId,jdbcType=INTEGER},
-      </if>
-      <if test="deptName != null">
-        #{deptName,jdbcType=VARCHAR},
-      </if>
       <if test="status != null">
         #{status,jdbcType=INTEGER},
       </if>
@@ -316,12 +304,6 @@
       <if test="level != null">
         level = #{level,jdbcType=VARCHAR},
       </if>
-      <if test="deptId != null">
-        dept_id = #{deptId,jdbcType=INTEGER},
-      </if>
-      <if test="deptName != null">
-        dept_name = #{deptName,jdbcType=VARCHAR},
-      </if>
       <if test="status != null">
         status = #{status,jdbcType=INTEGER},
       </if>
@@ -367,8 +349,6 @@
       parent_name = #{parentName,jdbcType=VARCHAR},
       parent_username = #{parentUsername,jdbcType=VARCHAR},
       level = #{level,jdbcType=VARCHAR},
-      dept_id = #{deptId,jdbcType=INTEGER},
-      dept_name = #{deptName,jdbcType=VARCHAR},
       status = #{status,jdbcType=INTEGER},
       remark = #{remark,jdbcType=VARCHAR},
       operate_ip = #{operateIp,jdbcType=VARCHAR},
@@ -399,8 +379,6 @@
       parent_name = #{parentName,jdbcType=VARCHAR},
       parent_username = #{parentUsername,jdbcType=VARCHAR},
       level = #{level,jdbcType=VARCHAR},
-      dept_id = #{deptId,jdbcType=INTEGER},
-      dept_name = #{deptName,jdbcType=VARCHAR},
       status = #{status,jdbcType=INTEGER},
       remark = #{remark,jdbcType=VARCHAR},
       operate_ip = #{operateIp,jdbcType=VARCHAR},
@@ -412,72 +390,80 @@
 
   <select id="countByDeptId" resultType="java.lang.Integer">
     SELECT count(1)
-    FROM sys_user
-    WHERE 1=1
+    FROM sys_user U, sys_dept_user DU
+    WHERE U.id = DU.user_id
     <if test="deptId != null">
-      AND dept_id = #{deptId,jdbcType=INTEGER}
+      AND DU.dept_id = #{deptId,jdbcType=INTEGER}
     </if>
     <if test="query != null">
       AND (
-        name LIKE CONCAT('%',#{query,jdbcType=VARCHAR},'%')
-        OR phone LIKE CONCAT('%',#{query,jdbcType=VARCHAR},'%')
-        OR mail LIKE CONCAT('%',#{query,jdbcType=VARCHAR},'%')
+        U.name LIKE CONCAT('%',#{query,jdbcType=VARCHAR},'%')
+        OR U.phone LIKE CONCAT('%',#{query,jdbcType=VARCHAR},'%')
+        OR U.mail LIKE CONCAT('%',#{query,jdbcType=VARCHAR},'%')
       )
     </if>
   </select>
   <select id="findUserPageByDeptId" resultMap="BaseResultMap">
-    SELECT <include refid="Base_Column_List" />
-    FROM sys_user
-    WHERE 1=1
+    SELECT
+      U.id, U.name, U.phone, U.mail, U.nick_name, U.avatar, U.open_we, U.open_qq, U.username, U.password, U.reset_code, U.status, U.remark, U.operate_ip, U.operate_id, U.operate_name, U.operate_time
+    FROM sys_user U, sys_dept_user DU
+    WHERE U.id = DU.user_id
     <if test="deptId != null">
-      AND dept_id = #{deptId,jdbcType=INTEGER}
+      AND DU.dept_id = #{deptId,jdbcType=INTEGER}
     </if>
     <if test="query != null">
       AND (
-      name LIKE CONCAT('%',#{query,jdbcType=VARCHAR},'%')
-      OR phone LIKE CONCAT('%',#{query,jdbcType=VARCHAR},'%')
-      OR mail LIKE CONCAT('%',#{query,jdbcType=VARCHAR},'%')
+      U.name LIKE CONCAT('%',#{query,jdbcType=VARCHAR},'%')
+      OR U.phone LIKE CONCAT('%',#{query,jdbcType=VARCHAR},'%')
+      OR U.mail LIKE CONCAT('%',#{query,jdbcType=VARCHAR},'%')
       )
     </if>
     LIMIT #{page.offset,jdbcType=INTEGER}, #{page.size,jdbcType=INTEGER}
   </select>
   <select id="countByDeptLevel" resultType="java.lang.Integer">
-    SELECT count(1)
-    FROM sys_user u, sys_dept d
-    WHERE u.dept_id = d.id
+    SELECT COUNT(DISTINCT U.id)
+    FROM sys_user U, sys_dept_user DU, sys_dept D
+    WHERE U.id = DU.user_id
+    AND DU.dept_id = D.id
     <if test="level != null">
-      AND d.level LIKE #{level,jdbcType=VARCHAR}
+      AND D.level LIKE CONCAT(#{level,jdbcType=VARCHAR},'.%')
     </if>
     <if test="query != null">
       AND (
-      u.name LIKE CONCAT('%',#{query,jdbcType=VARCHAR},'%')
-      OR u.phone LIKE CONCAT('%',#{query,jdbcType=VARCHAR},'%')
-      OR u.mail LIKE CONCAT('%',#{query,jdbcType=VARCHAR},'%')
+      U.name LIKE CONCAT('%',#{query,jdbcType=VARCHAR},'%')
+      OR U.phone LIKE CONCAT('%',#{query,jdbcType=VARCHAR},'%')
+      OR U.mail LIKE CONCAT('%',#{query,jdbcType=VARCHAR},'%')
       )
     </if>
   </select>
   <select id="findUserPageByDeptLevel" resultMap="BaseResultMap">
-    SELECT u.id, u.name, u.phone, u.mail, u.nick_name, u.avatar, u.open_we, u.open_qq, u.username, u.password, u.reset_code, u.dept_id, u.status, u.remark, u.operate_ip, u.operate_id, u.operate_name, u.operate_time
-    FROM sys_user u, sys_dept d
-    WHERE u.dept_id = d.id
+    SELECT DISTINCT U.id, U.name, U.phone, U.mail, U.nick_name, U.avatar, U.open_we, U.open_qq, U.username, U.password, U.reset_code, U.status, U.remark, U.operate_ip, U.operate_id, U.operate_name, U.operate_time
+    FROM sys_user U, sys_dept_user DU, sys_dept D
+    WHERE U.id = DU.user_id
+    AND DU.dept_id = D.id
     <if test="level != null">
-      AND d.level LIKE #{level,jdbcType=VARCHAR}
+      AND D.level LIKE CONCAT(#{level,jdbcType=VARCHAR},'.%')
     </if>
     <if test="query != null">
       AND (
-      u.name LIKE CONCAT('%',#{query,jdbcType=VARCHAR},'%')
-      OR u.phone LIKE CONCAT('%',#{query,jdbcType=VARCHAR},'%')
-      OR u.mail LIKE CONCAT('%',#{query,jdbcType=VARCHAR},'%')
+      U.name LIKE CONCAT('%',#{query,jdbcType=VARCHAR},'%')
+      OR U.phone LIKE CONCAT('%',#{query,jdbcType=VARCHAR},'%')
+      OR U.mail LIKE CONCAT('%',#{query,jdbcType=VARCHAR},'%')
       )
     </if>
     LIMIT #{page.offset,jdbcType=INTEGER}, #{page.size,jdbcType=INTEGER}
   </select>
+  <select id="findByUsername" parameterType="java.lang.String" resultMap="BaseResultMap">
+    SELECT <include refid="Base_Column_List" />
+    FROM sys_user
+    WHERE username = #{username,jdbcType=VARCHAR}
+  </select>
   <select id="findByKeyword" parameterType="java.lang.String" resultMap="BaseResultMap">
     SELECT <include refid="Base_Column_List" />
     FROM sys_user
-    WHERE username = #{keyword}
-    OR phone = #{keyword}
-    OR mail = #{keyword}
+    WHERE username = #{keyword,jdbcType=VARCHAR}
+    OR phone = #{keyword,jdbcType=VARCHAR}
+    OR mail = #{keyword,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByUserKeys">
     DELETE FROM sys_user
@@ -494,7 +480,7 @@
   </select>
   <select id="userCountPageOfNone" resultType="java.lang.Integer">
     SELECT
-      count(1)
+      COUNT(1)
     FROM sys_user
     WHERE parent_id IS NULL
     <if test="query != null">
@@ -555,21 +541,21 @@
   </update>
   <select id="userListByRoleCode" resultMap="BaseResultMap">
     SELECT
-      u.id, u.name, u.phone, u.mail, u.nick_name, u.avatar, u.open_we, u.open_qq, u.username, u.password, u.reset_code, u.dept_id, u.status, u.remark, u.operate_ip, u.operate_id, u.operate_name, u.operate_time
-    FROM sys_user u, sys_role r, sys_role_user ru
-    WHERE r.code = #{roleCode,jdbcType=VARCHAR}
-    AND r.id = ru.role_id
-    AND u.id = ru.user_id
+      U.id, U.name, U.phone, U.mail, U.nick_name, U.avatar, U.open_we, U.open_qq, U.username, U.password, U.reset_code, U.status, U.remark, U.operate_ip, U.operate_id, U.operate_name, U.operate_time
+    FROM sys_user U, sys_role R, sys_role_user RU
+    WHERE R.code = #{roleCode,jdbcType=VARCHAR}
+    AND R.id = RU.role_id
+    AND U.id = RU.user_id
   </select>
   <select id="userListByProcessId" parameterType="java.lang.String" resultMap="BaseResultMap">
     SELECT
-      U.id, U.name, U.phone, U.mail, U.nick_name, U.avatar, U.open_we, U.open_qq, U.username, U.password, U.reset_code, U.dept_id, U.status, U.remark, U.operate_ip, U.operate_id, U.operate_name, U.operate_time
+      U.id, U.name, U.phone, U.mail, U.nick_name, U.avatar, U.open_we, U.open_qq, U.username, U.password, U.reset_code, U.status, U.remark, U.operate_ip, U.operate_id, U.operate_name, U.operate_time
     FROM  ACT_RU_TASK RT, sys_user U
     WHERE RT.PROC_INST_ID_ = #{processId,jdbcType=VARCHAR}
     AND RT.ASSIGNEE_ = U.username
     UNION
     SELECT
-      U.id, U.name, U.phone, U.mail, U.nick_name, U.avatar, U.open_we, U.open_qq, U.username, U.password, U.reset_code, U.dept_id, U.status, U.remark, U.operate_ip, U.operate_id, U.operate_name, U.operate_time
+      U.id, U.name, U.phone, U.mail, U.nick_name, U.avatar, U.open_we, U.open_qq, U.username, U.password, U.reset_code, U.status, U.remark, U.operate_ip, U.operate_id, U.operate_name, U.operate_time
     FROM ACT_RU_TASK RT, ACT_RU_IDENTITYLINK RI, sys_user U
     WHERE RT.PROC_INST_ID_ = #{processId,jdbcType=VARCHAR}
     AND RT.ID_ = RI.TASK_ID_
@@ -577,7 +563,7 @@
     AND RI.USER_ID_ = U.username
     UNION
     SELECT
-      U.id, U.name, U.phone, U.mail, U.nick_name, U.avatar, U.open_we, U.open_qq, U.username, U.password, U.reset_code, U.dept_id, U.status, U.remark, U.operate_ip, U.operate_id, U.operate_name, U.operate_time
+      U.id, U.name, U.phone, U.mail, U.nick_name, U.avatar, U.open_we, U.open_qq, U.username, U.password, U.reset_code, U.status, U.remark, U.operate_ip, U.operate_id, U.operate_name, U.operate_time
     FROM ACT_RU_TASK RT, ACT_RU_IDENTITYLINK RI, sys_role R, sys_role_user RU, sys_user U
     WHERE RT.PROC_INST_ID_ = #{processId,jdbcType=VARCHAR}
     AND RT.ID_ = RI.TASK_ID_
@@ -591,5 +577,26 @@
       json_info
     FROM sys_user
     WHERE id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="findLeadListByDeptId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    SELECT
+      U.id, U.name, U.phone, U.mail, U.nick_name, U.avatar, U.open_we, U.open_qq, U.username, U.password, U.reset_code, U.status, U.remark, U.operate_ip, U.operate_id, U.operate_name, U.operate_time
+    FROM sys_user U, sys_dept_lead DL
+    WHERE U.id = DL.lead_id
+    AND DL.dept_id = #{deptId,jdbcType=INTEGER}
+  </select>
+  <select id="findLeadList" resultMap="BaseResultMap">
+    SELECT
+      U.id, DL.dept_id, U.name, U.phone, U.mail, U.nick_name, U.avatar, U.open_we, U.open_qq, U.username, U.password, U.reset_code, U.status, U.remark, U.operate_ip, U.operate_id, U.operate_name, U.operate_time
+    FROM sys_user U, sys_dept_lead DL
+    WHERE U.id = DL.lead_id
+  </select>
+  <select id="findLeadListByUserId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    SELECT DISTINCT
+      U.id, U.name, U.phone, U.mail, U.nick_name, U.avatar, U.open_we, U.open_qq, U.username, U.password, U.reset_code, U.status, U.remark, U.operate_ip, U.operate_id, U.operate_name, U.operate_time
+    FROM sys_dept_user DU, sys_dept_lead DL, sys_user U
+    WHERE DU.user_id = #{userId,jdbcType=INTEGER}
+    AND DU.dept_id = DL.dept_id
+    AND DL.lead_id = U.id
   </select>
 </mapper>

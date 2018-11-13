@@ -80,8 +80,8 @@ public class SysMenuServiceImpl implements ISysMenuService {
         if (menuList.size() > 0) {
             throw new SixException(ResultEnum.ERROR_PARAM.getCode(), "当前菜单存在子菜单，禁止删除");
         }
-        sysMenuMapper.deleteByPrimaryKey(menuId);
         sysRoleMenuMapper.deleteRoleMenuByMenuId(menuId);
+        sysMenuMapper.deleteByPrimaryKey(menuId);
     }
 
     @Transactional

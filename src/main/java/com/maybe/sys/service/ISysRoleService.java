@@ -16,13 +16,19 @@ import java.util.List;
  */
 public interface ISysRoleService {
 
+    void insertGroup(String name);
+
+    void updateGroup(Integer id, String name);
+
+    List<SysRole> groupList();
+
     void insert(RoleParam param);
 
     void update(RoleParam param);
 
     void delete(Integer roleId);
 
-    List<SysRole> findAll();
+    List<SysRole> roleList();
 
     List<SysRole> roleListByUser();
 

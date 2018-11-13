@@ -4,6 +4,7 @@ import com.maybe.sys.common.dto.LoginUserDto;
 import com.maybe.sys.common.dto.PageDto;
 import com.maybe.sys.common.param.PageParam;
 import com.maybe.sys.common.param.UserParam;
+import com.maybe.sys.model.SysDept;
 import com.maybe.sys.model.SysUser;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -25,8 +26,6 @@ public interface ISysUserService {
     void delete(Integer userId);
 
     void deleteBatch(List<Integer> userKeys);
-
-    SysUser findUserById(Integer id);
 
     PageDto<SysUser> findUserPageByDeptId(Integer deptId, String query, PageParam page);
 
@@ -51,4 +50,10 @@ public interface ISysUserService {
     void mineUpdate(String jsonInfo);
 
     String mineSelect();
+
+    List<SysDept> findDeptListByUserId(Integer userId);
+
+    List<SysUser> findLeadListByUserId(Integer integer);
+
+    List<SysUser> findLeadListByUsername(String username);
 }

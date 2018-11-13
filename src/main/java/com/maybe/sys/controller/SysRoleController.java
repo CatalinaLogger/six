@@ -29,6 +29,28 @@ public class SysRoleController {
     @Autowired
     private ISysRoleService sysRoleService;
 
+    @ApiOperation("新增角色组")
+    @PostMapping("/group/insert")
+    public JsonData insertGroup(@ApiParam(value = "角色组名称", required = true) @RequestParam("name") String name) {
+        sysRoleService.insertGroup(name);
+        return JsonData.successOperate();
+    }
+
+    @ApiOperation("修改角色组")
+    @PutMapping("/group/update")
+    public JsonData updateGroup(@ApiParam(value = "角色组ID", required = true, example = "1") @RequestParam("id") Integer id,
+                                @ApiParam(value = "角色组名称", required = true) @RequestParam("name") String name) {
+        sysRoleService.updateGroup(id, name);
+        return JsonData.successOperate();
+    }
+
+    @ApiOperation("获取角色组列表")
+    @GetMapping("/group/list")
+    public JsonData groupList() {
+        List<SysRole> list = sysRoleService.groupList();
+        return JsonData.success(list);
+    }
+
     @ApiOperation("新增角色")
     @ApiImplicitParams({
         @ApiImplicitParam(name = "code", value = "角色编码", dataType = "string", paramType = "query", required = true),
@@ -53,17 +75,17 @@ public class SysRoleController {
         return JsonData.successOperate();
     }
 
-    @ApiOperation("删除角色")
+    @ApiOperation("删除角色组或角色")
     @DeleteMapping("/delete")
     public JsonData deleteRole(@ApiParam(value = "角色ID", required = true, example = "1") @RequestParam(value = "roleId", defaultValue = "") Integer roleId) {
         sysRoleService.delete(roleId);
         return JsonData.successOperate();
     }
 
-    @ApiOperation("获取全部角色列表")
+    @ApiOperation("获取角色列表")
     @GetMapping("/list")
     public JsonData roleList() {
-        List<SysRole> list = sysRoleService.findAll();
+        List<SysRole> list = sysRoleService.roleList();
         return JsonData.success(list);
     }
 
@@ -76,7 +98,7 @@ public class SysRoleController {
 
     @ApiOperation("获取角色所绑定的菜单ID列表")
     @GetMapping("/menu/keys")
-    public JsonData menuKeys(@ApiParam(value = "角色ID", required = true, example = "1") @RequestParam("roleId") Integer roleId) {
+    public JsonData menuKeys(@ApiParam(value = "角色组或角色ID", required = true, example = "1") @RequestParam("roleId") Integer roleId) {
         List<Integer> list = sysRoleService.findMenuKeysByRoleId(roleId);
         return JsonData.success(list);
     }

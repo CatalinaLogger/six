@@ -2,7 +2,6 @@ package com.maybe.flow.service.impl;
 
 import com.maybe.flow.common.param.FlowParam;
 import com.maybe.flow.dao.FlowWaitMapper;
-import com.maybe.flow.model.FlowPast;
 import com.maybe.flow.model.FlowWait;
 import com.maybe.flow.service.IWaitService;
 import com.maybe.sys.common.dto.PageDto;
@@ -33,10 +32,7 @@ public class WaitServiceImpl implements IWaitService {
     public PageDto<FlowWait> waitPage(FlowParam param, PageParam page) {
         List<SysRole> roles = sysRoleUserMapper.roleListByUserId(SessionLocal.getUser().getId());
         int total = flowWaitMapper.waitCountByUserAndRole(SessionLocal.getUser().getUsername(), roles, param, page);
-        if (total > 0) {
-            List<FlowWait> list = flowWaitMapper.waitPageByUserAndRole(SessionLocal.getUser().getUsername(), roles, param, page);
-            return new PageDto<>(page.getPage(), page.getSize(), total, list);
-        }
-        return new PageDto<>(page.getPage(), page.getSize(), total, null);
+        List<FlowWait> list = flowWaitMapper.waitPageByUserAndRole(SessionLocal.getUser().getUsername(), roles, param, page);
+        return new PageDto<>(page.getPage(), page.getSize(), total, list);
     }
 }

@@ -42,8 +42,8 @@ public class WorkEasyServiceImpl implements IWorkEasyService {
         if (jsonObject.has("leader")) {
             map.put("leader", jsonObject.getString("leader"));
         } else {
-            SysDept dept = sysDeptMapper.selectByPrimaryKey(SessionLocal.getUser().getDeptId());
-            map.put("leader", dept.getLeaderUsername());
+            // SysDept dept = sysDeptMapper.selectByPrimaryKey(SessionLocal.getUser().getDeptId());
+            // map.put("leader", dept.getLeaderUsername());
         }
         if (jsonObject.has("helper")) {
             map.put("helper", jsonObject.getString("helper"));
@@ -58,8 +58,6 @@ public class WorkEasyServiceImpl implements IWorkEasyService {
             workEasy.setContent(content);
             workEasy.setUserId(SessionLocal.getUser().getId());
             workEasy.setUserName(SessionLocal.getUser().getName());
-            workEasy.setDeptId(SessionLocal.getUser().getDeptId());
-            workEasy.setDeptName(SessionLocal.getUser().getDeptName());
             workEasy.setStartTime(new Date());
             workEasy.setStatus(0);
             workEasy.setOperateIp(SessionLocal.getUser().getOperateIp());

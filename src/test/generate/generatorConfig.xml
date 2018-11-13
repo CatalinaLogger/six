@@ -32,6 +32,8 @@
 		<table tableName="sys_user" domainObjectName="SysUser" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" />
 		<table tableName="sys_user_login" domainObjectName="SysUserLogin" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" />
 		<table tableName="sys_dept" domainObjectName="SysDept" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" />
+		<table tableName="sys_dept_lead" domainObjectName="SysDeptLead" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" />
+		<table tableName="sys_dept_user" domainObjectName="SysDeptUser" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" />
 		<table tableName="sys_role" domainObjectName="SysRole" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" />
 		<table tableName="sys_role_menu" domainObjectName="SysRoleMenu" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" />
 		<table tableName="sys_role_user" domainObjectName="SysRoleUser" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" />
@@ -76,7 +78,6 @@
 		</javaClientGenerator>
 		&lt;!&ndash; 要生成那些表(更改tableName和domainObjectName就可以) &ndash;&gt;&lt;!&ndash; 6 &ndash;&gt;
 		<table tableName="work_draft" domainObjectName="WorkDraft" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" />
-		<table tableName="work_leave" domainObjectName="WorkLeave" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" />
 		<table tableName="work_easy" domainObjectName="WorkEasy" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" />
 -->
 

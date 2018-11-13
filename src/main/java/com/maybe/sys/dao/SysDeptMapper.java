@@ -25,4 +25,6 @@ public interface SysDeptMapper {
     List<SysDept> findChildrenByLevel(@Param("level") String level);
 
     void batchUpdateDeptLevel(@Param("sysDeptList") List<SysDept> sysDeptList);
+
+    List<SysDept> findDeptListByUserId(@Param("userId") Integer userId);
 }

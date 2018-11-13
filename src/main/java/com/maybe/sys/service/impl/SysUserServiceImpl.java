@@ -17,6 +17,7 @@ import com.maybe.sys.model.SysUserLogin;
 import com.maybe.sys.service.ISysTreeService;
 import com.maybe.sys.service.ISysUserService;
 import eu.bitwalker.useragentutils.UserAgent;
+import io.swagger.models.auth.In;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.protocol.RequestUserAgent;
 import org.hibernate.service.spi.ServiceException;
@@ -35,12 +36,10 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -58,6 +57,10 @@ public class SysUserServiceImpl implements ISysUserService{
     private SysDeptMapper sysDeptMapper;
     @Autowired
     private ISysTreeService sysTreeService;
+    @Autowired
+    private SysDeptUserMapper sysDeptUserMapper;
+    @Autowired
+    private SysDeptLeadMapper sysDeptLeadMapper;
     @Autowired
     private SysRoleUserMapper sysRoleUserMapper;
     @Autowired
@@ -94,13 +97,16 @@ public class SysUserServiceImpl implements ISysUserService{
         String password = PasswordUtil.randomPassword();
         String encryptedPassword = MD5Util.encrypt(password);
         sysUser.setPassword(encryptedPassword);
-        SysDept sysDept = sysDeptMapper.selectByPrimaryKey(sysUser.getDeptId());
-        sysUser.setDeptName(sysDept.getName());
         sysUser.setOperateIp(SessionLocal.getUser().getOperateIp());
         sysUser.setOperateId(SessionLocal.getUser().getId());
         sysUser.setOperateName(SessionLocal.getUser().getName());
         sysUser.setOperateTime(new Date());
         sysUserMapper.insertSelective(sysUser);
+        if (param.getDeptKeys().size() > 0) {
+            sysDeptUserMapper.insertUserDept(sysUser, param.getDeptKeys());
+        } else {
+            throw new SixException(ResultEnum.ERROR_PARAM.getCode(), "所属部门不能为空");
+        }
         if (param.getRoleKeys().size() > 0) {
             sysRoleUserMapper.insertUserRole(sysUser, param.getRoleKeys());
         }
@@ -130,54 +136,71 @@ public class SysUserServiceImpl implements ISysUserService{
         if (ObjectUtils.isEmpty(before)) {
             throw new SixException(ResultEnum.ERROR_PARAM.getCode(), "待更新用户不存在");
         }
-        SysDept sysDept = sysDeptMapper.selectByPrimaryKey(after.getDeptId());
-        after.setDeptName(sysDept.getName());
         after.setOperateIp(SessionLocal.getUser().getOperateIp());
         after.setOperateId(SessionLocal.getUser().getId());
         after.setOperateName(SessionLocal.getUser().getName());
         after.setOperateTime(new Date());
         sysUserMapper.updateByPrimaryKeySelective(after);
-        List<Integer> oldKeys = sysRoleUserMapper.selectRoleKeysByUserId(after.getId());
-        List<Integer> newKeys = param.getRoleKeys();
-        List<Integer> addKeys = new ArrayList<>();
-        addKeys.addAll(newKeys);
-        addKeys.removeAll(oldKeys);
-        List<Integer> delKeys = new ArrayList<>();
-        delKeys.addAll(oldKeys);
-        delKeys.removeAll(newKeys);
-        if (addKeys.size() > 0) {
-            sysRoleUserMapper.insertUserRole(after, addKeys);
+
+        List<Integer> oldDeptKeys = sysDeptUserMapper.selectDeptKeysByUserId(after.getId());
+        List<Integer> newDeptKeys = param.getDeptKeys();
+        Map<String, List<Integer>> deptMap = SixUtil.handelKeys(oldDeptKeys, newDeptKeys);
+        if (deptMap.containsKey("addKeys")) {
+            sysDeptUserMapper.insertUserDept(after, deptMap.get("addKeys"));
         }
-        if (delKeys.size() > 0) {
-            sysRoleUserMapper.removeUserRole(after, delKeys);
+        if (deptMap.containsKey("delKeys")) {
+            sysDeptUserMapper.removeUserDept(after, deptMap.get("delKeys"));
+            sysDeptLeadMapper.deleteByUserIdAndDeptKeys(after.getId(), deptMap.get("delKeys"));
+        }
+
+        List<Integer> oldRoleKeys = sysRoleUserMapper.selectRoleKeysByUserId(after.getId());
+        List<Integer> newRoleKeys = param.getRoleKeys();
+        Map<String, List<Integer>> roleMap = SixUtil.handelKeys(oldRoleKeys, newRoleKeys);
+        if (roleMap.containsKey("addKeys")) {
+            sysRoleUserMapper.insertUserRole(after, roleMap.get("addKeys"));
+        }
+        if (roleMap.containsKey("delKeys")) {
+            sysRoleUserMapper.removeUserRole(after, roleMap.get("delKeys"));
         }
     }
 
-
     @Override
+    @Transactional
     public void delete(Integer userId) {
         sysUserMapper.deleteByPrimaryKey(userId);
         sysRoleUserMapper.deleteRoleUserByUserId(userId);
+        sysDeptLeadMapper.deleteDeptLeadByUserId(userId);
     }
 
     @Override
+    @Transactional
     public void deleteBatch(List<Integer> userKeys) {
         sysUserMapper.deleteByUserKeys(userKeys);
         sysRoleUserMapper.deleteRoleUserByUserKeys(userKeys);
+        sysDeptLeadMapper.deleteDeptLeadByUserKeys(userKeys);
     }
 
     @Override
-    public SysUser findUserById(Integer id) {
-        return sysUserMapper.selectByPrimaryKey(id);
+    public List<SysDept> findDeptListByUserId(Integer userId) {
+        return sysDeptMapper.findDeptListByUserId(userId);
+    }
+
+    @Override
+    public List<SysUser> findLeadListByUserId(Integer userId) {
+        return sysUserMapper.findLeadListByUserId(userId);
+    }
+
+    @Override
+    public List<SysUser> findLeadListByUsername(String username) {
+        SysUser sysUser = sysUserMapper.findByUsername(username);
+        return findLeadListByUserId(sysUser.getId());
     }
 
     @Override
     public PageDto<SysUser> findUserPageByDeptId(Integer deptId, String query, PageParam page) {
         if (deptId == null) {
-            SysDept sysDept = sysDeptMapper.selectByPrimaryKey(SessionLocal.getUser().getDeptId());
-            String level = sysDept.getLevel() + "." + sysDept.getId() + "%";
-            int total = sysUserMapper.countByDeptLevel(level, query);
-            List<SysUser> list = sysUserMapper.findUserPageByDeptLevel(level, query, page);
+            int total = sysUserMapper.countByDeptLevel("0", query);
+            List<SysUser> list = sysUserMapper.findUserPageByDeptLevel("0", query, page);
             return new PageDto<>(page.getPage(), page.getSize(), total, list);
         } else {
             int total = sysUserMapper.countByDeptId(deptId, query);
@@ -282,8 +305,8 @@ public class SysUserServiceImpl implements ISysUserService{
             } else {
                 loginUserDto.setAvatar(systemConfig.getFastUrl() + avatar);
             }
-            loginUserDto.setMenus(sysTreeService.menuTreeByUserId(user.getId()));
-//            loginUserDto.setMenus(sysTreeService.menuTree());
+//            loginUserDto.setMenus(sysTreeService.menuTreeByUserId(user.getId()));
+            loginUserDto.setMenus(sysTreeService.menuTree());
             return loginUserDto;
         } catch (Exception e) {
             e.printStackTrace();
@@ -436,4 +459,5 @@ public class SysUserServiceImpl implements ISysUserService{
     public String mineSelect() {
         return sysUserMapper.findJsonInfoByUserId(SessionLocal.getUser().getId());
     }
+
 }

@@ -158,16 +158,19 @@
   </select>
   <insert id="insertRoleUser">
     INSERT INTO sys_role_user
-    (role_id, user_id, operate_ip, operate_id, operate_name, operate_time)
+    (role_id, user_id, dept_id, operate_ip, operate_id, operate_name, operate_time)
     VALUES
     <foreach collection ="userKeys" item="key" separator =",">
-      (#{sysRole.id,jdbcType=INTEGER}, #{key,jdbcType=INTEGER}, #{sysRole.operateIp,jdbcType=VARCHAR},
+      (#{sysRole.id,jdbcType=INTEGER}, #{key,jdbcType=INTEGER}, #{sysRole.deptId,jdbcType=VARCHAR}, #{sysRole.operateIp,jdbcType=VARCHAR},
       #{sysRole.operateId,jdbcType=INTEGER}, #{sysRole.operateName,jdbcType=VARCHAR}, #{sysRole.operateTime,jdbcType=TIMESTAMP})
     </foreach >
   </insert>
   <delete id="removeRoleUser">
     DELETE FROM sys_role_user
     WHERE role_id = #{sysRole.id,jdbcType=INTEGER}
+    <if test="sysRole.deptId != null">
+      AND dept_id = #{sysRole.deptId,jdbcType=INTEGER}
+    </if>
     AND user_id in
     <foreach collection ="userKeys" item="key"  open="(" separator="," close=")">
       #{key,jdbcType=INTEGER}
