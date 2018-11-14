@@ -130,4 +130,11 @@ public class SysUserController {
         List<SysUser> list = sysUserService.userListByRoleCode(roleCode);
         return JsonData.success(list);
     }
+
+    @ApiOperation("根据用户姓名获取用户列表")
+    @GetMapping("/list/name")
+    public JsonData userListByName(@ApiParam(value = "用户姓名", required = true) @RequestParam("name") String name) {
+        List<SysUser> list = sysUserService.userListByName(name);
+        return JsonData.success(list);
+    }
 }

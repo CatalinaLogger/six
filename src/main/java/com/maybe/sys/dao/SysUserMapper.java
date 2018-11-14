@@ -47,8 +47,10 @@ public interface SysUserMapper {
     void underPull(@Param("parentId") Integer parentId, @Param("userKeys") List<Integer> userKeys);
     /** 解绑用户的下属... */
     void underPullChild(@Param("userKey") Integer userKey);
-    /** 根据角色编码来获取用户 */
+    /** 根据角色编码来获取用户列表 */
     List<SysUser> userListByRoleCode(@Param("roleCode") String roleCode);
+    /** 根据用户姓名来获取用户列表 */
+    List<SysUser> userListByName(@Param("name") String name);
     /** 根据流程实例查询任务处理人 */
     List<SysUser> userListByProcessId(@Param("processId") String processId);
 
@@ -59,4 +61,5 @@ public interface SysUserMapper {
     List<SysUser> findLeadList();
     /** 根据用户userId字段获取用户的主管列表 */
     List<SysUser> findLeadListByUserId(@Param("userId") Integer userId);
+
 }

@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.ObjectUtils;
 
 import java.util.Date;
@@ -119,6 +120,20 @@ public class SysDeptServiceImpl implements ISysDeptService {
     @Override
     public List<SysUser> findLeadListByDeptId(Integer deptId) {
         return sysUserMapper.findLeadListByDeptId(deptId);
+    }
+
+    /** 处理用户列表使之带上部门信息 */
+    @Override
+    public List<SysUser> handleUserListWithDept(List<SysUser> userList) {
+        List<SysDept> deptList = sysDeptMapper.findDeptListWithUser();
+        LinkedMultiValueMap<Integer, SysDept> deptMap = new LinkedMultiValueMap<>();
+        for (SysDept dept : deptList) {
+            deptMap.add(dept.getUserId(), dept);
+        }
+        for (SysUser user : userList) {
+            user.setDept(deptMap.get(user.getId()));
+        }
+        return userList;
     }
 
     protected void updateWithChild(SysDept before, SysDept after) {

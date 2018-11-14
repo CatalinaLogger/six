@@ -45,6 +45,8 @@ public interface ISysUserService {
 
     List<SysUser> userListByRoleCode(String roleCode);
 
+    List<SysUser> userListByName(String name);
+
     void passUpdate(String oldPassword, String newPassword);
 
     void mineUpdate(String jsonInfo);

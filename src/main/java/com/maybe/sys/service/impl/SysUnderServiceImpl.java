@@ -8,6 +8,7 @@ import com.maybe.sys.common.util.LevelUtil;
 import com.maybe.sys.common.util.SessionLocal;
 import com.maybe.sys.dao.SysUserMapper;
 import com.maybe.sys.model.SysUser;
+import com.maybe.sys.service.ISysDeptService;
 import com.maybe.sys.service.ISysUnderService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,8 @@ public class SysUnderServiceImpl implements ISysUnderService{
 
     @Autowired
     private SysUserMapper sysUserMapper;
+    @Autowired
+    private ISysDeptService sysDeptService;
 
     @Override
     public List<SysUser> withListOfUser(Integer userId) {
@@ -35,24 +38,21 @@ public class SysUnderServiceImpl implements ISysUnderService{
             throw new SixException(ResultEnum.ERROR_PARAM.getCode(), "请提供用户信息");
         }
         if (userId.equals(SessionLocal.getUser().getId())) {
-            return sysUserMapper.withListOfUser(userId);
+            return sysDeptService.handleUserListWithDept(sysUserMapper.withListOfUser(userId));
         }
         SysUser under = sysUserMapper.selectByPrimaryKey(userId);
         if (ObjectUtils.isEmpty(under.getLevel()) || !under.getLevel().contains(SessionLocal.getUser().getId().toString())) {
             return null;
         } else {
-            return sysUserMapper.withListOfUser(userId);
+            return sysDeptService.handleUserListWithDept(sysUserMapper.withListOfUser(userId));
         }
     }
 
     @Override
     public PageDto<SysUser> userPageOfNone(String query, PageParam page) {
         int total = sysUserMapper.userCountPageOfNone(query);
-        if (total > 0) {
-            List<SysUser> list = sysUserMapper.userPageOfNone(query, page);
-            return new PageDto<>(page.getPage(), page.getSize(), total, list);
-        }
-        return new PageDto<>(page.getPage(), page.getSize(), total, null);
+        List<SysUser> list = sysDeptService.handleUserListWithDept(sysUserMapper.userPageOfNone(query, page));
+        return new PageDto<>(page.getPage(), page.getSize(), total, list);
     }
 
     @Override

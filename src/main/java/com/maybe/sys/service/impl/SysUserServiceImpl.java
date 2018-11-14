@@ -15,6 +15,7 @@ import com.maybe.sys.model.SysDept;
 import com.maybe.sys.model.SysRole;
 import com.maybe.sys.model.SysUser;
 import com.maybe.sys.model.SysUserLogin;
+import com.maybe.sys.service.ISysDeptService;
 import com.maybe.sys.service.ISysTreeService;
 import com.maybe.sys.service.ISysUserService;
 import eu.bitwalker.useragentutils.UserAgent;
@@ -64,6 +65,8 @@ public class SysUserServiceImpl implements ISysUserService{
     private SysUtilsMapper sysUtilsMapper;
     @Autowired
     private SysUserLoginMapper sysUserLoginMapper;
+    @Autowired
+    private ISysDeptService sysDeptService;
     @Autowired
     private ISysTreeService sysTreeService;
     @Autowired
@@ -403,6 +406,11 @@ public class SysUserServiceImpl implements ISysUserService{
     @Override
     public List<SysUser> userListByRoleCode(String roleCode) {
         return sysUserMapper.userListByRoleCode(roleCode);
+    }
+
+    @Override
+    public List<SysUser> userListByName(String name) {
+        return sysDeptService.handleUserListWithDept(sysUserMapper.userListByName(name));
     }
 
     @Override

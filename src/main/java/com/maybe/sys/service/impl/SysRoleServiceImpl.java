@@ -10,6 +10,7 @@ import com.maybe.sys.dao.*;
 import com.maybe.sys.model.SysDept;
 import com.maybe.sys.model.SysRole;
 import com.maybe.sys.model.SysUser;
+import com.maybe.sys.service.ISysDeptService;
 import com.maybe.sys.service.ISysRoleService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,13 +29,14 @@ public class SysRoleServiceImpl implements ISysRoleService {
     @Autowired
     private SysRoleMapper sysRoleMapper;
     @Autowired
-    private SysDeptMapper sysDeptMapper;
-    @Autowired
     private SysUtilsMapper sysUtilsMapper;
     @Autowired
     private SysRoleMenuMapper sysRoleMenuMapper;
     @Autowired
     private SysRoleUserMapper sysRoleUserMapper;
+    @Autowired
+    private ISysDeptService sysDeptService;
+
 
     @Override
     public void insertGroup(String name) {
@@ -170,30 +172,14 @@ public class SysRoleServiceImpl implements ISysRoleService {
     @Override
     public PageDto<SysUser> pageBoundByRoleId(Integer roleId, String query, PageParam page) {
         int total = sysRoleUserMapper.countBoundByRoleId(roleId, query);
-        List<SysUser> userList = sysRoleUserMapper.pageBoundByRoleId(roleId, query, page);
-        List<SysDept> deptList = sysDeptMapper.findDeptListWithUser();
-        LinkedMultiValueMap<Integer, SysDept> deptMap = new LinkedMultiValueMap<>();
-        for (SysDept dept : deptList) {
-            deptMap.add(dept.getUserId(), dept);
-        }
-        for (SysUser user : userList) {
-            user.setDept(deptMap.get(user.getId()));
-        }
+        List<SysUser> userList = sysDeptService.handleUserListWithDept(sysRoleUserMapper.pageBoundByRoleId(roleId, query, page));
         return new PageDto<>(page.getPage(), page.getSize(), total, userList);
     }
 
     @Override
     public PageDto<SysUser> pageUnboundByRoleId(Integer roleId, String query, PageParam page) {
         int total = sysRoleUserMapper.countUnboundByRoleId(roleId, query);
-        List<SysUser> userList = sysRoleUserMapper.pageUnboundByRoleId(roleId, query, page);
-        List<SysDept> deptList = sysDeptMapper.findDeptListWithUser();
-        LinkedMultiValueMap<Integer, SysDept> deptMap = new LinkedMultiValueMap<>();
-        for (SysDept dept : deptList) {
-            deptMap.add(dept.getUserId(), dept);
-        }
-        for (SysUser user : userList) {
-            user.setDept(deptMap.get(user.getId()));
-        }
+        List<SysUser> userList = sysDeptService.handleUserListWithDept(sysRoleUserMapper.pageUnboundByRoleId(roleId, query, page));
         return new PageDto<>(page.getPage(), page.getSize(), total, userList);
     }
 

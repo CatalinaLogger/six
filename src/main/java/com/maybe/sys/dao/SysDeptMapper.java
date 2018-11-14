@@ -22,6 +22,7 @@ public interface SysDeptMapper {
 
     List<SysDept> findAll();
     /** 查询用户部门列表 */
+    //TODO 待优化
     List<SysDept> findDeptListWithUser();
 
     List<SysDept> findChildrenByLevel(@Param("level") String level);

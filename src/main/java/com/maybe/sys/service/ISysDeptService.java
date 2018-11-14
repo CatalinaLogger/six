@@ -13,4 +13,6 @@ public interface ISysDeptService {
     void delete(Integer deptId);
 
     List<SysUser> findLeadListByDeptId(Integer deptId);
+
+    List<SysUser> handleUserListWithDept(List<SysUser> userList);
 }

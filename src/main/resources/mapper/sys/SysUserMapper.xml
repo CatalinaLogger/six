@@ -547,6 +547,12 @@
     AND R.id = RU.role_id
     AND U.id = RU.user_id
   </select>
+  <select id="userListByName" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List" />
+    FROM sys_user
+    WHERE name LIKE CONCAT('%',#{name,jdbcType=VARCHAR},'%')
+  </select>
   <select id="userListByProcessId" parameterType="java.lang.String" resultMap="BaseResultMap">
     SELECT
       U.id, U.name, U.phone, U.mail, U.nick_name, U.avatar, U.open_we, U.open_qq, U.username, U.password, U.reset_code, U.status, U.remark, U.operate_ip, U.operate_id, U.operate_name, U.operate_time
