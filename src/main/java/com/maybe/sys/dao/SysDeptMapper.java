@@ -21,6 +21,8 @@ public interface SysDeptMapper {
     int updateByPrimaryKey(SysDept record);
 
     List<SysDept> findAll();
+    /** 查询用户部门列表 */
+    List<SysDept> findDeptListWithUser();
 
     List<SysDept> findChildrenByLevel(@Param("level") String level);
 

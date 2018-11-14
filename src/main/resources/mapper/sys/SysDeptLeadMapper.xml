@@ -173,6 +173,14 @@
       #{key,jdbcType=INTEGER}
     </foreach >
   </delete>
+  <delete id="removeDeptLeadByUserDept">
+    DELETE FROM sys_dept_lead
+    WHERE lead_id = #{userId,jdbcType=INTEGER}
+    AND dept_id IN
+    <foreach collection ="deptKeys" item="key"  open="(" separator="," close=")">
+      #{key,jdbcType=INTEGER}
+    </foreach >
+  </delete>
   <delete id="deleteDeptLeadByUserId" parameterType="java.lang.Integer">
     DELETE FROM sys_dept_lead
     WHERE user_id = #{userId,jdbcType=INTEGER}
@@ -181,14 +189,6 @@
     DELETE FROM sys_dept_lead
     WHERE user_id IN
     <foreach collection ="userKeys" item="key"  open="(" separator="," close=")">
-      #{key,jdbcType=INTEGER}
-    </foreach >
-  </delete>
-  <delete id="deleteByUserIdAndDeptKeys">
-    DELETE FROM sys_dept_lead
-    WHERE lead_id = #{userId,jdbcType=INTEGER}
-    AND dept_id IN
-    <foreach collection ="deptKeys" item="key"  open="(" separator="," close=")">
       #{key,jdbcType=INTEGER}
     </foreach >
   </delete>

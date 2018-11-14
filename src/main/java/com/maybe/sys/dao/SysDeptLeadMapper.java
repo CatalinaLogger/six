@@ -27,9 +27,9 @@ public interface SysDeptLeadMapper {
 
     void removeDeptLead(@Param("sysDept") SysDept sysDept, @Param("leadKeys") List<Integer> leadKeys);
 
+    void removeDeptLeadByUserDept(@Param("userId") Integer userId, @Param("deptKeys") List<Integer> deptKeys);
+
     void deleteDeptLeadByUserId(@Param("userId") Integer userId);
 
     void deleteDeptLeadByUserKeys(@Param("userKeys") List<Integer> userKeys);
-
-    void deleteByUserIdAndDeptKeys(@Param("userId") Integer userId, @Param("deptKeys") List<Integer> deptKeys);
 }

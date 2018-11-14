@@ -12,14 +12,13 @@ import com.maybe.sys.common.param.UserParam;
 import com.maybe.sys.common.util.*;
 import com.maybe.sys.dao.*;
 import com.maybe.sys.model.SysDept;
+import com.maybe.sys.model.SysRole;
 import com.maybe.sys.model.SysUser;
 import com.maybe.sys.model.SysUserLogin;
 import com.maybe.sys.service.ISysTreeService;
 import com.maybe.sys.service.ISysUserService;
 import eu.bitwalker.useragentutils.UserAgent;
-import io.swagger.models.auth.In;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.http.protocol.RequestUserAgent;
 import org.hibernate.service.spi.ServiceException;
 import org.json.JSONObject;
 import org.springframework.beans.BeanUtils;
@@ -36,8 +35,6 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.lang.reflect.Array;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -56,7 +53,7 @@ public class SysUserServiceImpl implements ISysUserService{
     @Autowired
     private SysDeptMapper sysDeptMapper;
     @Autowired
-    private ISysTreeService sysTreeService;
+    private SysRoleMapper sysRoleMapper;
     @Autowired
     private SysDeptUserMapper sysDeptUserMapper;
     @Autowired
@@ -67,6 +64,8 @@ public class SysUserServiceImpl implements ISysUserService{
     private SysUtilsMapper sysUtilsMapper;
     @Autowired
     private SysUserLoginMapper sysUserLoginMapper;
+    @Autowired
+    private ISysTreeService sysTreeService;
     @Autowired
     private LoginUserDto loginUserDto;
     @Autowired
@@ -107,9 +106,6 @@ public class SysUserServiceImpl implements ISysUserService{
         } else {
             throw new SixException(ResultEnum.ERROR_PARAM.getCode(), "所属部门不能为空");
         }
-        if (param.getRoleKeys().size() > 0) {
-            sysRoleUserMapper.insertUserRole(sysUser, param.getRoleKeys());
-        }
         sendPasswordEmail(sysUser.getMail(), sysUser.getName(), password);
     }
 
@@ -142,6 +138,14 @@ public class SysUserServiceImpl implements ISysUserService{
         after.setOperateTime(new Date());
         sysUserMapper.updateByPrimaryKeySelective(after);
 
+        /** 获取主管这个角色，数据库ID为 7 */
+        SysRole role = sysRoleMapper.selectByPrimaryKey(7);
+        role.setDeptId(after.getId());
+        role.setOperateIp(SessionLocal.getUser().getOperateIp());
+        role.setOperateId(SessionLocal.getUser().getId());
+        role.setOperateName(SessionLocal.getUser().getName());
+        role.setOperateTime(new Date());
+
         List<Integer> oldDeptKeys = sysDeptUserMapper.selectDeptKeysByUserId(after.getId());
         List<Integer> newDeptKeys = param.getDeptKeys();
         Map<String, List<Integer>> deptMap = SixUtil.handelKeys(oldDeptKeys, newDeptKeys);
@@ -150,17 +154,8 @@ public class SysUserServiceImpl implements ISysUserService{
         }
         if (deptMap.containsKey("delKeys")) {
             sysDeptUserMapper.removeUserDept(after, deptMap.get("delKeys"));
-            sysDeptLeadMapper.deleteByUserIdAndDeptKeys(after.getId(), deptMap.get("delKeys"));
-        }
-
-        List<Integer> oldRoleKeys = sysRoleUserMapper.selectRoleKeysByUserId(after.getId());
-        List<Integer> newRoleKeys = param.getRoleKeys();
-        Map<String, List<Integer>> roleMap = SixUtil.handelKeys(oldRoleKeys, newRoleKeys);
-        if (roleMap.containsKey("addKeys")) {
-            sysRoleUserMapper.insertUserRole(after, roleMap.get("addKeys"));
-        }
-        if (roleMap.containsKey("delKeys")) {
-            sysRoleUserMapper.removeUserRole(after, roleMap.get("delKeys"));
+            sysDeptLeadMapper.removeDeptLeadByUserDept(after.getId(), deptMap.get("delKeys"));
+            sysRoleUserMapper.removeRoleUserByUserDept(after.getId(), deptMap.get("delKeys"));
         }
     }
 

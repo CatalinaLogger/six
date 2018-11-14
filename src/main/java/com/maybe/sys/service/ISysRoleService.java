@@ -6,7 +6,6 @@ import com.maybe.sys.common.param.RoleParam;
 import com.maybe.sys.model.SysRole;
 import com.maybe.sys.model.SysUser;
 
-import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -33,8 +32,6 @@ public interface ISysRoleService {
     List<SysRole> roleListByUser();
 
     List<Integer> findMenuKeysByRoleId(Integer roleId);
-
-    List<Integer> findRoleKeysByUserId(Integer userId);
 
     PageDto<SysUser> pageBoundByRoleId(Integer roleId, String query, PageParam param);
 

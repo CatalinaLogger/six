@@ -62,8 +62,8 @@ public class SysUser {
 
     private String jsonInfo;
 
+    private List<SysDept> dept;
     @JsonIgnore
     private Integer deptId;
 
-    private List<SysDept> dept;
 }

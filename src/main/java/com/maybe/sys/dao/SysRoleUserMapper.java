@@ -25,17 +25,11 @@ public interface  SysRoleUserMapper {
 
     List<SysRole> roleListByUserId(@Param("userId") Integer userId);
 
-    List<Integer> selectUserKeysByRoleId(@Param("roleId") Integer roleId);
-
     void insertRoleUser(@Param("sysRole") SysRole sysRole, @Param("userKeys") List<Integer> userKeys);
 
     void removeRoleUser(@Param("sysRole") SysRole sysRole, @Param("userKeys") List<Integer> userKeys);
 
-    List<Integer> selectRoleKeysByUserId(@Param("userId") Integer userId);
-
-    void insertUserRole(@Param("sysUser") SysUser sysUser, @Param("roleKeys") List<Integer> roleKeys);
-
-    void removeUserRole(@Param("sysUser") SysUser sysUser, @Param("roleKeys") List<Integer> roleKeys);
+    void removeRoleUserByUserDept(@Param("userId") Integer userId, @Param("deptKeys") List<Integer> deptKeys);
 
     int countBoundByRoleId(@Param("roleId") Integer roleId, @Param("query") String query);
 

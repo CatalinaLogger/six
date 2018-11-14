@@ -1,5 +1,6 @@
 package com.maybe.sys.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import java.util.Date;
@@ -15,8 +16,6 @@ public class SysDept {
 
     private String level;
 
-    private List<SysUser> lead;
-
     private Integer seq;
 
     private String remark;
@@ -28,4 +27,8 @@ public class SysDept {
     private String operateName;
 
     private Date operateTime;
+
+    private List<SysUser> lead;
+    @JsonIgnore
+    private Integer userId;
 }

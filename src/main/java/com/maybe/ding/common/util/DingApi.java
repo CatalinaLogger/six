@@ -28,7 +28,7 @@ public class DingApi {
         String json = HttpUtil.doGet("https://oapi.dingtalk.com/gettoken?corpid=dinge34b66a867d904ea35c2f4657eb6378f&corpsecret=G-GtXBCn9WGjqXh62_gNcbpDXx68bMN6A9miUJ-3BisyM-t72vykJZ_-86bLHUGF");
         JSONObject jsonObject = new JSONObject(json);
         token = (String) jsonObject.get("access_token");
-        log.info("刷新AccessToken{}--> ", token);
+        log.info("刷新AccessToken--> {}", token);
     }
 
 

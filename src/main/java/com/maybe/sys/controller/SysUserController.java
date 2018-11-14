@@ -110,13 +110,6 @@ public class SysUserController {
         return JsonData.success();
     }
 
-    @ApiOperation("获取用户所有角色ID数组")
-    @GetMapping("/role/keys")
-    public JsonData roleKeys(@ApiParam(value = "用户ID", required = true, example = "1") @RequestParam("userId") Integer userId) {
-        List<Integer> list = sysRoleService.findRoleKeysByUserId(userId);
-        return JsonData.success(list);
-    }
-
     @ApiOperation("获取用户所属部门列表")
     @GetMapping("/dept/list")
     public JsonData deptList(@ApiParam(value = "用户ID", required = true, example = "1") @RequestParam("userId") Integer userId) {

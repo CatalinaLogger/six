@@ -12,6 +12,7 @@
     <result column="operate_id" jdbcType="INTEGER" property="operateId" />
     <result column="operate_name" jdbcType="VARCHAR" property="operateName" />
     <result column="operate_time" jdbcType="TIMESTAMP" property="operateTime" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
   </resultMap>
   <sql id="Base_Column_List">
     id, name, parent_id, level, seq, remark, operate_ip, operate_id, operate_name, operate_time
@@ -154,6 +155,12 @@
     SELECT
     <include refid="Base_Column_List" />
     FROM sys_dept
+  </select>
+  <select id="findDeptListWithUser" resultMap="BaseResultMap">
+    SELECT
+    D.id, D.name, D.parent_id, D.level, D.seq, D.remark, D.operate_ip, D.operate_id, D.operate_name, D.operate_time, DU.user_id
+    FROM sys_dept_user DU, sys_dept D
+    WHERE DU.dept_id = D.id
   </select>
   <select id="findChildrenByLevel" parameterType="java.lang.String" resultMap="BaseResultMap">
     SELECT
