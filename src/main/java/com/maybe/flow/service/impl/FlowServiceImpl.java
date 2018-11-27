@@ -16,13 +16,16 @@ import com.maybe.sys.common.util.SessionLocal;
 import lombok.extern.slf4j.Slf4j;
 import org.flowable.engine.RepositoryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.Resource;
 import java.io.InputStream;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.zip.ZipInputStream;
 
 @Slf4j
@@ -37,6 +40,10 @@ public class FlowServiceImpl implements IFlowService {
     private FlowTaskMapper flowTaskMapper;
     @Autowired
     private FlowMineMapper flowMineMapper;
+    @Autowired
+    private AsyncServiceNotice serviceNotice;
+    @Resource
+    private RedisTemplate<String, String> redisTemplate;
 
     /**
      * 部署流程
@@ -140,6 +147,23 @@ public class FlowServiceImpl implements IFlowService {
             return new PageDto<>(page.getPage(), page.getSize(), total, list);
         }
         return new PageDto<>(page.getPage(), page.getSize(), total, null);
+    }
+
+    @Override
+    public FlowDefine selectByDefineId(String defineId) {
+        return flowDefineMapper.selectByDefineId(defineId);
+    }
+
+    @Override
+    public void pressFlow(String processId) {
+        // log.info("用户登录，缓存用户信息 >> " + loginKey);
+        String pressKey = SessionLocal.getUser().getId() + "-" + processId;
+        if (redisTemplate.hasKey(pressKey)) {
+            throw new SixException(ResultEnum.ERROR_PARAM.getCode(), "您已经催办过该流程了，请耐心等候！");
+        } else {
+            redisTemplate.opsForValue().set(pressKey, processId, 1, TimeUnit.HOURS);
+            serviceNotice.sendNoticePress(SessionLocal.getUser().getName(), processId);
+        }
     }
 
 }

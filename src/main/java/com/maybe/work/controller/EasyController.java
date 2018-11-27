@@ -46,4 +46,12 @@ public class EasyController {
         WorkEasy workEasy = workEasyService.select(processId);
         return JsonData.success(workEasy);
     }
+
+    @ApiOperation("根据流程实例ID修改副本数据")
+    @PutMapping("/update")
+    public JsonData update(@ApiParam(value = "流程实例ID", required = true) @RequestParam("processId") String processId,
+                           @ApiParam(value = "副本数据", required = true) @RequestParam("carbon") String carbon){
+        workEasyService.update(processId, carbon);
+        return JsonData.successOperate();
+    }
 }

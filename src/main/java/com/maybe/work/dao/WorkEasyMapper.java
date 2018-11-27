@@ -10,13 +10,7 @@ public interface WorkEasyMapper {
 
     int insert(WorkEasy record);
 
-    int insertSelective(WorkEasy record);
-
     WorkEasy selectByPrimaryKey(@Param("procInstId") String procInstId);
-
-    int updateByPrimaryKeySelective(WorkEasy record);
-
-    int updateByPrimaryKeyWithBLOBs(WorkEasy record);
 
     int updateByPrimaryKey(WorkEasy record);
 }

@@ -20,7 +20,6 @@ import com.maybe.sys.service.ISysTreeService;
 import com.maybe.sys.service.ISysUserService;
 import eu.bitwalker.useragentutils.UserAgent;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.service.spi.ServiceException;
 import org.json.JSONObject;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -114,7 +113,9 @@ public class SysUserServiceImpl implements ISysUserService{
 
     @Override
     public SysUser select() {
-        return sysUserMapper.selectByPrimaryKey(SessionLocal.getUser().getId());
+        SysUser user = sysUserMapper.selectByPrimaryKey(SessionLocal.getUser().getId());
+        user.setDept(sysDeptMapper.findDeptListByUserId(user.getId()));
+        return user;
     }
 
     @Override
@@ -167,6 +168,7 @@ public class SysUserServiceImpl implements ISysUserService{
     public void delete(Integer userId) {
         sysUserMapper.deleteByPrimaryKey(userId);
         sysRoleUserMapper.deleteRoleUserByUserId(userId);
+        sysDeptUserMapper.deleteDeptUserByUserId(userId);
         sysDeptLeadMapper.deleteDeptLeadByUserId(userId);
     }
 
@@ -175,6 +177,7 @@ public class SysUserServiceImpl implements ISysUserService{
     public void deleteBatch(List<Integer> userKeys) {
         sysUserMapper.deleteByUserKeys(userKeys);
         sysRoleUserMapper.deleteRoleUserByUserKeys(userKeys);
+        sysDeptUserMapper.deleteDeptUserByUserKeys(userKeys);
         sysDeptLeadMapper.deleteDeptLeadByUserKeys(userKeys);
     }
 
@@ -192,6 +195,14 @@ public class SysUserServiceImpl implements ISysUserService{
     public List<SysUser> findLeadListByUsername(String username) {
         SysUser sysUser = sysUserMapper.findByUsername(username);
         return findLeadListByUserId(sysUser.getId());
+    }
+
+    @Override
+    public SysUser selectByUsername(String username) {
+        SysUser user = sysUserMapper.findByUsername(username);
+        List<SysDept> deptList = sysDeptMapper.findDeptListByUserId(user.getId());
+        user.setDept(deptList);
+        return user;
     }
 
     @Override
@@ -303,8 +314,8 @@ public class SysUserServiceImpl implements ISysUserService{
             } else {
                 loginUserDto.setAvatar(systemConfig.getFastUrl() + avatar);
             }
-//            loginUserDto.setMenus(sysTreeService.menuTreeByUserId(user.getId()));
-            loginUserDto.setMenus(sysTreeService.menuTree());
+            loginUserDto.setMenus(sysTreeService.menuTreeByUserId(user.getId()));
+//            loginUserDto.setMenus(sysTreeService.menuTree());
             return loginUserDto;
         } catch (Exception e) {
             e.printStackTrace();
@@ -349,12 +360,7 @@ public class SysUserServiceImpl implements ISysUserService{
             "   </div>" +
             " </div>";
         boolean isHtml = true;
-        try {
-            mailUtil.sendHtmlEmail(deliver, receiver, carbonCopy, subject, content, isHtml);
-        } catch (ServiceException e) {
-            log.error("邮件发送失败", e);
-            throw new SixException(ResultEnum.ERROR_PARAM.getCode(), "邮件发送失败,请检查邮箱地址");
-        }
+        mailUtil.sendHtmlEmail(deliver, receiver, carbonCopy, subject, content, isHtml);
     }
 
 

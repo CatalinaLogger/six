@@ -1,9 +1,8 @@
 package com.maybe.sys.common.util;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import org.apache.commons.beanutils.BeanUtils;
+
+import java.util.*;
 
 public class SixUtil {
 
@@ -23,4 +22,16 @@ public class SixUtil {
         }
         return map;
     }
+
+    public static void setOperate(Object obj) {
+        try {
+            BeanUtils.setProperty(obj, "operateIp", SessionLocal.getUser().getOperateIp());
+            BeanUtils.setProperty(obj, "operateId", SessionLocal.getUser().getId());
+            BeanUtils.setProperty(obj, "operateName", SessionLocal.getUser().getName());
+            BeanUtils.setProperty(obj, "operateTime", new Date());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 }

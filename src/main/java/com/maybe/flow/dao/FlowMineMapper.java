@@ -14,4 +14,5 @@ public interface FlowMineMapper {
     int mineCountByUser(@Param("username") String username, @Param("param") FlowParam param, @Param("page") PageParam page);
 
     List<FlowMine> minePageByUser(@Param("username") String username, @Param("param") FlowParam param, @Param("page") PageParam page);
+
 }

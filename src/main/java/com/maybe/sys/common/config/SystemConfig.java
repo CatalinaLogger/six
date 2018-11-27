@@ -12,6 +12,8 @@ public class SystemConfig {
     private String avatar;
     @Value("${system.fast-url}")
     private String fastUrl;
+    @Value("${system.active}")
+    private String active;
 
 }
 

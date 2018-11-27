@@ -16,4 +16,5 @@ public interface FlowWaitMapper {
 
     List<FlowWait> waitPageByUserAndRole(@Param("username") String username, @Param("roles") List<SysRole> roles,  @Param("param") FlowParam param, @Param("page") PageParam page);
 
+    List<String> userListByProcessId(@Param("processId") String processId);
 }

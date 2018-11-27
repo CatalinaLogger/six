@@ -43,7 +43,7 @@ public class SysUser {
     private Integer parentId;
 
     private String parentName;
-
+    @JsonIgnore
     private String parentUsername;
 
     private String level;
@@ -51,9 +51,9 @@ public class SysUser {
     private Integer status;
 
     private String remark;
-
+    @JsonIgnore
     private String operateIp;
-
+    @JsonIgnore
     private Integer operateId;
 
     private String operateName;

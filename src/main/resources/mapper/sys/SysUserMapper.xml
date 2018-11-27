@@ -553,31 +553,6 @@
     FROM sys_user
     WHERE name LIKE CONCAT('%',#{name,jdbcType=VARCHAR},'%')
   </select>
-  <select id="userListByProcessId" parameterType="java.lang.String" resultMap="BaseResultMap">
-    SELECT
-      U.id, U.name, U.phone, U.mail, U.nick_name, U.avatar, U.open_we, U.open_qq, U.username, U.password, U.reset_code, U.status, U.remark, U.operate_ip, U.operate_id, U.operate_name, U.operate_time
-    FROM  ACT_RU_TASK RT, sys_user U
-    WHERE RT.PROC_INST_ID_ = #{processId,jdbcType=VARCHAR}
-    AND RT.ASSIGNEE_ = U.username
-    UNION
-    SELECT
-      U.id, U.name, U.phone, U.mail, U.nick_name, U.avatar, U.open_we, U.open_qq, U.username, U.password, U.reset_code, U.status, U.remark, U.operate_ip, U.operate_id, U.operate_name, U.operate_time
-    FROM ACT_RU_TASK RT, ACT_RU_IDENTITYLINK RI, sys_user U
-    WHERE RT.PROC_INST_ID_ = #{processId,jdbcType=VARCHAR}
-    AND RT.ID_ = RI.TASK_ID_
-    AND RI.TYPE_ = 'candidate'
-    AND RI.USER_ID_ = U.username
-    UNION
-    SELECT
-      U.id, U.name, U.phone, U.mail, U.nick_name, U.avatar, U.open_we, U.open_qq, U.username, U.password, U.reset_code, U.status, U.remark, U.operate_ip, U.operate_id, U.operate_name, U.operate_time
-    FROM ACT_RU_TASK RT, ACT_RU_IDENTITYLINK RI, sys_role R, sys_role_user RU, sys_user U
-    WHERE RT.PROC_INST_ID_ = #{processId,jdbcType=VARCHAR}
-    AND RT.ID_ = RI.TASK_ID_
-    AND RI.TYPE_ = 'candidate'
-    AND RI.GROUP_ID_ = R.code
-    AND R.id = RU.role_id
-    AND RU.user_id = U.id
-  </select>
   <select id="findJsonInfoByUserId" parameterType="java.lang.Integer" resultType="java.lang.String">
     SELECT
       json_info

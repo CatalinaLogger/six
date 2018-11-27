@@ -29,8 +29,10 @@
     <result column="CATEGORY_" jdbcType="VARCHAR" property="category" />
     <result column="TENANT_ID_" jdbcType="VARCHAR" property="tenantId" />
     <result column="LAST_UPDATED_TIME_" jdbcType="TIMESTAMP" property="lastUpdatedTime" />
+
     <result column="HANDEL_USER_" jdbcType="VARCHAR" property="handelUser" />
     <result column="TASK_CODE_" jdbcType="INTEGER" property="taskCode" />
+    <result column="TASK_NAME_" jdbcType="VARCHAR" property="taskName" />
     <result column="TASK_NOTE_" jdbcType="VARCHAR" property="taskNote" />
   </resultMap>
   <sql id="Base_Column_List">
@@ -46,7 +48,7 @@
       SCOPE_ID_, SUB_SCOPE_ID_, SCOPE_TYPE_, SCOPE_DEFINITION_ID_, NAME_, PARENT_TASK_ID_,
       DESCRIPTION_, OWNER_, ASSIGNEE_, START_TIME_, CLAIM_TIME_, END_TIME_, DURATION_,
       DELETE_REASON_, PRIORITY_, DUE_DATE_, FORM_KEY_, CATEGORY_, TENANT_ID_, LAST_UPDATED_TIME_,
-      U.name HANDEL_USER_, C.task_code TASK_CODE_, C.task_note TASK_NOTE_
+      U.name HANDEL_USER_, C.task_code TASK_CODE_, C.task_name TASK_NAME_, C.task_note TASK_NOTE_
     FROM ACT_HI_TASKINST T, flow_hi_check C, sys_user U
     WHERE T.PROC_INST_ID_ = #{processId,jdbcType=VARCHAR}
     AND T.ID_ = C.task_id

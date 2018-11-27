@@ -51,8 +51,6 @@ public interface SysUserMapper {
     List<SysUser> userListByRoleCode(@Param("roleCode") String roleCode);
     /** 根据用户姓名来获取用户列表 */
     List<SysUser> userListByName(@Param("name") String name);
-    /** 根据流程实例查询任务处理人 */
-    List<SysUser> userListByProcessId(@Param("processId") String processId);
 
     String findJsonInfoByUserId(@Param("id") Integer id);
     /** 获取部门主管列表 */
@@ -61,5 +59,4 @@ public interface SysUserMapper {
     List<SysUser> findLeadList();
     /** 根据用户userId字段获取用户的主管列表 */
     List<SysUser> findLeadListByUserId(@Param("userId") Integer userId);
-
 }

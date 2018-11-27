@@ -13,15 +13,15 @@ public class SysDept {
     private String name;
 
     private Integer parentId;
-
+    @JsonIgnore
     private String level;
 
     private Integer seq;
 
     private String remark;
-
+    @JsonIgnore
     private String operateIp;
-
+    @JsonIgnore
     private Integer operateId;
 
     private String operateName;

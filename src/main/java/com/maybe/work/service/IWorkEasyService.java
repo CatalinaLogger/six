@@ -10,4 +10,6 @@ public interface IWorkEasyService {
     void solve(WorkParam param);
 
     WorkEasy select(String processId);
+
+    void update(String processId, String carbon);
 }

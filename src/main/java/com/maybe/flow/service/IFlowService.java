@@ -29,4 +29,8 @@ public interface IFlowService {
     List<FlowTask> taskListByProcessId(String processId);
 
     PageDto<FlowMine> minePage(FlowParam param, PageParam page);
+
+    FlowDefine selectByDefineId(String defineId);
+
+    void pressFlow(String pressId);
 }

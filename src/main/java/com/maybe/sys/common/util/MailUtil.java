@@ -1,7 +1,8 @@
 package com.maybe.sys.common.util;
 
+import com.maybe.sys.common.config.ResultEnum;
+import com.maybe.sys.common.exception.SixException;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.service.spi.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
@@ -20,7 +21,7 @@ public class MailUtil {
     JavaMailSender mailSender;
 
     /** 发送简单邮件 */
-    public void sendSimpleEmail(String deliver, String[] receiver, String[] carbonCopy, String subject, String content) throws ServiceException {
+    public void sendSimpleEmail(String deliver, String[] receiver, String[] carbonCopy, String subject, String content) {
 
         long startTimestamp = System.currentTimeMillis();
         log.info("Start send mail ... ");
@@ -37,12 +38,12 @@ public class MailUtil {
         } catch (MailException e) {
             log.error("Send mail failed, error message is : {} \n", e.getMessage());
             e.printStackTrace();
-            throw new ServiceException(e.getMessage());
+            throw new SixException(ResultEnum.ERROR_PARAM.getCode(), "发送邮件失败");
         }
     }
 
     /** 发送Html邮件 */
-    public void sendHtmlEmail(String deliver, String[] receiver, String[] carbonCopy, String subject, String content, boolean isHtml) throws ServiceException {
+    public void sendHtmlEmail(String deliver, String[] receiver, String[] carbonCopy, String subject, String content, boolean isHtml){
         long startTimestamp = System.currentTimeMillis();
         log.info("Start send email ...");
 
@@ -61,7 +62,7 @@ public class MailUtil {
         } catch (MessagingException e) {
             log.error("Send email failed, error message is {} \n", e.getMessage());
             e.printStackTrace();
-            throw new ServiceException(e.getMessage());
+            throw new SixException(ResultEnum.ERROR_PARAM.getCode(), "发送邮件失败");
         }
     }
 

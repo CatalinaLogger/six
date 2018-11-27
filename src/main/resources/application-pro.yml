@@ -89,6 +89,15 @@ flowable:
       idm-url: a
   idm:
     enabled: false
+# 异步线程配置
+async:
+  executor:
+    thread:
+      core-pool-size: 5 # 配置核心线程数
+      max-pool-size: 5 # 配置最大线程数
+      queue-capacity: 99999 # 配置队列大小
+      name:
+        prefix: async-service- # 配置线程池中的线程的名称前缀
 
 # 分布式文件系统FDFS配置
 fdfs:
@@ -110,5 +119,6 @@ server:
 #    key-alias: jsixg.com
 
 system:
+  active: pro
   avatar: https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif?imageView2/1/w/80/h/80
   fast-url: http://oa.bdsmc.net:16480/

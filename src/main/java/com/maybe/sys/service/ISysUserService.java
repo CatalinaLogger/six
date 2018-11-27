@@ -58,4 +58,6 @@ public interface ISysUserService {
     List<SysUser> findLeadListByUserId(Integer integer);
 
     List<SysUser> findLeadListByUsername(String username);
+
+    SysUser selectByUsername(String username);
 }

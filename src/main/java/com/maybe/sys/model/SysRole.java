@@ -15,9 +15,9 @@ public class SysRole {
     private Integer parentId;
 
     private Integer edit;
-
+    @JsonIgnore
     private String operateIp;
-
+    @JsonIgnore
     private Integer operateId;
 
     private String operateName;

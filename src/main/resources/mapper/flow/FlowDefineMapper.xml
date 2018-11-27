@@ -38,4 +38,15 @@
     </if>
     ORDER BY arp.VERSION_ ASC
   </select>
+
+  <select id="selectByDefineId" parameterType="java.lang.String" resultMap="BaseResultMap">
+    SELECT
+    arp.ID_, arp.REV_, ard.CATEGORY_, ard.NAME_, arp.KEY_, arp.VERSION_, ard.DEPLOY_TIME_, arp.DEPLOYMENT_ID_, arp.RESOURCE_NAME_, arp.DGRM_RESOURCE_NAME_,
+    arp.DESCRIPTION_, arp.HAS_START_FORM_KEY_, arp.HAS_GRAPHICAL_NOTATION_, arp.SUSPENSION_STATE_, arp.TENANT_ID_,
+    arp.ENGINE_VERSION_, arp.DERIVED_FROM_, arp.DERIVED_FROM_ROOT_, arp.DERIVED_VERSION_
+    FROM ACT_RE_PROCDEF arp, ACT_RE_DEPLOYMENT ard
+    WHERE arp.DEPLOYMENT_ID_ = ard.ID_
+    AND arp.ID_ = #{defineId,jdbcType=VARCHAR}
+  </select>
+
 </mapper>

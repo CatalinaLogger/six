@@ -70,5 +70,7 @@ public class FlowPast {
 
     private Date createTime;
 
+    private Date finishTime;
+
     private Integer level;
 }

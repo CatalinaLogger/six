@@ -162,4 +162,26 @@
     ORDER BY T.CREATE_TIME_ DESC
     LIMIT #{page.offset,jdbcType=INTEGER}, #{page.size,jdbcType=INTEGER}
   </select>
+  <select id="userListByProcessId" parameterType="java.lang.String" resultType="java.lang.String">
+    SELECT U.name
+    FROM  ACT_RU_TASK RT, sys_user U
+    WHERE RT.PROC_INST_ID_ = #{processId,jdbcType=VARCHAR}
+    AND RT.ASSIGNEE_ = U.username
+    UNION
+    SELECT U.name
+    FROM ACT_RU_TASK RT, ACT_RU_IDENTITYLINK RI, sys_user U
+    WHERE RT.PROC_INST_ID_ = #{processId,jdbcType=VARCHAR}
+    AND RT.ID_ = RI.TASK_ID_
+    AND RI.TYPE_ = 'candidate'
+    AND RI.USER_ID_ = U.username
+    UNION
+    SELECT U.name
+    FROM ACT_RU_TASK RT, ACT_RU_IDENTITYLINK RI, sys_role R, sys_role_user RU, sys_user U
+    WHERE RT.PROC_INST_ID_ = #{processId,jdbcType=VARCHAR}
+    AND RT.ID_ = RI.TASK_ID_
+    AND RI.TYPE_ = 'candidate'
+    AND RI.GROUP_ID_ = R.code
+    AND R.id = RU.role_id
+    AND RU.user_id = U.id
+  </select>
 </mapper>

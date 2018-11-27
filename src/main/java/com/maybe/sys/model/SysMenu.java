@@ -1,5 +1,6 @@
 package com.maybe.sys.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import java.util.Date;
 
@@ -28,9 +29,9 @@ public class SysMenu {
     private Integer type;
 
     private String remark;
-
+    @JsonIgnore
     private String operateIp;
-
+    @JsonIgnore
     private Integer operateId;
 
     private String operateName;

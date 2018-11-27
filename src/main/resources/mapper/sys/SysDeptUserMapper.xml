@@ -162,4 +162,15 @@
       #{key,jdbcType=INTEGER}
     </foreach >
   </delete>
+  <delete id="deleteDeptUserByUserId" parameterType="java.lang.Integer">
+    DELETE FROM sys_dept_user
+    WHERE user_id = #{userId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteDeptUserByUserKeys">
+    DELETE FROM sys_dept_user
+    WHERE user_id IN
+    <foreach collection ="userKeys" item="key"  open="(" separator="," close=")">
+      #{key,jdbcType=INTEGER}
+    </foreach >
+  </delete>
 </mapper>

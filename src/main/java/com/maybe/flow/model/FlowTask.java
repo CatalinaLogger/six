@@ -64,6 +64,8 @@ public class FlowTask {
 
     private Integer taskCode;
 
+    private String taskName;
+
     private String taskNote;
 
 }

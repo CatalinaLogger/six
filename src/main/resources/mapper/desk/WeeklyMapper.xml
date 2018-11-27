@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.maybe.desk.dao.WeeklyMapper">
+  <resultMap id="BaseResultMap" type="com.maybe.desk.model.Weekly">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="year" jdbcType="INTEGER" property="year" />
+    <result column="week" jdbcType="INTEGER" property="week" />
+    <result column="done" jdbcType="VARCHAR" property="done" />
+    <result column="sum" jdbcType="VARCHAR" property="sum" />
+    <result column="plan" jdbcType="VARCHAR" property="plan" />
+    <result column="help" jdbcType="VARCHAR" property="help" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="operate_ip" jdbcType="VARCHAR" property="operateIp" />
+    <result column="operate_id" jdbcType="INTEGER" property="operateId" />
+    <result column="operate_name" jdbcType="VARCHAR" property="operateName" />
+    <result column="operate_time" jdbcType="TIMESTAMP" property="operateTime" />
+
+    <result column="level" jdbcType="VARCHAR" property="level" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, year, week, done, sum, plan, help, remark, operate_ip, operate_id, operate_name,
+    operate_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from rep_weekly
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from rep_weekly
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.maybe.desk.model.Weekly">
+    insert into rep_weekly (id, year, week,
+      done, sum, plan, help,
+      remark, operate_ip, operate_id,
+      operate_name, operate_time)
+    values (#{id,jdbcType=INTEGER}, #{year,jdbcType=INTEGER}, #{week,jdbcType=INTEGER},
+      #{done,jdbcType=VARCHAR}, #{sum,jdbcType=VARCHAR}, #{plan,jdbcType=VARCHAR}, #{help,jdbcType=VARCHAR},
+      #{remark,jdbcType=VARCHAR}, #{operateIp,jdbcType=VARCHAR}, #{operateId,jdbcType=INTEGER},
+      #{operateName,jdbcType=VARCHAR}, #{operateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.maybe.desk.model.Weekly">
+    insert into rep_weekly
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="year != null">
+        year,
+      </if>
+      <if test="week != null">
+        week,
+      </if>
+      <if test="done != null">
+        done,
+      </if>
+      <if test="sum != null">
+        sum,
+      </if>
+      <if test="plan != null">
+        plan,
+      </if>
+      <if test="help != null">
+        help,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="operateIp != null">
+        operate_ip,
+      </if>
+      <if test="operateId != null">
+        operate_id,
+      </if>
+      <if test="operateName != null">
+        operate_name,
+      </if>
+      <if test="operateTime != null">
+        operate_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="year != null">
+        #{year,jdbcType=INTEGER},
+      </if>
+      <if test="week != null">
+        #{week,jdbcType=INTEGER},
+      </if>
+      <if test="done != null">
+        #{done,jdbcType=VARCHAR},
+      </if>
+      <if test="sum != null">
+        #{sum,jdbcType=VARCHAR},
+      </if>
+      <if test="plan != null">
+        #{plan,jdbcType=VARCHAR},
+      </if>
+      <if test="help != null">
+        #{help,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="operateIp != null">
+        #{operateIp,jdbcType=VARCHAR},
+      </if>
+      <if test="operateId != null">
+        #{operateId,jdbcType=INTEGER},
+      </if>
+      <if test="operateName != null">
+        #{operateName,jdbcType=VARCHAR},
+      </if>
+      <if test="operateTime != null">
+        #{operateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.maybe.desk.model.Weekly">
+    update rep_weekly
+    <set>
+      <if test="year != null">
+        year = #{year,jdbcType=INTEGER},
+      </if>
+      <if test="week != null">
+        week = #{week,jdbcType=INTEGER},
+      </if>
+      <if test="done != null">
+        done = #{done,jdbcType=VARCHAR},
+      </if>
+      <if test="sum != null">
+        sum = #{sum,jdbcType=VARCHAR},
+      </if>
+      <if test="plan != null">
+        plan = #{plan,jdbcType=VARCHAR},
+      </if>
+      <if test="help != null">
+        help = #{help,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="operateIp != null">
+        operate_ip = #{operateIp,jdbcType=VARCHAR},
+      </if>
+      <if test="operateId != null">
+        operate_id = #{operateId,jdbcType=INTEGER},
+      </if>
+      <if test="operateName != null">
+        operate_name = #{operateName,jdbcType=VARCHAR},
+      </if>
+      <if test="operateTime != null">
+        operate_time = #{operateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.maybe.desk.model.Weekly">
+    update rep_weekly
+    set year = #{year,jdbcType=INTEGER},
+      week = #{week,jdbcType=INTEGER},
+      done = #{done,jdbcType=VARCHAR},
+      sum = #{sum,jdbcType=VARCHAR},
+      plan = #{plan,jdbcType=VARCHAR},
+      help = #{help,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      operate_ip = #{operateIp,jdbcType=VARCHAR},
+      operate_id = #{operateId,jdbcType=INTEGER},
+      operate_name = #{operateName,jdbcType=VARCHAR},
+      operate_time = #{operateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="selectByOperateIdAndWeekAndYear" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List" />
+    FROM rep_weekly
+    WHERE operate_id = #{operateId,jdbcType=INTEGER}
+    AND week = #{week,jdbcType=INTEGER}
+    AND year = #{year,jdbcType=INTEGER}
+  </select>
+  <select id="selectByWeekAndYearAndLevelLike" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    SELECT W.id, W.year, W.week, W.done, W.sum, W.plan, W.help, W.remark, W.operate_ip, U.id operate_id, U.name operate_name, W.operate_time, U.level
+    FROM sys_user U LEFT JOIN rep_weekly W ON U.id = W.operate_id
+    AND W.week = #{week,jdbcType=INTEGER}
+    AND W.year = #{year,jdbcType=INTEGER}
+    AND U.level LIKE CONCAT('%',#{level,jdbcType=INTEGER},'%')
+  </select>
+</mapper>

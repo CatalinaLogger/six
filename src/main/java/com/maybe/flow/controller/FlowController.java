@@ -81,4 +81,11 @@ public class FlowController {
         PageDto<FlowMine> minePage = flowService.minePage(flowParam, pageParam);
         return JsonData.success(minePage);
     }
+
+    @ApiOperation("流程催办")
+    @PostMapping("/press")
+    public JsonData pressFlow(@ApiParam("流程实例ID") @RequestParam(value = "processId") String processId) {
+        flowService.pressFlow(processId);
+        return JsonData.successOperate();
+    }
 }

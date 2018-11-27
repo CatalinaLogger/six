@@ -26,4 +26,8 @@ public interface SysDeptUserMapper {
     void insertUserDept(@Param("sysUser") SysUser sysUser, @Param("deptKeys") List<Integer> deptKeys);
 
     void removeUserDept(@Param("sysUser") SysUser sysUser, @Param("deptKeys") List<Integer> deptKeys);
+
+    void deleteDeptUserByUserId(@Param("userId") Integer userId);
+
+    void deleteDeptUserByUserKeys(@Param("userKeys") List<Integer> userKeys);
 }

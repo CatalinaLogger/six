@@ -28,4 +28,6 @@ public class WorkEasy {
     private Date operateTime;
 
     private String content;
+
+    private String carbon;
 }

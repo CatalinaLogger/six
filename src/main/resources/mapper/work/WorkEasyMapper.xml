@@ -4,6 +4,8 @@
   <resultMap id="BaseResultMap" type="com.maybe.work.model.WorkEasy">
     <id column="proc_inst_id_" jdbcType="VARCHAR" property="procInstId" />
     <result column="code" jdbcType="VARCHAR" property="code" />
+    <result column="content" jdbcType="LONGVARCHAR" property="content" />
+    <result column="carbon" jdbcType="LONGVARCHAR" property="carbon" />
     <result column="user_id" jdbcType="INTEGER" property="userId" />
     <result column="user_name" jdbcType="VARCHAR" property="userName" />
     <result column="start_time" jdbcType="TIMESTAMP" property="startTime" />
@@ -14,21 +16,13 @@
     <result column="operate_name" jdbcType="VARCHAR" property="operateName" />
     <result column="operate_time" jdbcType="TIMESTAMP" property="operateTime" />
   </resultMap>
-  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.maybe.work.model.WorkEasy">
-    <result column="content" jdbcType="LONGVARCHAR" property="content" />
-  </resultMap>
   <sql id="Base_Column_List">
-    proc_inst_id_, code, user_id, user_name, start_time, end_time, status, operate_ip,
+    proc_inst_id_, code, content, carbon, user_id, user_name, start_time, end_time, status, operate_ip,
     operate_id, operate_name, operate_time
   </sql>
-  <sql id="Blob_Column_List">
-    content
-  </sql>
-  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="ResultMapWithBLOBs">
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />
-    ,
-    <include refid="Blob_Column_List" />
     from work_easy
     where proc_inst_id_ = #{procInstId,jdbcType=VARCHAR}
   </select>
@@ -40,159 +34,17 @@
     insert into work_easy (proc_inst_id_, code, user_id,
       user_name, start_time, end_time,
       status, operate_ip, operate_id,
-      operate_name, operate_time, content
-      )
+      operate_name, operate_time, content,
+      carbon)
     values (#{procInstId,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR}, #{userId,jdbcType=INTEGER},
       #{userName,jdbcType=VARCHAR}, #{startTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP},
       #{status,jdbcType=INTEGER}, #{operateIp,jdbcType=VARCHAR}, #{operateId,jdbcType=INTEGER},
-      #{operateName,jdbcType=VARCHAR}, #{operateTime,jdbcType=TIMESTAMP}, #{content,jdbcType=LONGVARCHAR}
-      )
+      #{operateName,jdbcType=VARCHAR}, #{operateTime,jdbcType=TIMESTAMP}, #{content,jdbcType=LONGVARCHAR},
+      #{carbon,jdbcType=LONGVARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.maybe.work.model.WorkEasy">
-    insert into work_easy
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="procInstId != null">
-        proc_inst_id_,
-      </if>
-      <if test="code != null">
-        code,
-      </if>
-      <if test="userId != null">
-        user_id,
-      </if>
-      <if test="userName != null">
-        user_name,
-      </if>
-      <if test="startTime != null">
-        start_time,
-      </if>
-      <if test="endTime != null">
-        end_time,
-      </if>
-      <if test="status != null">
-        status,
-      </if>
-      <if test="operateIp != null">
-        operate_ip,
-      </if>
-      <if test="operateId != null">
-        operate_id,
-      </if>
-      <if test="operateName != null">
-        operate_name,
-      </if>
-      <if test="operateTime != null">
-        operate_time,
-      </if>
-      <if test="content != null">
-        content,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="procInstId != null">
-        #{procInstId,jdbcType=VARCHAR},
-      </if>
-      <if test="code != null">
-        #{code,jdbcType=VARCHAR},
-      </if>
-      <if test="userId != null">
-        #{userId,jdbcType=INTEGER},
-      </if>
-      <if test="userName != null">
-        #{userName,jdbcType=VARCHAR},
-      </if>
-      <if test="startTime != null">
-        #{startTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="endTime != null">
-        #{endTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="status != null">
-        #{status,jdbcType=INTEGER},
-      </if>
-      <if test="operateIp != null">
-        #{operateIp,jdbcType=VARCHAR},
-      </if>
-      <if test="operateId != null">
-        #{operateId,jdbcType=INTEGER},
-      </if>
-      <if test="operateName != null">
-        #{operateName,jdbcType=VARCHAR},
-      </if>
-      <if test="operateTime != null">
-        #{operateTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="content != null">
-        #{content,jdbcType=LONGVARCHAR},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.maybe.work.model.WorkEasy">
-    update work_easy
-    <set>
-      <if test="code != null">
-        code = #{code,jdbcType=VARCHAR},
-      </if>
-      <if test="userId != null">
-        user_id = #{userId,jdbcType=INTEGER},
-      </if>
-      <if test="userName != null">
-        user_name = #{userName,jdbcType=VARCHAR},
-      </if>
-      <if test="startTime != null">
-        start_time = #{startTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="endTime != null">
-        end_time = #{endTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="status != null">
-        status = #{status,jdbcType=INTEGER},
-      </if>
-      <if test="operateIp != null">
-        operate_ip = #{operateIp,jdbcType=VARCHAR},
-      </if>
-      <if test="operateId != null">
-        operate_id = #{operateId,jdbcType=INTEGER},
-      </if>
-      <if test="operateName != null">
-        operate_name = #{operateName,jdbcType=VARCHAR},
-      </if>
-      <if test="operateTime != null">
-        operate_time = #{operateTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="content != null">
-        content = #{content,jdbcType=LONGVARCHAR},
-      </if>
-    </set>
-    where proc_inst_id_ = #{procInstId,jdbcType=VARCHAR}
-  </update>
-  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.maybe.work.model.WorkEasy">
-    update work_easy
-    set code = #{code,jdbcType=VARCHAR},
-      user_id = #{userId,jdbcType=INTEGER},
-      user_name = #{userName,jdbcType=VARCHAR},
-      start_time = #{startTime,jdbcType=TIMESTAMP},
-      end_time = #{endTime,jdbcType=TIMESTAMP},
-      status = #{status,jdbcType=INTEGER},
-      operate_ip = #{operateIp,jdbcType=VARCHAR},
-      operate_id = #{operateId,jdbcType=INTEGER},
-      operate_name = #{operateName,jdbcType=VARCHAR},
-      operate_time = #{operateTime,jdbcType=TIMESTAMP},
-      content = #{content,jdbcType=LONGVARCHAR}
-    where proc_inst_id_ = #{procInstId,jdbcType=VARCHAR}
-  </update>
   <update id="updateByPrimaryKey" parameterType="com.maybe.work.model.WorkEasy">
     update work_easy
-    set code = #{code,jdbcType=VARCHAR},
-      user_id = #{userId,jdbcType=INTEGER},
-      user_name = #{userName,jdbcType=VARCHAR},
-      start_time = #{startTime,jdbcType=TIMESTAMP},
-      end_time = #{endTime,jdbcType=TIMESTAMP},
-      status = #{status,jdbcType=INTEGER},
-      operate_ip = #{operateIp,jdbcType=VARCHAR},
-      operate_id = #{operateId,jdbcType=INTEGER},
-      operate_name = #{operateName,jdbcType=VARCHAR},
-      operate_time = #{operateTime,jdbcType=TIMESTAMP}
+    set carbon = #{carbon,jdbcType=LONGVARCHAR}
     where proc_inst_id_ = #{procInstId,jdbcType=VARCHAR}
   </update>
 </mapper>

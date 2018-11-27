@@ -10,4 +10,6 @@ import java.util.List;
 public interface FlowDefineMapper {
 
     List<FlowDefine> defineListByNameAndCategory(@Param("name") String name, @Param("category") String category);
+
+    FlowDefine selectByDefineId(@Param("defineId") String defineId);
 }

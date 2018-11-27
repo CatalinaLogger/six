@@ -7,7 +7,6 @@ import com.maybe.sys.common.param.PageParam;
 import com.maybe.sys.common.param.UserParam;
 import com.maybe.sys.model.SysDept;
 import com.maybe.sys.model.SysUser;
-import com.maybe.sys.service.ISysDeptService;
 import com.maybe.sys.service.ISysRoleService;
 import com.maybe.sys.service.ISysUserService;
 import io.swagger.annotations.*;

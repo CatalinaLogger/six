@@ -35,4 +35,9 @@ public class WaitServiceImpl implements IWaitService {
         List<FlowWait> list = flowWaitMapper.waitPageByUserAndRole(SessionLocal.getUser().getUsername(), roles, param, page);
         return new PageDto<>(page.getPage(), page.getSize(), total, list);
     }
+
+    @Override
+    public List<String> userListByProcessId(String processId) {
+        return flowWaitMapper.userListByProcessId(processId);
+    }
 }

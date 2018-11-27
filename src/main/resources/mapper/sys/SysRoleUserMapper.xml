@@ -185,9 +185,9 @@
     WHERE EXISTS(SELECT 1 FROM sys_role_user RU WHERE RU.user_id = U.id AND RU.role_id = #{roleId,jdbcType=INTEGER})
     <if test="query != null">
       AND (
-      U.name LIKE #{query,jdbcType=VARCHAR}
-      OR U.phone LIKE #{query,jdbcType=VARCHAR}
-      OR U.mail LIKE #{query,jdbcType=VARCHAR}
+      U.name LIKE CONCAT('%',#{query,jdbcType=VARCHAR},'%')
+      OR U.phone LIKE CONCAT('%',#{query,jdbcType=VARCHAR},'%')
+      OR U.mail LIKE CONCAT('%',#{query,jdbcType=VARCHAR},'%')
       )
     </if>
   </select>
@@ -197,9 +197,9 @@
     WHERE EXISTS(SELECT 1 FROM sys_role_user RU WHERE RU.user_id = U.id AND RU.role_id = #{roleId,jdbcType=INTEGER})
     <if test="query != null">
       AND (
-      U.name LIKE #{query,jdbcType=VARCHAR}
-      OR U.phone LIKE #{query,jdbcType=VARCHAR}
-      OR U.mail LIKE #{query,jdbcType=VARCHAR}
+      U.name LIKE CONCAT('%',#{query,jdbcType=VARCHAR},'%')
+      OR U.phone LIKE CONCAT('%',#{query,jdbcType=VARCHAR},'%')
+      OR U.mail LIKE CONCAT('%',#{query,jdbcType=VARCHAR},'%')
       )
     </if>
     LIMIT #{page.offset,jdbcType=INTEGER}, #{page.size,jdbcType=INTEGER}
@@ -210,9 +210,9 @@
     WHERE NOT EXISTS(SELECT 1 FROM sys_role_user RU WHERE RU.user_id = U.id AND RU.role_id = #{roleId,jdbcType=INTEGER})
     <if test="query != null">
       AND (
-      U.name LIKE #{query,jdbcType=VARCHAR}
-      OR U.phone LIKE #{query,jdbcType=VARCHAR}
-      OR U.mail LIKE #{query,jdbcType=VARCHAR}
+      U.name LIKE CONCAT('%',#{query,jdbcType=VARCHAR},'%')
+      OR U.phone LIKE CONCAT('%',#{query,jdbcType=VARCHAR},'%')
+      OR U.mail LIKE CONCAT('%',#{query,jdbcType=VARCHAR},'%')
       )
     </if>
   </select>
@@ -222,9 +222,9 @@
     WHERE NOT EXISTS(SELECT 1 FROM sys_role_user RU WHERE RU.user_id = U.id AND RU.role_id = #{roleId,jdbcType=INTEGER})
     <if test="query != null">
       AND (
-      U.name LIKE #{query,jdbcType=VARCHAR}
-      OR U.phone LIKE #{query,jdbcType=VARCHAR}
-      OR U.mail LIKE #{query,jdbcType=VARCHAR}
+      U.name LIKE CONCAT('%',#{query,jdbcType=VARCHAR},'%')
+      OR U.phone LIKE CONCAT('%',#{query,jdbcType=VARCHAR},'%')
+      OR U.mail LIKE CONCAT('%',#{query,jdbcType=VARCHAR},'%')
       )
     </if>
     LIMIT #{page.offset,jdbcType=INTEGER}, #{page.size,jdbcType=INTEGER}

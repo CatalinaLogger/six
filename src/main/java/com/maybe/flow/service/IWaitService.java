@@ -15,4 +15,6 @@ import java.util.List;
 public interface IWaitService {
 
     PageDto<FlowWait> waitPage(FlowParam param, PageParam page);
+
+    List<String> userListByProcessId(String processId);
 }

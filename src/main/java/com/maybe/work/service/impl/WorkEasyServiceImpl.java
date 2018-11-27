@@ -1,11 +1,8 @@
 package com.maybe.work.service.impl;
 
 import com.maybe.flow.service.IProxyService;
-import com.maybe.sys.common.config.ResultEnum;
-import com.maybe.sys.common.exception.SixException;
 import com.maybe.sys.common.util.SessionLocal;
-import com.maybe.sys.dao.SysDeptMapper;
-import com.maybe.sys.model.SysDept;
+import com.maybe.sys.common.util.SixUtil;
 import com.maybe.work.common.param.WorkParam;
 import com.maybe.work.dao.WorkEasyMapper;
 import com.maybe.work.model.WorkEasy;
@@ -28,8 +25,6 @@ public class WorkEasyServiceImpl implements IWorkEasyService {
     private IProxyService proxyService;
     @Autowired
     private WorkEasyMapper workEasyMapper;
-    @Autowired
-    private SysDeptMapper sysDeptMapper;
 
     @Override
     @Transactional
@@ -41,9 +36,6 @@ public class WorkEasyServiceImpl implements IWorkEasyService {
         }
         if (jsonObject.has("leader")) {
             map.put("leader", jsonObject.getString("leader"));
-        } else {
-            // SysDept dept = sysDeptMapper.selectByPrimaryKey(SessionLocal.getUser().getDeptId());
-            // map.put("leader", dept.getLeaderUsername());
         }
         if (jsonObject.has("helper")) {
             map.put("helper", jsonObject.getString("helper"));
@@ -56,24 +48,20 @@ public class WorkEasyServiceImpl implements IWorkEasyService {
             workEasy.setProcInstId(processId);
             workEasy.setCode(param.getDefineId());
             workEasy.setContent(content);
+            workEasy.setCarbon(content);
             workEasy.setUserId(SessionLocal.getUser().getId());
             workEasy.setUserName(SessionLocal.getUser().getName());
             workEasy.setStartTime(new Date());
             workEasy.setStatus(0);
-            workEasy.setOperateIp(SessionLocal.getUser().getOperateIp());
-            workEasy.setOperateId(SessionLocal.getUser().getId());
-            workEasy.setOperateName(SessionLocal.getUser().getName());
-            workEasy.setOperateTime(new Date());
+            SixUtil.setOperate(workEasy);
             workEasyMapper.insert(workEasy);
         } else {
             Task task = proxyService.solveProcess(param, map);
             WorkEasy workEasy = workEasyMapper.selectByPrimaryKey(task.getProcessInstanceId());
             workEasy.setContent(content);
-            workEasy.setOperateIp(SessionLocal.getUser().getOperateIp());
-            workEasy.setOperateId(SessionLocal.getUser().getId());
-            workEasy.setOperateName(SessionLocal.getUser().getName());
-            workEasy.setOperateTime(new Date());
-            workEasyMapper.updateByPrimaryKeyWithBLOBs(workEasy);
+            workEasy.setCarbon(content);
+            SixUtil.setOperate(workEasy);
+            workEasyMapper.updateByPrimaryKey(workEasy);
         }
 
     }
@@ -87,5 +75,12 @@ public class WorkEasyServiceImpl implements IWorkEasyService {
     @Override
     public WorkEasy select(String processId) {
         return workEasyMapper.selectByPrimaryKey(processId);
+    }
+
+    @Override
+    public void update(String processId, String carbon) {
+        WorkEasy workEasy = workEasyMapper.selectByPrimaryKey(processId);
+        workEasy.setCarbon(carbon);
+        workEasyMapper.updateByPrimaryKey(workEasy);
     }
 }

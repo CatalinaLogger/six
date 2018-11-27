@@ -4,12 +4,13 @@
   <resultMap id="BaseResultMap" type="com.maybe.flow.model.FlowCheck">
     <id column="task_id" jdbcType="VARCHAR" property="taskId" />
     <result column="task_code" jdbcType="INTEGER" property="taskCode" />
+    <result column="task_name" jdbcType="VARCHAR" property="taskName" />
     <result column="task_note" jdbcType="VARCHAR" property="taskNote" />
   </resultMap>
   <insert id="insert" parameterType="com.maybe.flow.model.FlowCheck">
-    insert into flow_hi_check (task_id, task_code, task_note
+    insert into flow_hi_check (task_id, task_code, task_name, task_note
       )
-    values (#{taskId,jdbcType=VARCHAR}, #{taskCode,jdbcType=INTEGER}, #{taskNote,jdbcType=VARCHAR}
+    values (#{taskId,jdbcType=VARCHAR}, #{taskCode,jdbcType=INTEGER}, #{taskName,jdbcType=VARCHAR}, #{taskNote,jdbcType=VARCHAR}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.maybe.flow.model.FlowCheck">
@@ -21,6 +22,9 @@
       <if test="taskCode != null">
         task_code,
       </if>
+      <if test="taskName != null">
+        task_name,
+      </if>
       <if test="taskNote != null">
         task_note,
       </if>
@@ -31,6 +35,9 @@
       </if>
       <if test="taskCode != null">
         #{taskCode,jdbcType=INTEGER},
+      </if>
+      <if test="taskName != null">
+        #{taskName,jdbcType=VARCHAR},
       </if>
       <if test="taskNote != null">
         #{taskNote,jdbcType=VARCHAR},
