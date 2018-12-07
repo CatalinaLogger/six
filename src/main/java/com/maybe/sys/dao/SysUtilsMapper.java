@@ -19,5 +19,6 @@ public interface SysUtilsMapper {
      * @return 存在记录数
      */
     int countOfExist(@Param("tableName") String tableName, @Param("parentId") Object parentId, @Param("id") Object id, @Param("field") String field, @Param("value") Object value);
+    int countOfExistByGroup(@Param("tableName") String tableName, @Param("groupId") Object groupId, @Param("id") Object id, @Param("field") String field, @Param("value") Object value);
 
 }

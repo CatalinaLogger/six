@@ -206,19 +206,7 @@ public class SysTreeServiceImpl implements ISysTreeService{
     /**
      * 排序规则
      */
-    private Comparator<DeptLevelDto> deptSeqComparator = new Comparator<DeptLevelDto>() {
-        public int compare(DeptLevelDto o1, DeptLevelDto o2) {
-            return o1.getSeq() - o2.getSeq();
-        }
-    };
-    private Comparator<MenuLevelDto> menuSeqComparator = new Comparator<MenuLevelDto>() {
-        public int compare(MenuLevelDto o1, MenuLevelDto o2) {
-            return o1.getSeq() - o2.getSeq();
-        }
-    };
-    private Comparator<ConfLevelDto> dictionaryDataSeqComparator = new Comparator<ConfLevelDto>() {
-        public int compare(ConfLevelDto o1, ConfLevelDto o2) {
-            return o1.getSeq() - o2.getSeq();
-        }
-    };
+    private Comparator<DeptLevelDto> deptSeqComparator = Comparator.comparingInt(SysDept::getSeq);
+    private Comparator<MenuLevelDto> menuSeqComparator = Comparator.comparingInt(SysMenu::getSeq);
+    private Comparator<ConfLevelDto> dictionaryDataSeqComparator = Comparator.comparingInt(GlobalConfData::getSeq);
 }

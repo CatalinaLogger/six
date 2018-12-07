@@ -64,22 +64,24 @@
 -->
 
 
-		<!-- 生成模型的包名和位置 --> <!-- 3 -->
+<!--
+		&lt;!&ndash; 生成模型的包名和位置 &ndash;&gt; &lt;!&ndash; 3 &ndash;&gt;
 		<javaModelGenerator targetPackage="com.maybe.work.model" targetProject="./target">
 			<property name="enableSubPackages" value="true" />
 			<property name="trimStrings" value="true" />
 		</javaModelGenerator>
-		<!-- 生成的映射文件包名和位置 --> <!-- 4 -->
+		&lt;!&ndash; 生成的映射文件包名和位置 &ndash;&gt; &lt;!&ndash; 4 &ndash;&gt;
 		<sqlMapGenerator targetPackage="mapper.work" targetProject="./target">
 			<property name="enableSubPackages" value="true" />
 		</sqlMapGenerator>
-		<!-- 生成DAO的包名和位置 --> <!-- 5 -->
+		&lt;!&ndash; 生成DAO的包名和位置 &ndash;&gt; &lt;!&ndash; 5 &ndash;&gt;
 		<javaClientGenerator type="XMLMAPPER" targetPackage="com.maybe.work.dao" targetProject="./target">
 			<property name="enableSubPackages" value="true" />
 		</javaClientGenerator>
-		<!-- 要生成那些表(更改tableName和domainObjectName就可以) --><!-- 6 -->
+		&lt;!&ndash; 要生成那些表(更改tableName和domainObjectName就可以) &ndash;&gt;&lt;!&ndash; 6 &ndash;&gt;
 		<table tableName="work_draft" domainObjectName="WorkDraft" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" />
 		<table tableName="work_easy" domainObjectName="WorkEasy" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" />
+-->
 
 
 <!--
@@ -120,6 +122,25 @@
 		<table tableName="rep_weekly" domainObjectName="Weekly" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" />
 -->
 
+		<!-- 生成模型的包名和位置 --> <!-- 3 -->
+		<javaModelGenerator targetPackage="com.maybe.jxc.model" targetProject="./target">
+			<property name="enableSubPackages" value="true" />
+			<property name="trimStrings" value="true" />
+		</javaModelGenerator>
+		<!-- 生成的映射文件包名和位置 --> <!-- 4 -->
+		<sqlMapGenerator targetPackage="mapper.jxc" targetProject="./target">
+			<property name="enableSubPackages" value="true" />
+		</sqlMapGenerator>
+		<!-- 生成DAO的包名和位置 --> <!-- 5 -->
+		<javaClientGenerator type="XMLMAPPER" targetPackage="com.maybe.jxc.dao" targetProject="./target">
+			<property name="enableSubPackages" value="true" />
+		</javaClientGenerator>
+		<!-- 要生成那些表(更改tableName和domainObjectName就可以) --><!-- 6 -->
+		<table tableName="jxc_store" domainObjectName="Store" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" />
+		<table tableName="jxc_product_group" domainObjectName="ProductGroup" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" />
+		<table tableName="jxc_property_group" domainObjectName="PropertyGroup" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" />
+		<table tableName="jxc_property" domainObjectName="Property" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" />
+		<table tableName="jxc_unit" domainObjectName="Unit" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" />
 
 	</context>
 </generatorConfiguration>

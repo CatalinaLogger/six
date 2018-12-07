@@ -161,9 +161,6 @@ public class SysDeptServiceImpl implements ISysDeptService {
 
     private String getLevel(Integer id) {
         SysDept dept = sysDeptMapper.selectByPrimaryKey(id);
-        if (dept == null) {
-            return null;
-        }
-        return dept.getLevel();
+        return ObjectUtils.isEmpty(dept) ? null : dept.getLevel();
     }
 }

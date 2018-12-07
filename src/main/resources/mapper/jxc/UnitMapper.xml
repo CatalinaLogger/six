@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.maybe.jxc.dao.UnitMapper">
+  <resultMap id="BaseResultMap" type="com.maybe.jxc.model.Unit">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="deputy" jdbcType="VARCHAR" property="deputy" />
+    <result column="conversion" jdbcType="VARCHAR" property="conversion" />
+    <result column="num" jdbcType="INTEGER" property="num" />
+    <result column="category" jdbcType="INTEGER" property="category" />
+    <result column="parent_id" jdbcType="INTEGER" property="parentId" />
+    <result column="seq" jdbcType="INTEGER" property="seq" />
+    <result column="operate_ip" jdbcType="VARCHAR" property="operateIp" />
+    <result column="operate_id" jdbcType="INTEGER" property="operateId" />
+    <result column="operate_name" jdbcType="VARCHAR" property="operateName" />
+    <result column="operate_time" jdbcType="TIMESTAMP" property="operateTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, name, deputy, conversion, num, category, parent_id, seq, operate_ip, operate_id,
+    operate_name, operate_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from jxc_unit
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from jxc_unit
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.maybe.jxc.model.Unit">
+    insert into jxc_unit (id, name, deputy,
+      conversion, num, category,
+      parent_id, seq, operate_ip,
+      operate_id, operate_name, operate_time
+      )
+    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{deputy,jdbcType=VARCHAR},
+      #{conversion,jdbcType=VARCHAR}, #{num,jdbcType=INTEGER}, #{category,jdbcType=INTEGER},
+      #{parentId,jdbcType=INTEGER}, #{seq,jdbcType=INTEGER}, #{operateIp,jdbcType=VARCHAR},
+      #{operateId,jdbcType=INTEGER}, #{operateName,jdbcType=VARCHAR}, #{operateTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.maybe.jxc.model.Unit">
+    insert into jxc_unit
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="deputy != null">
+        deputy,
+      </if>
+      <if test="conversion != null">
+        conversion,
+      </if>
+      <if test="num != null">
+        num,
+      </if>
+      <if test="category != null">
+        category,
+      </if>
+      <if test="parentId != null">
+        parent_id,
+      </if>
+      <if test="seq != null">
+        seq,
+      </if>
+      <if test="operateIp != null">
+        operate_ip,
+      </if>
+      <if test="operateId != null">
+        operate_id,
+      </if>
+      <if test="operateName != null">
+        operate_name,
+      </if>
+      <if test="operateTime != null">
+        operate_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="deputy != null">
+        #{deputy,jdbcType=VARCHAR},
+      </if>
+      <if test="conversion != null">
+        #{conversion,jdbcType=VARCHAR},
+      </if>
+      <if test="num != null">
+        #{num,jdbcType=INTEGER},
+      </if>
+      <if test="category != null">
+        #{category,jdbcType=INTEGER},
+      </if>
+      <if test="parentId != null">
+        #{parentId,jdbcType=INTEGER},
+      </if>
+      <if test="seq != null">
+        #{seq,jdbcType=INTEGER},
+      </if>
+      <if test="operateIp != null">
+        #{operateIp,jdbcType=VARCHAR},
+      </if>
+      <if test="operateId != null">
+        #{operateId,jdbcType=INTEGER},
+      </if>
+      <if test="operateName != null">
+        #{operateName,jdbcType=VARCHAR},
+      </if>
+      <if test="operateTime != null">
+        #{operateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.maybe.jxc.model.Unit">
+    update jxc_unit
+    <set>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="deputy != null">
+        deputy = #{deputy,jdbcType=VARCHAR},
+      </if>
+      <if test="conversion != null">
+        conversion = #{conversion,jdbcType=VARCHAR},
+      </if>
+      <if test="num != null">
+        num = #{num,jdbcType=INTEGER},
+      </if>
+      <if test="category != null">
+        category = #{category,jdbcType=INTEGER},
+      </if>
+      <if test="parentId != null">
+        parent_id = #{parentId,jdbcType=INTEGER},
+      </if>
+      <if test="seq != null">
+        seq = #{seq,jdbcType=INTEGER},
+      </if>
+      <if test="operateIp != null">
+        operate_ip = #{operateIp,jdbcType=VARCHAR},
+      </if>
+      <if test="operateId != null">
+        operate_id = #{operateId,jdbcType=INTEGER},
+      </if>
+      <if test="operateName != null">
+        operate_name = #{operateName,jdbcType=VARCHAR},
+      </if>
+      <if test="operateTime != null">
+        operate_time = #{operateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.maybe.jxc.model.Unit">
+    update jxc_unit
+    set name = #{name,jdbcType=VARCHAR},
+      deputy = #{deputy,jdbcType=VARCHAR},
+      conversion = #{conversion,jdbcType=VARCHAR},
+      num = #{num,jdbcType=INTEGER},
+      category = #{category,jdbcType=INTEGER},
+      parent_id = #{parentId,jdbcType=INTEGER},
+      seq = #{seq,jdbcType=INTEGER},
+      operate_ip = #{operateIp,jdbcType=VARCHAR},
+      operate_id = #{operateId,jdbcType=INTEGER},
+      operate_name = #{operateName,jdbcType=VARCHAR},
+      operate_time = #{operateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
